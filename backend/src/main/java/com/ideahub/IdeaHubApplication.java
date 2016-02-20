@@ -1,9 +1,10 @@
 package com.ideahub;
 
 import io.dropwizard.Application;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-
 import jodd.petite.PetiteContainer;
 import jodd.petite.config.AutomagicPetiteConfigurator;
 
@@ -26,11 +27,24 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
         // This enables automatic registration of PetiteBeans.
         final AutomagicPetiteConfigurator petiteConfigurator = new AutomagicPetiteConfigurator();
         petiteConfigurator.configure(this.petite);
+        
+        // DB Migrations
+        bootstrap.addBundle(new MigrationsBundle<IdeaHubConfiguration>() {
+            @Override
+            public DataSourceFactory getDataSourceFactory(IdeaHubConfiguration configuration) {
+                return configuration.getDataSourceFactory();
+            }
+        });
     }
 
     @Override
     public void run(final IdeaHubConfiguration configuration, final Environment environment)
             throws Exception {
 
+    }
+
+    @Override
+    public String getName() {
+        return "ideahub";
     }
 }
