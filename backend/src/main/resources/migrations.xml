@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="kyle" id="1455957189141-1">
+        <createTable tableName="idea">
+            <column name="id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-2">
+        <createTable tableName="idea_collaborator">
+            <column name="user_id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idea_id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="invite_status" type="TINYINT(3)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-3">
+        <createTable tableName="idea_part">
+            <column name="id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idea_id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idea_part_type_id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="upvotes" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="downvotes" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="justification" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-4">
+        <createTable tableName="idea_part_suggestion">
+            <column name="id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idea_part_id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="suggestion" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="upvotes" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="downvotes" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-5">
+        <createTable tableName="idea_part_type">
+            <column name="id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)"/>
+            <column name="metadata" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-6">
+        <createTable tableName="user">
+            <column name="id" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="oauth_token" type="VARCHAR(45)"/>
+            <column name="username" type="VARCHAR(45)"/>
+            <column name="email" type="VARCHAR(45)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-7">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="idea"/>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-8">
+        <addPrimaryKey columnNames="user_id, idea_id" constraintName="PRIMARY" tableName="idea_collaborator"/>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-9">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="idea_part"/>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-10">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="idea_part_suggestion"/>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-11">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="idea_part_type"/>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-12">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="user"/>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-13">
+        <createIndex indexName="fk_idea_part_idea1_idx" tableName="idea_part">
+            <column name="idea_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-14">
+        <createIndex indexName="fk_idea_part_idea_part_type1_idx" tableName="idea_part">
+            <column name="idea_part_type_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-15">
+        <createIndex indexName="fk_idea_part_suggestion_idea_part1_idx" tableName="idea_part_suggestion">
+            <column name="idea_part_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-16">
+        <createIndex indexName="fk_idea_part_suggestion_user1_idx" tableName="idea_part_suggestion">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-17">
+        <createIndex indexName="fk_idea_user_idx" tableName="idea">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-18">
+        <createIndex indexName="fk_user_has_idea_idea1_idx" tableName="idea_collaborator">
+            <column name="idea_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-19">
+        <createIndex indexName="fk_user_has_idea_user1_idx" tableName="idea_collaborator">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-20">
+        <addForeignKeyConstraint baseColumnNames="idea_id" baseTableName="idea_part" constraintName="fk_idea_part_idea1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="idea"/>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-21">
+        <addForeignKeyConstraint baseColumnNames="idea_part_type_id" baseTableName="idea_part" constraintName="fk_idea_part_idea_part_type1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="idea_part_type"/>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-22">
+        <addForeignKeyConstraint baseColumnNames="idea_part_id" baseTableName="idea_part_suggestion" constraintName="fk_idea_part_suggestion_idea_part1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="idea_part"/>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-23">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="idea_part_suggestion" constraintName="fk_idea_part_suggestion_user1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-24">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="idea" constraintName="fk_idea_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-25">
+        <addForeignKeyConstraint baseColumnNames="idea_id" baseTableName="idea_collaborator" constraintName="fk_user_has_idea_idea1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="idea"/>
+    </changeSet>
+    <changeSet author="kyle" id="1455957189141-26">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="idea_collaborator" constraintName="fk_user_has_idea_user1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="fixtures" id="1455957189141-26">
+        <insert tableName="user">
+            <column name="id">1</column>
+            <column name="oauth_token">8675309</column>
+            <column name="username">kylekury</column>
+            <column name="email">kyle.kury@gmail.com</column>
+        </insert>
+        <insert tableName="user">
+            <column name="id">2</column>
+            <column name="oauth_token">8675309</column>
+            <column name="username">mitsuotakaki</column>
+            <column name="email">mitsuotakaki@gmail.com</column>
+        </insert>
+        <insert tableName="user">
+            <column name="id">3</column>
+            <column name="oauth_token">8675309</column>
+            <column name="username">betatakaki</column>
+            <column name="email">me@betatakaki.com</column>
+        </insert>
+        <insert tableName="user">
+            <column name="id">4</column>
+            <column name="oauth_token">8675309</column>
+            <column name="username">massanoritakaki</column>
+            <column name="email">massanori@gmail.com</column>
+        </insert>
+        <insert tableName="user">
+            <column name="id">5</column>
+            <column name="oauth_token">8675309</column>
+            <column name="username">hinaaman</column>
+            <column name="email">hina.aman@gmail.com</column>
+        </insert>
+        <insert tableName="user">
+            <column name="id">6</column>
+            <column name="oauth_token">8675309</column>
+            <column name="username">rockylee</column>
+            <column name="email">hakjoonglee@gmail.com</column>
+        </insert>
+    </changeSet>
+    
+    <changeSet author="fixtures" id="1455957189141-27">
+        <insert tableName="idea_part_type">
+            <column name="id">1</column>
+            <column name="name">name</column>
+            <column name="metadata">{"name_text": "Idea Name", "justification_text": "How does the name tie into what your idea is about?"}</column>
+        </insert>
+        <insert tableName="idea_part_type">
+            <column name="id">2</column>
+            <column name="name">elevator_pitch</column>
+            <column name="metadata">{"name_text": "Elevator Pitch", "justification_text": "How will this entice someone to want to know more about your idea?"}</column>
+        </insert>
+    </changeSet>
+    
+    <changeSet author="fixtures" id="1455957189141-28">
+        <insert tableName="idea">
+            <column name="id">1</column>
+            <column name="user_id">1</column>
+        </insert>
+    </changeSet>
+    
+    <changeSet author="fixtures" id="1455957189141-29">
+        <insert tableName="idea_collaborator">
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="invite_status">1</column>
+        </insert>
+        <insert tableName="idea_collaborator">
+            <column name="user_id">2</column>
+            <column name="idea_id">1</column>
+            <column name="invite_status">1</column>
+        </insert>
+        <insert tableName="idea_collaborator">
+            <column name="user_id">3</column>
+            <column name="idea_id">1</column>
+            <column name="invite_status">1</column>
+        </insert>
+        <insert tableName="idea_collaborator">
+            <column name="user_id">4</column>
+            <column name="idea_id">1</column>
+            <column name="invite_status">1</column>
+        </insert>
+        <insert tableName="idea_collaborator">
+            <column name="user_id">5</column>
+            <column name="idea_id">1</column>
+            <column name="invite_status">1</column>
+        </insert>
+        <insert tableName="idea_collaborator">
+            <column name="user_id">6</column>
+            <column name="idea_id">1</column>
+            <column name="invite_status">1</column>
+        </insert>
+    </changeSet>    
+    
+    <changeSet author="fixtures" id="1455957189141-30">
+        <insert tableName="idea_part">
+            <column name="id">1</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">1</column>
+            <column name="upvotes">4</column>
+            <column name="downvotes">2</column>
+            <column name="content">IdeaHub</column>
+            <column name="justification">The project is GitHub for ideas, so IdeaHub seemed to be a natural fit.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">2</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">2</column>
+            <column name="upvotes">3</column>
+            <column name="downvotes">3</column>
+            <column name="content">GitHub for ideas; iterate and flesh out ideas so that you can actually begin to execute.</column>
+            <column name="justification">Showing potential users that we can guide them through the idea-forming process.</column>
+        </insert>
+    </changeSet>
+        
+    <changeSet author="fixtures" id="1455957189141-32">
+        <insert tableName="idea_part_suggestion">
+            <column name="id">1</column>
+            <column name="user_id">5</column>
+            <column name="idea_part_id">2</column>
+            <column name="suggestion">Can we make this process backed by science, and put that into the pitch?</column>
+            <column name="upvotes">6</column>
+            <column name="downvotes">0</column>
+        </insert>
+    </changeSet>
+    
+    
+</databaseChangeLog>
