@@ -4,6 +4,13 @@ import org.hibernate.SessionFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.github.scribejava.apis.GitHubApi;
+import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.oauth.OAuth20Service;
+import com.ideahub.model.Idea;
+import com.ideahub.model.IdeaCollaborator;
+import com.ideahub.model.IdeaPart;
+import com.ideahub.model.IdeaPartSuggestion;
 import com.ideahub.model.User;
 
 import io.dropwizard.Application;
@@ -23,7 +30,8 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
 
     protected PetiteContainer petite;
     private final HibernateBundle<IdeaHubConfiguration> hibernate = new HibernateBundle<IdeaHubConfiguration>(
-            User.class) {
+            User.class, Idea.class, IdeaPartSuggestion.class, IdeaPart.class,
+            IdeaCollaborator.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(
                 final IdeaHubConfiguration configuration) {
@@ -44,6 +52,7 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
         final AutomagicPetiteConfigurator petiteConfigurator = new AutomagicPetiteConfigurator();
         petiteConfigurator.configure(this.petite);
 
+        bootstrap.addBundle(this.hibernate);
         // DB Migrations
         bootstrap.addBundle(new MigrationsBundle<IdeaHubConfiguration>() {
             @Override
@@ -89,5 +98,12 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
         this.petite.addBean(SessionFactory.class.getName(), this.hibernate.getSessionFactory());
         // Hooking up our configuration just in case we need to pass it around.
         this.petite.addBean(IdeaHubConfiguration.class.getName(), configuration);
+
+        this.petite.addBean(OAuth20Service.class.getName(), new ServiceBuilder()
+                .apiKey(configuration.getClientId())
+                .apiSecret(configuration.getClientSecret())
+                .state(configuration.getSecretState())
+                .callback("http://localhost:8080/auth/authorized")
+                .build(GitHubApi.instance()));
     }
 }
