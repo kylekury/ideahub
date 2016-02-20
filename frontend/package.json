@@ -22,6 +22,15 @@
     "output_path": "build"
   },
   "scripts": {
-  	"copy-images": "cp -R -f -p assets/images $npm_package_config_output_path/"
+  	"copy-images": "cp -R -f -p assets/images $npm_package_config_output_path/",
+  	"watch:css": "$(npm bin)/watch 'npm run css' app/stylesheets/",
+    "watch:js": "$(npm bin)/watch 'npm run js' app/javascripts/",
+    "watch:jade": "$(npm bin)/watch 'npm run jade' app/views/",
+    "watch": "npm run watch:css & npm run watch:js & npm run watch:jade & npm run watch:robots-txt",
+    "jade": "for f in $(find ./assets/views -name '*.jade'); do p=${f#./assets/views}; fpath=$npm_package_config_output_path$(dirname $p); $(npm bin)/jade -o $fpath $f; done;",
+    "css": "",
+    "js": "",
+    "css:prod": "",
+    "js:prod": ""
   }
 }
