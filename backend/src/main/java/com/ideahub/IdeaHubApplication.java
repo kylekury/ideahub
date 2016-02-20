@@ -4,6 +4,9 @@ import org.hibernate.SessionFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.github.scribejava.apis.GitHubApi;
+import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.oauth.OAuth20Service;
 import com.ideahub.model.Idea;
 import com.ideahub.model.IdeaPart;
 import com.ideahub.model.IdeaPartSuggestion;
@@ -99,5 +102,12 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
         this.petite.addBean(SessionFactory.class.getName(), this.hibernate.getSessionFactory());
         // Hooking up our configuration just in case we need to pass it around.
         this.petite.addBean(IdeaHubConfiguration.class.getName(), configuration);
+
+        this.petite.addBean(OAuth20Service.class.getName(), new ServiceBuilder()
+                .apiKey(configuration.getClientId())
+                .apiSecret(configuration.getClientSecret())
+                .state(configuration.getSecretState())
+                .callback("http://localhost:8080/auth/authorized")
+                .build(GitHubApi.instance()));
     }
 }

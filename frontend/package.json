@@ -1,0 +1,36 @@
+{
+  "name": "ideaHub",
+  "version": "1.0.0",
+  "description": "Social Platform to Discuss and Manage Ideas",
+  "main": "index.js",
+  "scripts": {
+    "setup": "npm install -g requirejs; npm run copy-assets",
+    "build": "r.js -o build.js; npm run css:prod; npm run copy-requirejs; npm run jade; npm run copy-images",
+    "copy-assets": "cp node_modules/jquery/dist/jquery.min.js assets/javascript/vendor; cp node_modules/underscore/underscore-min.js assets/javascript/vendor;",
+    "copy-requirejs": "cp node_modules/requirejs/require.js $npm_package_config_output_path/js/;",
+    "copy-images": "cp -R -f -p assets/images $npm_package_config_output_path/",
+    "watch:css": "$(npm bin)/watch 'npm run css' assets/stylesheets/",
+    "watch:jade": "$(npm bin)/watch 'npm run jade' assets/views/",
+    "watch": "npm run watch:css & npm run watch:jade",
+    "jade": "for f in $(find ./assets/views/pages -name '*.jade'); do p=${f#./assets/views/pages}; fpath=$npm_package_config_output_path$(dirname $p); $(npm bin)/jade -o $fpath $f; done;",
+    "jadef": "jade assets/views/pages/$f -o $npm_package_config_output_path/$(dirname \"${f}\")",
+    "css": "$(npm bin)/node-sass assets/stylesheets/ideahub.scss -o $npm_package_config_output_path/css/",
+    "css:prod": "$(npm bin)/node-sass assets/stylesheets/ideahub.scss -o $npm_package_config_output_path/css/ --output-style compressed"
+  },
+  "author": "ideaHub",
+  "license": "ISC",
+  "devDependencies": {
+    "bootstrap-sass": "^3.3.6",
+    "node-sass": "^3.4.2",
+    "jade": "^1.11.0",
+    "jquery": "^2.2.0",
+    "node-sass": "^3.4.2",
+    "requirejs": "^2.1.22",
+    "uglifyjs": "^2.4.10",
+    "underscore": "^1.8.3",
+    "watch": "^0.17.1"
+  },
+  "config": {
+    "output_path": "dist"
+  }
+}

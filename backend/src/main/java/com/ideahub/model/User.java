@@ -1,7 +1,6 @@
 package com.ideahub.model;
 // Generated Feb 20, 2016 12:32:19 AM by Hibernate Tools 4.3.1
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -54,9 +53,8 @@ public class User {
     private String email;
 
     // TODO: Uncomment this when we get collaborators in
-//    @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "user")
-//    private Set<IdeaCollaborator> ideaCollaborators = new HashSet<>(0);
-
+    // @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "user")
+    // private Set<IdeaCollaborator> ideaCollaborators = new HashSet<>(0);
     @OneToMany(cascade = { CascadeType.ALL })
     @JoinColumn(name = "user_id") // Which column in the referenced table will be joined
     private Set<Idea> ideas;
