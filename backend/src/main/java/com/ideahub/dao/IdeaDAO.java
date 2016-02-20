@@ -14,4 +14,8 @@ public class IdeaDAO extends AbstractDAO<Idea> {
     public IdeaDAO(final SessionFactory sessionFactory) {
         super(sessionFactory);
     }
+    
+    public Idea create(Idea idea) {
+        return this.persist(idea);
+    }
 }

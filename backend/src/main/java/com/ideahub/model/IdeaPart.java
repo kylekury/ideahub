@@ -5,17 +5,19 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,12 +43,13 @@ import lombok.ToString;
 @Entity
 @Table(name = "idea_part")
 @DynamicUpdate
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class IdeaPart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     @JsonIgnore
-    private int id;
+    private Integer id;
     
     // I think we need to reference just the id here instead of the object
     // as we'd run into a double-binding issue in a previous project
@@ -56,10 +59,14 @@ public class IdeaPart {
     // I think we need to reference just the id here instead of the object
     // as we'd run into a double-binding issue in a previous project
     @Column(name = "idea_id", nullable = false)
-    private int idea_id;
+    private int ideaId;
     
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "idea_part_type_id")
     private IdeaPartType ideaPartType;
+    
+//    @Column(name = "idea_part_type_id", nullable = false)
+//    private int ideaPartTypeId;
     
     @Column(name = "upvotes", nullable = false)
     private int upvotes;
@@ -72,7 +79,7 @@ public class IdeaPart {
     
     @Column(name = "justification", nullable = false)
     private String justification;
-    
+        
     @OneToMany(cascade = { CascadeType.ALL })
     @JoinColumn(name = "idea_part_id") // Which column in the referenced table will be joined
     private Set<IdeaPartSuggestion> ideaPartSuggestions;

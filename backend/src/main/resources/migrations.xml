@@ -2,8 +2,8 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet author="kyle" id="1455957189141-1">
         <createTable tableName="idea">
-            <column name="id" type="INT(10)">
-                <constraints nullable="false"/>
+            <column name="id" autoIncrement="true" type="INT(10)">
+                <constraints primaryKey="true"/>
             </column>
             <column name="user_id" type="INT(10)">
                 <constraints nullable="false"/>
@@ -23,8 +23,8 @@
     </changeSet>
     <changeSet author="kyle" id="1455957189141-3">
         <createTable tableName="idea_part">
-            <column name="id" type="INT(10)">
-                <constraints nullable="false"/>
+            <column name="id" autoIncrement="true" type="INT(10)">
+                <constraints primaryKey="true"/>
             </column>
             <column name="user_id" type="INT(10)">
                 <constraints nullable="false"/>
@@ -49,8 +49,8 @@
     </changeSet>
     <changeSet author="kyle" id="1455957189141-4">
         <createTable tableName="idea_part_suggestion">
-            <column name="id" type="INT(10)">
-                <constraints nullable="false"/>
+            <column name="id" autoIncrement="true" type="INT(10)">
+                <constraints primaryKey="true"/>
             </column>
             <column name="user_id" type="INT(10)">
                 <constraints nullable="false"/>
@@ -72,39 +72,27 @@
     <changeSet author="kyle" id="1455957189141-5">
         <createTable tableName="idea_part_type">
             <column name="id" type="INT(10)">
-                <constraints nullable="false"/>
+                <constraints primaryKey="true"/>
             </column>
             <column name="name" type="VARCHAR(100)"/>
+            <column name="allow_multiple" type="TINYINT(1)">
+                <constraints nullable="false" />
+            </column>
             <column name="metadata" type="TEXT"/>
         </createTable>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-6">
         <createTable tableName="user">
-            <column name="id" type="INT(10)">
-                <constraints nullable="false"/>
+            <column name="id" autoIncrement="true" type="INT(10)">
+                <constraints primaryKey="true"/>
             </column>
             <column name="oauth_token" type="VARCHAR(45)"/>
             <column name="username" type="VARCHAR(45)"/>
             <column name="email" type="VARCHAR(45)"/>
         </createTable>
     </changeSet>
-    <changeSet author="kyle" id="1455957189141-7">
-        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="idea"/>
-    </changeSet>
     <changeSet author="kyle" id="1455957189141-8">
         <addPrimaryKey columnNames="user_id, idea_id" constraintName="PRIMARY" tableName="idea_collaborator"/>
-    </changeSet>
-    <changeSet author="kyle" id="1455957189141-9">
-        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="idea_part"/>
-    </changeSet>
-    <changeSet author="kyle" id="1455957189141-10">
-        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="idea_part_suggestion"/>
-    </changeSet>
-    <changeSet author="kyle" id="1455957189141-11">
-        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="idea_part_type"/>
-    </changeSet>
-    <changeSet author="kyle" id="1455957189141-12">
-        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="user"/>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-13">
         <createIndex indexName="fk_idea_part_idea1_idx" tableName="idea_part">
@@ -206,11 +194,19 @@
             <column name="id">1</column>
             <column name="name">name</column>
             <column name="metadata">{"nameText": "Idea Name", "justificationText": "How does the name tie into what your idea is about?"}</column>
+            <column name="allow_multiple">0</column>
         </insert>
         <insert tableName="idea_part_type">
             <column name="id">2</column>
             <column name="name">elevator_pitch</column>
             <column name="metadata">{"nameText": "Elevator Pitch", "justificationText": "How will this entice someone to want to know more about your idea?"}</column>
+            <column name="allow_multiple">0</column>
+        </insert>
+        <insert tableName="idea_part_type">
+            <column name="id">3</column>
+            <column name="name">features</column>
+            <column name="metadata">{"nameText": "Feature", "justificationText": "How does this provide more value to your core idea/elevator pitch?"}</column>
+            <column name="allow_multiple">0</column>
         </insert>
     </changeSet>
     
@@ -274,6 +270,26 @@
             <column name="downvotes">3</column>
             <column name="content">GitHub for ideas; iterate and flesh out ideas so that you can actually begin to execute.</column>
             <column name="justification">Showing potential users that we can guide them through the idea-forming process.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">3</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">3</column>
+            <column name="upvotes">4</column>
+            <column name="downvotes">2</column>
+            <column name="content">Private and public ideas.</column>
+            <column name="justification">This will allow users to prevent their ideas from being stolen, and generate revenue for us.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">4</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">3</column>
+            <column name="upvotes">2</column>
+            <column name="downvotes">5</column>
+            <column name="content">Allow users to allow others to collaborate on their ideas.</column>
+            <column name="justification">Further helps someone flesh out an idea, instead of relying on just themselves.</column>
         </insert>
     </changeSet>
         
