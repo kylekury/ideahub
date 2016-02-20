@@ -46,7 +46,6 @@ public class Idea {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    @JsonIgnore
     private int id;
     
     // I think we need to reference just the id here instead of the object

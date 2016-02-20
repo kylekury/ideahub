@@ -45,6 +45,9 @@ public class IdeaPartType {
     @Column(name = "name", nullable = false)    
     private String name;
     
+    @Column(name = "allow_multiple", nullable = false)
+    private boolean allowMultiple;
+    
     @Type(type = "com.ideahub.model.userType.IdeaPartTypeMetadataUserType")
     @Column(name = "metadata", nullable = false)
     private IdeaPartTypeMetadata metadata;
