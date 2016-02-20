@@ -58,7 +58,7 @@
             <column name="idea_part_id" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="suggestion" type="VARCHAR(45)">
+            <column name="suggestion" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
             <column defaultValueNumeric="0" name="upvotes" type="INT(10)">
@@ -162,4 +162,131 @@
     <changeSet author="kyle" id="1455957189141-26">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="idea_collaborator" constraintName="fk_user_has_idea_user1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
+    <changeSet author="fixtures" id="1455957189141-26">
+        <insert tableName="user">
+            <column name="id">1</column>
+            <column name="oauth_token">8675309</column>
+            <column name="username">kylekury</column>
+            <column name="email">kyle.kury@gmail.com</column>
+        </insert>
+        <insert tableName="user">
+            <column name="id">2</column>
+            <column name="oauth_token">8675309</column>
+            <column name="username">mitsuotakaki</column>
+            <column name="email">mitsuotakaki@gmail.com</column>
+        </insert>
+        <insert tableName="user">
+            <column name="id">3</column>
+            <column name="oauth_token">8675309</column>
+            <column name="username">betatakaki</column>
+            <column name="email">me@betatakaki.com</column>
+        </insert>
+        <insert tableName="user">
+            <column name="id">4</column>
+            <column name="oauth_token">8675309</column>
+            <column name="username">massanoritakaki</column>
+            <column name="email">massanori@gmail.com</column>
+        </insert>
+        <insert tableName="user">
+            <column name="id">5</column>
+            <column name="oauth_token">8675309</column>
+            <column name="username">hinaaman</column>
+            <column name="email">hina.aman@gmail.com</column>
+        </insert>
+        <insert tableName="user">
+            <column name="id">6</column>
+            <column name="oauth_token">8675309</column>
+            <column name="username">rockylee</column>
+            <column name="email">hakjoonglee@gmail.com</column>
+        </insert>
+    </changeSet>
+    
+    <changeSet author="fixtures" id="1455957189141-27">
+        <insert tableName="idea_part_type">
+            <column name="id">1</column>
+            <column name="name">name</column>
+            <column name="metadata">{"name_text": "Idea Name", "justification_text": "How does the name tie into what your idea is about?"}</column>
+        </insert>
+        <insert tableName="idea_part_type">
+            <column name="id">2</column>
+            <column name="name">elevator_pitch</column>
+            <column name="metadata">{"name_text": "Elevator Pitch", "justification_text": "How will this entice someone to want to know more about your idea?"}</column>
+        </insert>
+    </changeSet>
+    
+    <changeSet author="fixtures" id="1455957189141-28">
+        <insert tableName="idea">
+            <column name="id">1</column>
+            <column name="user_id">1</column>
+        </insert>
+    </changeSet>
+    
+    <changeSet author="fixtures" id="1455957189141-29">
+        <insert tableName="idea_collaborator">
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="invite_status">1</column>
+        </insert>
+        <insert tableName="idea_collaborator">
+            <column name="user_id">2</column>
+            <column name="idea_id">1</column>
+            <column name="invite_status">1</column>
+        </insert>
+        <insert tableName="idea_collaborator">
+            <column name="user_id">3</column>
+            <column name="idea_id">1</column>
+            <column name="invite_status">1</column>
+        </insert>
+        <insert tableName="idea_collaborator">
+            <column name="user_id">4</column>
+            <column name="idea_id">1</column>
+            <column name="invite_status">1</column>
+        </insert>
+        <insert tableName="idea_collaborator">
+            <column name="user_id">5</column>
+            <column name="idea_id">1</column>
+            <column name="invite_status">1</column>
+        </insert>
+        <insert tableName="idea_collaborator">
+            <column name="user_id">6</column>
+            <column name="idea_id">1</column>
+            <column name="invite_status">1</column>
+        </insert>
+    </changeSet>    
+    
+    <changeSet author="fixtures" id="1455957189141-30">
+        <insert tableName="idea_part">
+            <column name="id">1</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">1</column>
+            <column name="upvotes">4</column>
+            <column name="downvotes">2</column>
+            <column name="content">IdeaHub</column>
+            <column name="justification">The project is GitHub for ideas, so IdeaHub seemed to be a natural fit.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">2</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">2</column>
+            <column name="upvotes">3</column>
+            <column name="downvotes">3</column>
+            <column name="content">GitHub for ideas; iterate and flesh out ideas so that you can actually begin to execute.</column>
+            <column name="justification">Showing potential users that we can guide them through the idea-forming process.</column>
+        </insert>
+    </changeSet>
+        
+    <changeSet author="fixtures" id="1455957189141-32">
+        <insert tableName="idea_part_suggestion">
+            <column name="id">1</column>
+            <column name="user_id">5</column>
+            <column name="idea_part_id">2</column>
+            <column name="suggestion">Can we make this process backed by science, and put that into the pitch?</column>
+            <column name="upvotes">6</column>
+            <column name="downvotes">0</column>
+        </insert>
+    </changeSet>
+    
+    
 </databaseChangeLog>
