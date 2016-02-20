@@ -13,6 +13,11 @@ To change the build directory, please edit "output_path" defined in package.json
 
     $ npm run build
 
+## Debugging
+To enable debugging, modify build.js file and uncomment the following line:
+
+    //optimize: "none",
+
 ## Build Manager
 
 Main npm tasks to manage build:
