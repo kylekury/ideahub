@@ -83,6 +83,13 @@
             <version>1.9.33</version>
         </dependency>
 
+        <!-- Shiro package for security. -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.2.4</version>
+        </dependency>
+
         <!-- Swagger for API documentation -->
         <dependency>
             <groupId>io.federecio</groupId>

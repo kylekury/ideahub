@@ -1,5 +1,7 @@
 package com.ideahub;
 
+import org.apache.shiro.crypto.RandomNumberGenerator;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.hibernate.SessionFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -21,6 +23,7 @@ import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+
 import jodd.petite.PetiteContainer;
 import jodd.petite.config.AutomagicPetiteConfigurator;
 
@@ -58,7 +61,7 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
 
         // Hibernate
         bootstrap.addBundle(this.hibernate);
-        
+
         // DB Migrations
         bootstrap.addBundle(new MigrationsBundle<IdeaHubConfiguration>() {
             @Override
@@ -110,10 +113,13 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
                 .apiKey(configuration.getClientId())
                 .apiSecret(configuration.getClientSecret())
                 .state(configuration.getSecretState())
-                .callback("http://localhost:8080/auth/authorized")
+                .scope("user")
+                .callback(configuration.getAuthCallback())
                 .build(GitHubApi.instance()));
+        this.petite.addBean(RandomNumberGenerator.class.getName(),
+                new SecureRandomNumberGenerator());
     }
-    
+
     protected void registerResources(final Environment environment) {
         environment.jersey().register(this.petite.getBean(AuthenticationResource.class));
         environment.jersey().register(this.petite.getBean(IdeaResource.class));
