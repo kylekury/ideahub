@@ -17,7 +17,12 @@ public class IdeaHubConfiguration extends Configuration {
     @JsonProperty("database")
     private final DataSourceFactory database = new DataSourceFactory();
 
+    @NotNull
     private String clientId;
+    @NotNull
     private String clientSecret;
+    @NotNull
     private String secretState;
+    @NotNull
+    private String authCallback;
 }

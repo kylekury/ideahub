@@ -9,6 +9,7 @@ import com.google.common.base.Optional;
 import com.ideahub.model.User;
 
 import io.dropwizard.hibernate.AbstractDAO;
+
 import jodd.petite.meta.PetiteBean;
 import jodd.petite.meta.PetiteInject;
 
@@ -28,5 +29,9 @@ public class UserDAO extends AbstractDAO<User> {
         final Criteria criteria = this.criteria()
                 .add(Restrictions.eq("email", email));
         return Optional.fromNullable(this.uniqueResult(criteria));
+    }
+
+    public void save(final User user) {
+        this.persist(user);
     }
 }

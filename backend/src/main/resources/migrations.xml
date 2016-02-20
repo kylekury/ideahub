@@ -86,9 +86,9 @@
             <column name="id" autoIncrement="true" type="BIGINT(20)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="oauth_token" type="VARCHAR(45)"/>
-            <column name="username" type="VARCHAR(45)"/>
-            <column name="email" type="VARCHAR(45)"/>
+            <column name="oauth_token" type="VARCHAR(88)"/>
+            <column name="username" type="VARCHAR(100)"/>
+            <column name="email" type="VARCHAR(100)"/>
         </createTable>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-8">

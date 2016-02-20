@@ -1,6 +1,7 @@
 clientId: 0b985cb6cb3f4c2d9961
 clientSecret: 43ef82cc8b4c1e45e6789e508a5bcfb4c161c835
 secretState: secret
+authCallback: http://localhost:8080/auth/authorized
 
 database:
   # the name of your JDBC driver
@@ -43,4 +44,4 @@ database:
 logging:
 
   # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
-  level: DEBUG  
+  level: INFO  
