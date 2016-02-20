@@ -8,9 +8,9 @@ import com.github.scribejava.apis.GitHubApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.ideahub.model.Idea;
-import com.ideahub.model.IdeaCollaborator;
 import com.ideahub.model.IdeaPart;
 import com.ideahub.model.IdeaPartSuggestion;
+import com.ideahub.model.IdeaPartType;
 import com.ideahub.model.User;
 
 import io.dropwizard.Application;
@@ -19,7 +19,6 @@ import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-
 import jodd.petite.PetiteContainer;
 import jodd.petite.config.AutomagicPetiteConfigurator;
 
@@ -30,8 +29,11 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
 
     protected PetiteContainer petite;
     private final HibernateBundle<IdeaHubConfiguration> hibernate = new HibernateBundle<IdeaHubConfiguration>(
-            User.class, Idea.class, IdeaPartSuggestion.class, IdeaPart.class,
-            IdeaCollaborator.class) {
+            User.class,
+            Idea.class,
+            IdeaPart.class,
+            IdeaPartType.class,
+            IdeaPartSuggestion.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(
                 final IdeaHubConfiguration configuration) {
@@ -52,7 +54,9 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
         final AutomagicPetiteConfigurator petiteConfigurator = new AutomagicPetiteConfigurator();
         petiteConfigurator.configure(this.petite);
 
+        // Hibernate
         bootstrap.addBundle(this.hibernate);
+        
         // DB Migrations
         bootstrap.addBundle(new MigrationsBundle<IdeaHubConfiguration>() {
             @Override
