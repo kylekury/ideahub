@@ -1,27 +1,10 @@
 package com.ideahub.model;
 
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import javax.persistence.*;
+import java.util.Set;
 
 /**
  * 
@@ -57,7 +40,7 @@ public class Idea {
     @JoinColumn(name = "idea_id") // Which column in the referenced table will be joined
     private Set<IdeaPart> ideaParts;
     
-    // TODO: Uncomment this when collaborators are added
-//    @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "idea")
-//    private Set<IdeaCollaborator> ideaCollaborators;
+
+    @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "idea")
+    private Set<IdeaCollaborator> ideaCollaborators;
 }
