@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -15,9 +16,12 @@ import org.slf4j.LoggerFactory;
 
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
+import com.google.common.base.Optional;
+import com.ideahub.cache.IdeaDefinitionCache;
 import com.ideahub.dao.IdeaDAO;
 import com.ideahub.dao.IdeaPartDAO;
-import com.ideahub.dao.IdeaPartTypeDAO;
+import com.ideahub.exceptions.IdeaPartTypeNotFoundException;
+import com.ideahub.exceptions.UserDoesntOwnIdeaException;
 import com.ideahub.exceptions.UserDoesntOwnIdeaPartException;
 import com.ideahub.exceptions.UserNotAllowedToCreateMultipleIdeaPartsOfTypeException;
 import com.ideahub.model.Idea;
@@ -36,9 +40,9 @@ import lombok.AllArgsConstructor;
 public class IdeaResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(IdeaResource.class);
 
+    private final IdeaDefinitionCache ideaDefinitionCache;
     private final IdeaDAO ideaDAO;
     private final IdeaPartDAO ideaPartDAO;
-    private final IdeaPartTypeDAO ideaPartTypeDAO;
 
     @GET
     @Path("/definition")
@@ -47,9 +51,31 @@ public class IdeaResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public List<IdeaPartType> getIdeaDefinition(@Auth final User authenticatedUser) throws Exception {
-        return ideaPartTypeDAO.getIdeaDefinition();
+        return ideaDefinitionCache.getIdeaDefinition();
     }
 
+    @GET
+    @Path("/{ideaId}")
+    @Timed
+    @ExceptionMetered
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    public Optional<Idea> getIdea(@PathParam("ideaId") final long ideaId) throws Exception {
+        // TODO: Replace this with user lookup, anonymous view is fine as well.
+        // final long userId = authenticatedUser.getId();
+        final long userId = 1L;
+        
+        Optional<Idea> idea = ideaDAO.findById(ideaId);
+        
+        // TODO: There needs to be an OR condition here that also checks whether they're a collaborator
+        if (idea.isPresent() && idea.get().isPrivate() && idea.get().getUserId() != userId) {
+            throw new UserDoesntOwnIdeaException();
+        }
+        
+        return idea;
+    }
+    
     @POST
     @Timed
     @ExceptionMetered
@@ -72,10 +98,10 @@ public class IdeaResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public IdeaPart updateIdeaParts(/*@Auth final User authenticatedUser,*/ final IdeaPart ideaPart)
-            throws UserDoesntOwnIdeaPartException, UserNotAllowedToCreateMultipleIdeaPartsOfTypeException {
+    public List<IdeaPart> updateIdeaParts(/*@Auth final User authenticatedUser,*/ final List<IdeaPart> ideaParts)
+            throws UserDoesntOwnIdeaPartException, UserNotAllowedToCreateMultipleIdeaPartsOfTypeException, IdeaPartTypeNotFoundException {
         // TODO: This is inefficient, batch calls to the DB where possible
-        //for (IdeaPart ideaPart : ideaParts) {
+        for (IdeaPart ideaPart : ideaParts) {
             // TODO: Update this to use the authenticated user
             // final long userId = authenticatedUser.getId();
             final long userId = 1L;
@@ -86,16 +112,16 @@ public class IdeaResource {
 
             // Don't allow someone to add more parts than the type allows
             if (ideaPart.getId() == null) {
-                int currentTypeCount = ideaPartDAO.countPartsByType(userId, ideaPart.getIdeaPartType());
+                int currentTypeCount = ideaPartDAO.countPartsByType(userId, ideaPart.getIdeaPartTypeId());
 
-                if (!ideaPart.getIdeaPartType().isAllowMultiple() && currentTypeCount > 0) {
+                if (!ideaDefinitionCache.isPartTypeAllowedMultiple(ideaPart.getIdeaPartTypeId()) && currentTypeCount > 0) {
                     throw new UserNotAllowedToCreateMultipleIdeaPartsOfTypeException();
                 }
             }
+            
+            ideaPart = ideaPartDAO.createOrUpdateIdeaPart(ideaPart);
+        }
 
-            /*ideaPart = */ideaPartDAO.updateIdeaPart(ideaPart);
-        //}
-
-        return ideaPart;
+        return ideaParts;
     }
 }

@@ -8,6 +8,9 @@
             <column name="user_id" type="BIGINT(20)">
                 <constraints nullable="false"/>
             </column>
+            <column name="is_private" type="TINYINT(1)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-2">
@@ -206,7 +209,7 @@
             <column name="id">3</column>
             <column name="name">features</column>
             <column name="metadata">{"nameText": "Feature", "justificationText": "How does this provide more value to your core idea/elevator pitch?"}</column>
-            <column name="allow_multiple">0</column>
+            <column name="allow_multiple">1</column>
         </insert>
     </changeSet>
     
@@ -214,6 +217,7 @@
         <insert tableName="idea">
             <column name="id">1</column>
             <column name="user_id">1</column>
+            <column name="is_private">0</column>
         </insert>
     </changeSet>
     

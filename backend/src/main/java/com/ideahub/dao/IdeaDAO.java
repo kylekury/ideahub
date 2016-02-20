@@ -1,7 +1,10 @@
 package com.ideahub.dao;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
+import com.google.common.base.Optional;
 import com.ideahub.model.Idea;
 
 import io.dropwizard.hibernate.AbstractDAO;
@@ -15,7 +18,14 @@ public class IdeaDAO extends AbstractDAO<Idea> {
         super(sessionFactory);
     }
     
-    public Idea create(Idea idea) {
+    public Idea create(final Idea idea) {
         return this.persist(idea);
+    }
+    
+    public Optional<Idea> findById(final long ideaId) {
+        Criteria criteria = this.criteria()
+                .add(Restrictions.eq("id", ideaId));
+        
+        return Optional.fromNullable(this.uniqueResult(criteria));
     }
 }
