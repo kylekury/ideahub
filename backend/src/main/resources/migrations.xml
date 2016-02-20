@@ -2,20 +2,20 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet author="kyle" id="1455957189141-1">
         <createTable tableName="idea">
-            <column name="id" autoIncrement="true" type="INT(10)">
+            <column name="id" autoIncrement="true" type="BIGINT(20)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="user_id" type="INT(10)">
+            <column name="user_id" type="BIGINT(20)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-2">
         <createTable tableName="idea_collaborator">
-            <column name="user_id" type="INT(10)">
+            <column name="user_id" type="BIGINT(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="idea_id" type="INT(10)">
+            <column name="idea_id" type="BIGINT(20)">
                 <constraints nullable="false"/>
             </column>
             <column name="invite_status" type="TINYINT(3)"/>
@@ -23,13 +23,13 @@
     </changeSet>
     <changeSet author="kyle" id="1455957189141-3">
         <createTable tableName="idea_part">
-            <column name="id" autoIncrement="true" type="INT(10)">
+            <column name="id" autoIncrement="true" type="BIGINT(20)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="user_id" type="INT(10)">
+            <column name="user_id" type="BIGINT(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="idea_id" type="INT(10)">
+            <column name="idea_id" type="BIGINT(20)">
                 <constraints nullable="false"/>
             </column>
             <column name="idea_part_type_id" type="INT(10)">
@@ -49,13 +49,13 @@
     </changeSet>
     <changeSet author="kyle" id="1455957189141-4">
         <createTable tableName="idea_part_suggestion">
-            <column name="id" autoIncrement="true" type="INT(10)">
+            <column name="id" autoIncrement="true" type="BIGINT(20)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="user_id" type="INT(10)">
+            <column name="user_id" type="BIGINT(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="idea_part_id" type="INT(10)">
+            <column name="idea_part_id" type="BIGINT(20)">
                 <constraints nullable="false"/>
             </column>
             <column name="suggestion" type="VARCHAR(100)">
@@ -83,7 +83,7 @@
     </changeSet>
     <changeSet author="kyle" id="1455957189141-6">
         <createTable tableName="user">
-            <column name="id" autoIncrement="true" type="INT(10)">
+            <column name="id" autoIncrement="true" type="BIGINT(20)">
                 <constraints primaryKey="true"/>
             </column>
             <column name="oauth_token" type="VARCHAR(45)"/>

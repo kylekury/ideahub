@@ -38,17 +38,17 @@ public class IdeaPartSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     @JsonIgnore
-    private int id;
+    private long id;
 
     // I think we need to reference just the id here instead of the object
     // as we'd run into a double-binding issue in a previous project
     @Column(name = "idea_part_id", nullable = false)
-    private int ideaPartId;
+    private long ideaPartId;
 
     // I think we need to reference just the id here instead of the object
     // as we'd run into a double-binding issue in a previous project
     @Column(name = "user_id", nullable = false)
-    private int userId;
+    private long userId;
     
     @Column(name = "suggestion", nullable = false)
     private String suggestion;

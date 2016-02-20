@@ -36,7 +36,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     @JsonIgnore
-    private int id;
+    private long id;
 
     @Column(name = "oauth_token", nullable = false)
     private String oauthToken;

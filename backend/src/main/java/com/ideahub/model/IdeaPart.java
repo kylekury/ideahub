@@ -49,17 +49,17 @@ public class IdeaPart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     @JsonIgnore
-    private Integer id;
+    private Long id;
     
     // I think we need to reference just the id here instead of the object
     // as we'd run into a double-binding issue in a previous project
     @Column(name = "user_id", nullable = false)
-    private int userId;
+    private long userId;
     
     // I think we need to reference just the id here instead of the object
     // as we'd run into a double-binding issue in a previous project
     @Column(name = "idea_id", nullable = false)
-    private int ideaId;
+    private long ideaId;
     
     @ManyToOne
     @JoinColumn(name = "idea_part_type_id")
