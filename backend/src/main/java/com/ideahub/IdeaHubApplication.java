@@ -12,6 +12,8 @@ import com.ideahub.model.IdeaPart;
 import com.ideahub.model.IdeaPartSuggestion;
 import com.ideahub.model.IdeaPartType;
 import com.ideahub.model.User;
+import com.ideahub.resources.AuthenticationResource;
+import com.ideahub.resources.IdeaResource;
 
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
@@ -77,6 +79,7 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
                 .setSerializationInclusion(Include.NON_NULL);
 
         this.registerExternalDependencies(configuration, environment);
+        this.registerResources(environment);
     }
 
     @Override
@@ -109,5 +112,10 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
                 .state(configuration.getSecretState())
                 .callback("http://localhost:8080/auth/authorized")
                 .build(GitHubApi.instance()));
+    }
+    
+    protected void registerResources(final Environment environment) {
+        environment.jersey().register(this.petite.getBean(AuthenticationResource.class));
+        environment.jersey().register(this.petite.getBean(IdeaResource.class));
     }
 }

@@ -6,13 +6,17 @@ import org.hibernate.SessionFactory;
 import com.ideahub.model.User;
 
 import io.dropwizard.hibernate.AbstractDAO;
+import jodd.petite.meta.PetiteBean;
+import jodd.petite.meta.PetiteInject;
 
 /**
  * Home object for domain model class User.
  *
  * @see User
  */
+@PetiteBean
 public class UserDAO extends AbstractDAO<User> {
+    @PetiteInject
     public UserDAO(final SessionFactory sessionFactory) {
         super(sessionFactory);
     }
