@@ -1,0 +1,27 @@
+{
+  "name": "ideaHub",
+  "version": "1.0.0",
+  "description": "Social Platform to Discuss and Manage Ideas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ideaHub",
+  "license": "ISC",
+  "devDependencies": {
+    "bootstrap": "^3.3.6",
+    "jade": "^1.11.0",
+    "jquery": "^2.2.0",
+    "node-sass": "^3.4.2",
+    "requirejs": "^2.1.22",
+    "uglifyjs": "^2.4.10",
+    "underscore": "^1.8.3",
+    "watch": "^0.17.1"
+  },
+  "config": {
+    "output_path": "build"
+  },
+  "scripts": {
+  	"copy-images": "cp -R -f -p assets/images $npm_package_config_output_path/"
+  }
+}
