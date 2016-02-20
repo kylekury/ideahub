@@ -33,7 +33,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = { "id" })
 @ToString
 @Entity
-@Table(name = "idea_part_suggestion")
+@Table(name = "idea_part_type")
 @DynamicUpdate
 public class IdeaPartType {
     @Id
@@ -47,5 +47,5 @@ public class IdeaPartType {
     
     @Type(type = "com.ideahub.model.userType.IdeaPartTypeMetadataUserType")
     @Column(name = "metadata", nullable = false)
-    private String metadata;
+    private IdeaPartTypeMetadata metadata;
 }

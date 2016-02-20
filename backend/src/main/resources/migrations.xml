@@ -205,12 +205,12 @@
         <insert tableName="idea_part_type">
             <column name="id">1</column>
             <column name="name">name</column>
-            <column name="metadata">{"name_text": "Idea Name", "justification_text": "How does the name tie into what your idea is about?"}</column>
+            <column name="metadata">{"nameText": "Idea Name", "justificationText": "How does the name tie into what your idea is about?"}</column>
         </insert>
         <insert tableName="idea_part_type">
             <column name="id">2</column>
             <column name="name">elevator_pitch</column>
-            <column name="metadata">{"name_text": "Elevator Pitch", "justification_text": "How will this entice someone to want to know more about your idea?"}</column>
+            <column name="metadata">{"nameText": "Elevator Pitch", "justificationText": "How will this entice someone to want to know more about your idea?"}</column>
         </insert>
     </changeSet>
     
