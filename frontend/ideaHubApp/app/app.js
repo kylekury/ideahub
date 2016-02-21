@@ -36,6 +36,10 @@
 			templateUrl: 'app/project/project.html',
 			controller: 'ProjectController'
 		}).
+			when('/dashboard', {
+			templateUrl: 'app/dashboard/dashboard.html',
+			controller: 'DashboardController'
+		}).
 		otherwise({
 			redirectTo: '/home'
 		});
