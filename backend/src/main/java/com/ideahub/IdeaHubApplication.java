@@ -13,6 +13,7 @@ import com.github.scribejava.core.oauth.OAuth20Service;
 import com.ideahub.auth.TokenAuthenticator;
 import com.ideahub.auth.UserRoleAuthorizer;
 import com.ideahub.model.Idea;
+import com.ideahub.model.IdeaCollaborator;
 import com.ideahub.model.IdeaPart;
 import com.ideahub.model.IdeaPartSuggestion;
 import com.ideahub.model.IdeaPartType;
@@ -46,7 +47,8 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
             Idea.class,
             IdeaPart.class,
             IdeaPartType.class,
-            IdeaPartSuggestion.class) {
+            IdeaPartSuggestion.class,
+            IdeaCollaborator.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(
                 final IdeaHubConfiguration configuration) {

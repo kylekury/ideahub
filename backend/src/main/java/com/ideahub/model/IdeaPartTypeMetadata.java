@@ -2,8 +2,6 @@ package com.ideahub.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +19,8 @@ public class IdeaPartTypeMetadata implements Serializable {
     private static final long serialVersionUID = 7804576875753054455L;
     
     private String nameText;
+
+    private String nameToolTip;
     
     private String justificationText;
 }

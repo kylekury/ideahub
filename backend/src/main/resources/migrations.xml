@@ -8,6 +8,9 @@
             <column name="user_id" type="BIGINT(20)">
                 <constraints nullable="false"/>
             </column>
+            <column name="is_private" type="TINYINT(1)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-2">
@@ -41,10 +44,10 @@
             <column name="downvotes" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="content" type="VARCHAR(100)">
+            <column name="content" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="justification" type="VARCHAR(100)"/>
+            <column name="justification" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-4">
@@ -199,14 +202,80 @@
         <insert tableName="idea_part_type">
             <column name="id">2</column>
             <column name="name">elevator_pitch</column>
-            <column name="metadata">{"nameText": "Elevator Pitch", "justificationText": "How will this entice someone to want to know more about your idea?"}</column>
+            <column name="metadata">{"nameText": "Elevator Pitch", "nameToolTip": "Your one-sentence sales sentence for those interested in your idea.", "justificationText": "How will this entice someone to want to know more about your idea?"}</column>
             <column name="allow_multiple">0</column>
         </insert>
         <insert tableName="idea_part_type">
             <column name="id">3</column>
-            <column name="name">features</column>
-            <column name="metadata">{"nameText": "Feature", "justificationText": "How does this provide more value to your core idea/elevator pitch?"}</column>
+            <column name="name">motivation</column>
+            <column name="metadata">{"nameText": "Motivation", "nameToolTip": "Why should someone be interested in your idea?", "justificationText": "How will this entice someone to want to know more about your idea?"}</column>
             <column name="allow_multiple">0</column>
+        </insert>
+        <insert tableName="idea_part_type">
+            <column name="id">4</column>
+            <column name="name">target_audience</column>
+            <column name="metadata">{"nameText": "Target Audience", "nameToolTip": "Who are you building this idea for?", "justificationText": "Why is this group of people the best fit for your idea?"}</column>
+            <column name="allow_multiple">0</column>
+        </insert>
+        <insert tableName="idea_part_type">
+            <column name="id">5</column>
+            <column name="name">platform</column>
+            <column name="metadata">{"nameText": "Platform", "nameToolTip": "Website? App? eBook?", "justificationText": "How will this platform benefit from your idea? How will your users benefit from this platform?"}</column>
+            <column name="allow_multiple">1</column>
+        </insert>
+        <insert tableName="idea_part_type">
+            <column name="id">6</column>
+            <column name="name">revenue_model</column>
+            <column name="metadata">{"nameText": "Revenue Model", "nameToolTip": "If this isn't free, how are you planning to earn money?", "justificationText": "What is the benefit of going with this model?"}</column>
+            <column name="allow_multiple">1</column>
+        </insert>
+        <insert tableName="idea_part_type">
+            <column name="id">7</column>
+            <column name="name">features</column>
+            <column name="metadata">{"nameText": "Feature", "nameToolTip": "A feature should somehow relate to your elevator pitch.", "justificationText": "How does this provide more value to your core concepts?"}</column>
+            <column name="allow_multiple">1</column>
+        </insert>
+        <insert tableName="idea_part_type">
+            <column name="id">8</column>
+            <column name="name">open_questions</column>
+            <column name="metadata">{"nameText": "Open Questions", "nameToolTip": "Things that are totally open-ended right now.", "justificationText": "What can you do to remove uncertainty?"}</column>
+            <column name="allow_multiple">1</column>
+        </insert>
+        <insert tableName="idea_part_type">
+            <column name="id">9</column>
+            <column name="name">approaches</column>
+            <column name="metadata">{"nameText": "Approaches", "nameToolTip": "What tools are you going to use to build this idea?", "justificationText": "Why is this the best choice?"}</column>
+            <column name="allow_multiple">1</column>
+        </insert>
+        <insert tableName="idea_part_type">
+            <column name="id">10</column>
+            <column name="name">attachments</column>
+            <column name="metadata">{"nameText": "Wireframes/Docs/Mockups/Screenshots", "nameToolTip": "Visual design.", "justificationText": "What is this showing?"}</column>
+            <column name="allow_multiple">1</column>
+        </insert>
+        <insert tableName="idea_part_type">
+            <column name="id">11</column>
+            <column name="name">challenges</column>
+            <column name="metadata">{"nameText": "Challenges", "nameToolTip": "You know the problem but not the solution.", "justificationText": "What can you do to remove uncertainty?"}</column>
+            <column name="allow_multiple">1</column>
+        </insert>
+        <insert tableName="idea_part_type">
+            <column name="id">12</column>
+            <column name="name">competition</column>
+            <column name="metadata">{"nameText": "Competition", "nameToolTip": "Who will be trying to take users from you?", "justificationText": "Why will they be trying to take users away from you? How will you prevent that from happening?"}</column>
+            <column name="allow_multiple">1</column>
+        </insert>
+        <insert tableName="idea_part_type">
+            <column name="id">13</column>
+            <column name="name">tasks</column>
+            <column name="metadata">{"nameText": "High Level Tasks", "nameToolTip": "Break down things you need to do.", "justificationText": "How much effort will this take?"}</column>
+            <column name="allow_multiple">1</column>
+        </insert>
+        <insert tableName="idea_part_type">
+            <column name="id">14</column>
+            <column name="name">core_concepts</column>
+            <column name="metadata">{"nameText": "Core Concepts", "nameToolTip": "The pillars that support your idea.", "justificationText": "How will this further support your idea?"}</column>
+            <column name="allow_multiple">1</column>
         </insert>
     </changeSet>
     
@@ -214,6 +283,7 @@
         <insert tableName="idea">
             <column name="id">1</column>
             <column name="user_id">1</column>
+            <column name="is_private">0</column>
         </insert>
     </changeSet>
     
@@ -272,24 +342,174 @@
             <column name="justification">Showing potential users that we can guide them through the idea-forming process.</column>
         </insert>
         <insert tableName="idea_part">
-            <column name="id">3</column>
+            <column name="id">5</column>
             <column name="user_id">1</column>
             <column name="idea_id">1</column>
             <column name="idea_part_type_id">3</column>
+            <column name="upvotes">0</column>
+            <column name="downvotes">0</column>
+            <column name="content">This is a better system than trying to organize yourself in Excel or Word.</column>
+            <column name="justification">People need a structured way to visualize their ideas, so they can actually execute.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">6</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">4</column>
+            <column name="upvotes">0</column>
+            <column name="downvotes">0</column>
+            <column name="content">Designers, Developers, and Entrepreneurs.</column>
+            <column name="justification">These people often come up with great ideas that they can't execute on because they don't fully explore the idea, causing them to give up.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">7</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">5</column>
+            <column name="upvotes">2</column>
+            <column name="downvotes">1</column>
+            <column name="content">Web Application.</column>
+            <column name="justification">Why not? :)</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">8</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">5</column>
+            <column name="upvotes">6</column>
+            <column name="downvotes">0</column>
+            <column name="content">Web Application.</column>
+            <column name="justification">This will allow users to quickly add parts of ideas on the fly, and then go into more detail when they're at their desk.</column>
+        </insert>      
+        <insert tableName="idea_part">
+            <column name="id">10</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">6</column>
+            <column name="upvotes">6</column>
+            <column name="downvotes">0</column>
+            <column name="content">Private Idea Subscription.</column>
+            <column name="justification">Copy the GitHub model of giving everyone free ideas, but you pay to keep them private.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">11</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">7</column>
             <column name="upvotes">4</column>
             <column name="downvotes">2</column>
             <column name="content">Private and public ideas.</column>
             <column name="justification">This will allow users to prevent their ideas from being stolen, and generate revenue for us.</column>
         </insert>
         <insert tableName="idea_part">
-            <column name="id">4</column>
+            <column name="id">12</column>
             <column name="user_id">1</column>
             <column name="idea_id">1</column>
-            <column name="idea_part_type_id">3</column>
+            <column name="idea_part_type_id">7</column>
             <column name="upvotes">2</column>
             <column name="downvotes">5</column>
             <column name="content">Allow users to allow others to collaborate on their ideas.</column>
             <column name="justification">Further helps someone flesh out an idea, instead of relying on just themselves.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">13</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">8</column>
+            <column name="upvotes">3</column>
+            <column name="downvotes">3</column>
+            <column name="content">Should we support email digests for collaborators?</column>
+            <column name="justification">Talk to some users of the system to understand if they'd like this feature.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">14</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">9</column>
+            <column name="upvotes">3</column>
+            <column name="downvotes">3</column>
+            <column name="content">Backend: Dropwizard + MySQL</column>
+            <column name="justification">This will get us running as fast as possible, given the team's skillset.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">15</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">9</column>
+            <column name="upvotes">3</column>
+            <column name="downvotes">3</column>
+            <column name="content">Frontend: npm + jade + sass + jQuery</column>
+            <column name="justification">This will get us running as fast as possible, given the team's skillset.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">16</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">10</column>
+            <column name="upvotes">3</column>
+            <column name="downvotes">3</column>
+            <column name="content">https://docs.google.com/document/d/1hXRBFFCC5cVKPb8rqOQkv9_7z9LkAAsYaJtQo45ax8E/edit</column>
+            <column name="justification">Initial design document that we worked off of.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">17</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">11</column>
+            <column name="upvotes">3</column>
+            <column name="downvotes">3</column>
+            <column name="content">How the hell can we build this thing in 48h?</column>
+            <column name="justification">Caffeine.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">18</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">12</column>
+            <column name="upvotes">3</column>
+            <column name="downvotes">3</column>
+            <column name="content">GitHub</column>
+            <column name="justification">It's such a similar model, they could just absorb our idea, but we'll try to be more focused than them.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">19</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">13</column>
+            <column name="upvotes">3</column>
+            <column name="downvotes">3</column>
+            <column name="content">Build the backend.</column>
+            <column name="justification">48</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">20</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">13</column>
+            <column name="upvotes">3</column>
+            <column name="downvotes">3</column>
+            <column name="content">Build the frontend</column>
+            <column name="justification">48</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">21</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">14</column>
+            <column name="upvotes">3</column>
+            <column name="downvotes">3</column>
+            <column name="content">The application should make it easy for you to flesh out an idea.</column>
+            <column name="justification">We want low pain for the end user, this should be better than using a spreadsheet.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">22</column>
+            <column name="user_id">1</column>
+            <column name="idea_id">1</column>
+            <column name="idea_part_type_id">9</column>
+            <column name="upvotes">3</column>
+            <column name="downvotes">3</column>
+            <column name="content">GitHub for authentication.</column>
+            <column name="justification">Most of the target audience uses GitHub, so make it pain-free.</column>
         </insert>
     </changeSet>
         

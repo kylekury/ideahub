@@ -2,15 +2,7 @@ package com.ideahub.model;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -53,11 +45,13 @@ public class Idea {
     @Column(name = "user_id", nullable = false)
     private long userId;
         
-    @OneToMany(cascade = { CascadeType.ALL })
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     @JoinColumn(name = "idea_id") // Which column in the referenced table will be joined
     private Set<IdeaPart> ideaParts;
-    
-    // TODO: Uncomment this when collaborators are added
-//    @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "idea")
-//    private Set<IdeaCollaborator> ideaCollaborators;
+
+    @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "idea")
+    private Set<IdeaCollaborator> ideaCollaborators;
+
+    @Column(name = "is_private", nullable = false)
+    private boolean isPrivate;
 }

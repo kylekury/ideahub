@@ -2,12 +2,17 @@ package com.ideahub.model;
 // Generated Feb 20, 2016 12:32:19 AM by Hibernate Tools 4.3.1
 
 import java.security.Principal;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
@@ -54,16 +59,16 @@ public class User implements Principal {
         return this.username;
     }
 
-    // TODO: Uncomment this when we get collaborators in
-    // @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "user")
-    // private Set<IdeaCollaborator> ideaCollaborators = new HashSet<>(0);
-    // @OneToMany(cascade = { CascadeType.ALL })
-    // @JoinColumn(name = "user_id") // Which column in the referenced table
-    // will be joined
-    // private Set<Idea> ideas;
+    @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "user")
+    private Set<IdeaCollaborator> ideaCollaborators = new HashSet<>(0);
 
-    // @OneToMany(cascade = { CascadeType.ALL })
-    // @JoinColumn(name = "user_id") // Which column in the referenced table
-    // will be joined
-    // private Set<IdeaPartSuggestion> ideaPartSuggestions;
+    @OneToMany(cascade = { CascadeType.ALL })
+    @JoinColumn(name = "user_id") // Which column in the referenced table will
+                                  // be joined
+    private Set<Idea> ideas;
+
+    @OneToMany(cascade = { CascadeType.ALL })
+    @JoinColumn(name = "user_id") // Which column in the referenced table will
+                                  // be joined
+    private Set<IdeaPartSuggestion> ideaPartSuggestions;
 }

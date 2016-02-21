@@ -6,7 +6,6 @@ import org.hibernate.criterion.Restrictions;
 
 import com.google.common.base.Optional;
 import com.ideahub.model.IdeaPart;
-import com.ideahub.model.IdeaPartType;
 
 import io.dropwizard.hibernate.AbstractDAO;
 import jodd.petite.meta.PetiteBean;
@@ -19,8 +18,12 @@ public class IdeaPartDAO extends AbstractDAO<IdeaPart> {
         super(sessionFactory);
     }
     
-    public IdeaPart updateIdeaPart(final IdeaPart ideaPart) {
-        return this.persist(ideaPart);
+    public IdeaPart createOrUpdateIdeaPart(final IdeaPart ideaPart) {
+        if (ideaPart.getId() == null) {
+            return this.persist(ideaPart);
+        }
+        
+        return (IdeaPart)this.currentSession().merge(ideaPart);
     }
     
     public boolean userOwnsIdeaPart(final long userId, final long ideaPartId) {
@@ -31,10 +34,10 @@ public class IdeaPartDAO extends AbstractDAO<IdeaPart> {
         return Optional.fromNullable(this.uniqueResult(criteria)).isPresent();
     }
     
-    public int countPartsByType(final long userId, final IdeaPartType ideaPartType) {
+    public int countPartsByType(final long userId, final int ideaPartTypeId) {
         final Criteria criteria = this.criteria()
                 .add(Restrictions.eq("userId", userId))
-                .add(Restrictions.eq("idPartTypeId", ideaPartType.getId()));
+                .add(Restrictions.eq("ideaPartTypeId", ideaPartTypeId));
         
         return this.list(criteria).size();
     }
