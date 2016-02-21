@@ -1,10 +1,27 @@
 package com.ideahub.model;
 
-import lombok.*;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * 
@@ -36,11 +53,13 @@ public class Idea {
     @Column(name = "user_id", nullable = false)
     private long userId;
         
-    @OneToMany(cascade = { CascadeType.ALL })
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     @JoinColumn(name = "idea_id") // Which column in the referenced table will be joined
     private Set<IdeaPart> ideaParts;
-    
 
     @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "idea")
     private Set<IdeaCollaborator> ideaCollaborators;
+
+    @Column(name = "is_private", nullable = false)
+    private boolean isPrivate;
 }
