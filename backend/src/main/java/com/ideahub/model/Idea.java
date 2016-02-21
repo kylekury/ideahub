@@ -76,14 +76,14 @@ public class Idea {
     @Column(name = "created_at", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-    
+
     private transient String name;
-    
+
     private transient String elevatorPitch;
-    
+
     private transient int votes;
-    
+
     private transient int contributions;
-    
+
     private transient String userName;
 }
