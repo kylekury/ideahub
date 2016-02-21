@@ -46,7 +46,7 @@ public class IdeaCollaboratorDAOTest {
 
         final IdeaPartType ideaType = IdeaPartType.builder()
                 .name("Type A")
-                .metadata(new IdeaPartTypeMetadata("A text", "just text"))
+                .metadata(new IdeaPartTypeMetadata("A text", "tooltip","just text"))
                 .build();
         this.testUtil.getSession().save(ideaType);
 

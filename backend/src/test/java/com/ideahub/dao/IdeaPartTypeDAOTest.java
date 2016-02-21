@@ -29,7 +29,7 @@ public class IdeaPartTypeDAOTest {
         for (int i = 0; i < 100; i++) {
             final IdeaPartType ideaType = IdeaPartType.builder()
                     .name(String.valueOf(seed.nextInt(10000)))
-                    .metadata(new IdeaPartTypeMetadata("A text", "just text"))
+                    .metadata(new IdeaPartTypeMetadata("A text", "tooltip","just text"))
                     .build();
             if (i == 0) {
                 name = ideaType.getName();
