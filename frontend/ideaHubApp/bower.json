@@ -1,0 +1,31 @@
+{
+  "name": "ideahubDemo",
+  "version": "0.0.0",
+  "homepage": "https://github.com/kylekury/ideahub",
+  "authors": [
+    "Rocky Lee <rocky.lee@payfirma.com>"
+  ],
+  "description": "ideahubDemo",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.5.0",
+    "bootstrap": "~3.3.6",
+    "jquery": "~2.2.0",
+    "underscore": "~1.8.3",
+    "moment": "~2.6.0",
+    "angular-route": "~1.2.24",
+    "angular-animate": "~1.2.24",
+    "angular-sanitize": "~1.2.24",
+    "font-awesome": "~4.0.3",
+    "extras.angular.plus": "~0.9.0"
+  }
+}
