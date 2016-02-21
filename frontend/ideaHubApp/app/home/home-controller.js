@@ -15,7 +15,8 @@
         $scope.definition_list= [];  
         $scope.recentIdea_list= [];          
         
-        getIdeas ();
+        //getIdeas ();
+        
         getRecentIedas();
 
         
