@@ -1,5 +1,6 @@
 package com.ideahub.resources.idea;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import com.google.common.base.Optional;
 import com.ideahub.dao.IdeaDAO;
 import com.ideahub.exceptions.UserDoesntOwnIdeaException;
 import com.ideahub.model.Idea;
+import com.ideahub.model.RecentIdea;
 import com.ideahub.model.User;
 
 import io.dropwizard.auth.Auth;
@@ -88,14 +90,32 @@ public class IdeaResource {
     @Timed
     @ExceptionMetered
     @UnitOfWork
-    public List<Idea> getRecentIdeas(@QueryParam("total") final Optional<Integer> total) {
+    public List<RecentIdea> getRecentIdeas(@QueryParam("total") final Optional<Integer> total) {
         int totalParameter;
         if (!total.isPresent()) {
             totalParameter = MAX_NUMBER_OF_RECENT_IDEAS;
         } else {
             totalParameter = total.get();
         }
-        return this.ideaDAO.findRecent(Math.min(totalParameter, MAX_NUMBER_OF_RECENT_IDEAS));
+        final List<Idea> ideas = this.ideaDAO.findRecent(Math.min(totalParameter, MAX_NUMBER_OF_RECENT_IDEAS));
+        final List<RecentIdea> recentIdeas = new ArrayList<>(ideas.size());
+        ideas.stream().forEach(idea -> {
+            final RecentIdea recentIdea = RecentIdea.builder()
+                    .id(idea.getId())
+                    .userId(idea.getUserId())
+                    .build();
+            idea.getIdeaParts().stream().filter(ideaPart -> ideaPart.getIdeaPartTypeId() == 1L
+                    || ideaPart.getIdeaPartTypeId() == 2L).forEach(ideaPart -> {
+                        if (ideaPart.getIdeaPartTypeId() == 1L) {
+                            recentIdea.setTitle(ideaPart.getContent());
+                        } else {
+                            recentIdea.setDescription(ideaPart.getContent());
+                        }
+            });
+            recentIdeas.add(recentIdea);
+        });
+
+        return recentIdeas;
     }
 
     @PUT
