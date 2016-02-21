@@ -1,9 +1,9 @@
 package com.ideahub.resources.idea;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -97,7 +97,7 @@ public class IdeaResource {
         } else {
             totalParameter = total.get();
         }
-        final Set<Idea> ideas = new TreeSet<>(this.ideaDAO.findRecent(Math.min(totalParameter, MAX_NUMBER_OF_RECENT_IDEAS)));
+        final Set<Idea> ideas = new HashSet<>(this.ideaDAO.findRecent(Math.min(totalParameter, MAX_NUMBER_OF_RECENT_IDEAS)));
         return ideas;
     }
 
