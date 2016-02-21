@@ -1,31 +1,68 @@
 /* Sticky footer styles
 -------------------------------------------------- */
-html {
+/*html {
   position: relative;
   min-height: 100%;
 }
 body {
-  /* Margin bottom by footer height */
+  /* Margin bottom by footer height 
   margin-bottom: 60px;
 }
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  /* Set the fixed height of the footer here */
+  /* Set the fixed height of the footer here 
   height: 60px;
   background-color: #f5f5f5;
 }
-
+*/
 
 /* Custom page CSS
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
 
-.container {
-  width: auto;
-  padding: 0 15px;
+
+/* Home Banner */
+
+.intro-lead-in span, .intro-heading span {
+  background: rgba(254, 209, 54, 0.8);
 }
-.container .text-muted {
-  margin: 20px 0;
+
+.header-cta, .login-cta {
+  background: black;
+}
+
+.login-cta:hover {
+  background: rgba(0,0,0,0.7);
+}
+
+/* Sections */
+section {
+  padding: 50px 0
+}
+
+
+/* Idea Boxes */
+
+.ideabox {
+  background: #f7f7f7;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 30px;
+}
+
+.ideabox__heading {
+  margin: 15px 0;
+  text-transform: none;
+}
+
+.ideabox__side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ideabox__votes, .ideabox__label {
+  display: block;
 }

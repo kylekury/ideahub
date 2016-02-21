@@ -14,35 +14,53 @@
     </style>
 
     <!-- inject-vendor:css -->
-    <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- endinject -->
+
+    <!-- inject-theme:css -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
     <!-- endinject -->
 
     <!-- inject:css -->
-    <link href="/styles/customtheme.css" rel="stylesheet">
-    <link href="/styles/styles.css" rel="stylesheet" />
-    <link href="/styles/ideahub-styles.css" rel="stylesheet" />
+    <link href="styles/agencytheme.css" rel="stylesheet">
+    <link href="styles/styles.css" rel="stylesheet" />
+    <link href="styles/ideahub-styles.css" rel="stylesheet" />
     <!-- endinject -->
 </head>
-<body>
+<body id="page-top" class="index">
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="#">IdeaHub</a>
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll logo" href="#page-top">ideaHub</a>
             </div>
-            <div id="navbar" class="navbar-collapse collapse">
-              <div class="navbar-form navbar-right">
-                <a href="#login" class="btn btn-success">GitHub Login</a>
-              </div>
-            </div><!--/.navbar-collapse -->
-          </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll login-cta" href="#services">Login with Github</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
     </nav>
 
     <!-- end navigation -->
@@ -64,21 +82,27 @@
 
 
     <!-- inject-vendor:js -->
-    <script src="/bower_components/jquery/dist/jquery.js"></script>
-    <script src="/bower_components/angular/angular.js"></script>
-    <script src="/bower_components/angular-animate/angular-animate.js"></script>
-    <script src="/bower_components/angular-route/angular-route.js"></script>
-    <script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="/bower_components/moment/moment.js"></script>
-    <script src="/bower_components/extras.angular.plus/ngplus-overlay.js"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/extras.angular.plus/ngplus-overlay.js"></script>
     <!-- endinject -->
 
+    <!-- inject-theme:js -->
+     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="vendor/classie.js"></script>
+    <script src="vendor/cbpAnimatedHeader.js"></script>
+    <script src="vendor/agency.js"></script>
+    <!-- endinject -->
 
     <!-- inject:js -->
-    <script src="/app/app.js"></script>
-    <script src="/app/home/home-controller.js"></script>
-    <script src="/app/login/login-controller.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/home/home-controller.js"></script>
+    <script src="app/login/login-controller.js"></script>
 
 </body>
 </html>
