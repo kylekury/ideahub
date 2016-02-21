@@ -1,5 +1,7 @@
 package com.ideahub.resources.idea;
 
+import java.util.List;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -9,6 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,8 +99,18 @@ public class IdeaResource {
         
         idea.get().setPrivate(isPrivate);
                 
-        ideaDAO.createOrUpdate(idea.get());
+        idea = Optional.fromNullable(ideaDAO.createOrUpdate(idea.get()));
         
         return idea;
+    }
+    
+    @GET
+    @Path("/popular")
+    @Timed
+    @ExceptionMetered
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    public List<Idea> getPopularIdeas() throws Exception {
+        return ideaDAO.findPopularIdeas();
     }
 }

@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -82,7 +83,7 @@ public class IdeaPart {
     @Column(name = "justification", nullable = false)
     private String justification;
 
-    @OneToMany(cascade = { CascadeType.ALL })
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     @JoinColumn(name = "idea_part_id") // Which column in the referenced table will be joined
     private Set<IdeaPartSuggestion> ideaPartSuggestions;
 

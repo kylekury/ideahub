@@ -46,7 +46,7 @@ public class IdeaPartSuggestionResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public IdeaPartSuggestion updateIdeaPartSuggestion(/* @Auth final User authenticatedUser, */ IdeaPartSuggestion ideaPartSuggestion) throws Exception {
+    public IdeaPartSuggestion createOrUpdateIdeaPartSuggestion(/* @Auth final User authenticatedUser, */ IdeaPartSuggestion ideaPartSuggestion) throws Exception {
         // TODO: Update this to use the authenticated user
         // final long userId = authenticatedUser.getId();
         final long userId = 1L;
@@ -63,6 +63,8 @@ public class IdeaPartSuggestionResource {
         // if (parentIdea.isPrivate() && !isCollaboratorOnIdea)
 
         if (!parentIdea.isPrivate() || parentIdeaPart.get().getUserId() == userId) {
+            // TODO: This is gross
+            ideaPartSuggestion.setIdeaId(parentIdeaPart.get().getIdeaId());
             ideaPartSuggestion = ideaPartSuggestionDAO.createOrUpdateIdeaPartSuggestion(ideaPartSuggestion);
         }
 

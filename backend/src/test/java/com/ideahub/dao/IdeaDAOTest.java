@@ -1,15 +1,22 @@
 package com.ideahub.dao;
 
-import com.google.common.base.Optional;
-import com.ideahub.model.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import com.google.common.base.Optional;
+import com.ideahub.model.Idea;
+import com.ideahub.model.IdeaCollaborator;
+import com.ideahub.model.IdeaPart;
+import com.ideahub.model.IdeaPartSuggestion;
+import com.ideahub.model.IdeaPartType;
+import com.ideahub.model.IdeaPartTypeMetadata;
+import com.ideahub.model.User;
 
 public class IdeaDAOTest {
     private UserDAO userDAO;
@@ -23,7 +30,7 @@ public class IdeaDAOTest {
                         IdeaPartSuggestion.class, IdeaCollaborator.class));
 
         this.userDAO = new UserDAO(this.testUtil.getSessionFactory());
-        this.ideaDAO = new IdeaDAO(this.testUtil.getSessionFactory());
+        this.ideaDAO = new IdeaDAO(this.testUtil.getSessionFactory(), this.userDAO);
     }
 
     @Test
@@ -52,11 +59,11 @@ public class IdeaDAOTest {
                 .userId(userFound.get().getId())
                 .ideaId(1)
                 .build();
-        Set<IdeaPart> ideaPartSet = new HashSet<>();
-        ideaPartSet.add(ideaPart);
+        Map<Integer, IdeaPart> ideaPartMap = new HashMap<>();
+        ideaPartMap.put(1, ideaPart);
 
         final Idea idea = Idea.builder()
-                .ideaParts(ideaPartSet)
+                .ideaParts(ideaPartMap)
                 .userId(userFound.get().getId())
                 .build();
         this.testUtil.getSession().save(idea);

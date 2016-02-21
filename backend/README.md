@@ -255,6 +255,7 @@ Input:
 Output: 
     {
         "id": 4,
+        "idea_id": 1
         "idea_part_id": 2,
         "user_id": 1,
         "suggestion": "Maybe make it a little more accessible to users.",
@@ -283,4 +284,15 @@ Headers:
     Accept: application/json;
     
 Output: {See update /idea/part/suggestion output}
+```
+
+### List out popular ideas
+
+```
+URI: /idea/popular
+Method: GET
+Headers:
+    Accept: application/json;
+    
+Output: {See load idea output}
 ```
