@@ -4,6 +4,7 @@ package com.ideahub.model;
 import lombok.*;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 /**
@@ -15,6 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 @ToString
+@Embeddable
 public class IdeaCollaboratorId implements Serializable {
 
     @Column(name = "user_id ", nullable = false)

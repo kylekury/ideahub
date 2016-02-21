@@ -1,6 +1,7 @@
 package com.ideahub.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.Optional;
 import org.hibernate.Criteria;
@@ -28,5 +29,27 @@ public class IdeaPartTypeDAO extends AbstractDAO<IdeaPartType> {
         final Criteria criteria = this.criteria()
                 .add(Restrictions.eq("name", aTypeName));
         return Optional.fromNullable(this.uniqueResult(criteria));
+    }
+
+    public Optional<IdeaPartType> findCachedName(String aTypeName) {
+        IdeaPartType result = null;
+        for (IdeaPartType partType : getIdeaDefinition()) {
+            if (partType.getName().equals(aTypeName)) {
+                result = partType;
+                break;
+            }
+        }
+        return Optional.fromNullable(result);
+    }
+
+    public Optional<IdeaPartType> findCachedNameS(String aTypeName) {
+        IdeaPartType result = null;
+        for (IdeaPartType partType : getIdeaDefinition()) {
+            if (partType.getName().equals(aTypeName)) {
+                result = partType;
+                break;
+            }
+        }
+        return Optional.fromNullable(result);
     }
 }

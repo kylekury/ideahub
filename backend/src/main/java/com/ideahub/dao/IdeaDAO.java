@@ -1,5 +1,6 @@
 package com.ideahub.dao;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 
 import com.ideahub.model.Idea;
@@ -7,6 +8,9 @@ import com.ideahub.model.Idea;
 import io.dropwizard.hibernate.AbstractDAO;
 import jodd.petite.meta.PetiteBean;
 import jodd.petite.meta.PetiteInject;
+import org.hibernate.criterion.Restrictions;
+
+import com.google.common.base.Optional;
 
 @PetiteBean
 public class IdeaDAO extends AbstractDAO<Idea> {

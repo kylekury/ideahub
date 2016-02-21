@@ -45,9 +45,9 @@ public class User {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "user")
     private Set<IdeaCollaborator> ideaCollaborators = new HashSet<>(0);
+
     @OneToMany(cascade = {CascadeType.ALL})
     @JoinColumn(name = "user_id") // Which column in the referenced table will be joined
     private Set<Idea> ideas;
