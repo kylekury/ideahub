@@ -1,0 +1,61 @@
+clientId: ""
+clientSecret: ""
+secretState: eVXfFa4E8yepWE+SoYz01CrVVz2U5Y24k4s879r2SO47+bdKDoSPC1tUShUtQJ67HvzKQrWzW9KfnpNyFdu0vA==
+authCallback: http://169.44.56.200:8080/auth/authorized
+
+database:
+  # the name of your JDBC driver
+  driverClass: com.mysql.jdbc.Driver
+
+  # the username
+  user: root
+
+  # the password
+  password: ""
+
+  # the JDBC URL
+  url: jdbc:mysql://127.0.0.1:3306/ideahub?zeroDateTimeBehavior=convertToNull&autoReconnect=true
+
+  # any properties specific to your JDBC driver:
+  properties:
+    charSet: UTF-8
+    hibernate.dialect: org.hibernate.dialect.MySQLDialect
+    hibernate.show_sql: true
+    # hibernate.hbm2ddl.auto: update
+
+  # the maximum amount of time to wait on an empty pool before throwing an exception
+  maxWaitForConnection: 1s
+
+  # the SQL query to run when validating a connection's liveness
+  validationQuery: "/* MyApplication Health Check */ SELECT 1"
+
+  # the minimum number of connections to keep open
+  minSize: 8
+
+  # the maximum number of connections to keep open
+  maxSize: 32
+
+  # whether or not idle connections should be validated
+  checkConnectionWhileIdle: true
+
+  checkConnectionOnBorrow: true
+  
+# Logging settings.
+logging:
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: WARN
+  appenders:
+    - type: file
+      # The file to which current statements will be logged.
+      currentLogFilename: ./logs/ideahub.log
+
+      # When the log file rotates, the archived log will be renamed to this and gzipped. The
+      # %d is replaced with the previous day (yyyy-MM-dd). Custom rolling windows can be created
+      # by passing a SimpleDateFormat-compatible format as an argument: "%d{yyyy-MM-dd-hh}".
+      archivedLogFilenamePattern: ./logs/ideahub-%d.log.gz
+
+      # The number of archived files to keep.
+      archivedFileCount: 2
+
+      # The timezone used to format dates. HINT: USE THE DEFAULT, UTC.
+      timeZone: UTC
