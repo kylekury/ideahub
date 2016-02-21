@@ -22,6 +22,11 @@ body {
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
 
+/* Forms */
+
+input.form-control, select.form-control, textarea.form-control {
+  display: initial;
+}
 
 /* Home Banner */
 
@@ -44,6 +49,10 @@ section {
 
 .profile, .explore {
   padding-top: 100px;
+}
+
+.project {
+  padding-top: 150px;
 }
 
 

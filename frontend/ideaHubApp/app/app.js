@@ -32,6 +32,10 @@
 			templateUrl: 'app/profile/profile.html',
 			controller: 'ProfileController'
 		}).
+			when('/project', {
+			templateUrl: 'app/project/project.html',
+			controller: 'ProjectController'
+		}).
 		otherwise({
 			redirectTo: '/home'
 		});
