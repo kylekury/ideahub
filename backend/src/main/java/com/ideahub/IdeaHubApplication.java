@@ -2,6 +2,7 @@ package com.ideahub;
 
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.hibernate.SessionFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -9,6 +10,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.github.scribejava.apis.GitHubApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.oauth.OAuth20Service;
+import com.ideahub.auth.TokenAuthenticator;
+import com.ideahub.auth.UserRoleAuthorizer;
 import com.ideahub.model.Idea;
 import com.ideahub.model.IdeaCollaborator;
 import com.ideahub.model.IdeaPart;
@@ -24,8 +27,13 @@ import com.ideahub.resources.idea.IdeaPartSuggestionResource;
 import com.ideahub.resources.idea.IdeaResource;
 
 import io.dropwizard.Application;
+import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthFilter;
+import io.dropwizard.auth.AuthValueFactoryProvider;
+import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
+import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -90,6 +98,7 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
                 .setSerializationInclusion(Include.NON_NULL);
 
         this.registerExternalDependencies(configuration, environment);
+        this.registerAuthentication(configuration, environment, environment.jersey());
         this.registerResources(environment);
     }
 
@@ -134,5 +143,29 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
         environment.jersey().register(this.petite.getBean(IdeaDefinitionResource.class));
         environment.jersey().register(this.petite.getBean(IdeaPartResource.class));
         environment.jersey().register(this.petite.getBean(IdeaPartSuggestionResource.class));
+    }
+
+    private void registerAuthentication(final IdeaHubConfiguration configuration,
+            final Environment environment, final JerseyEnvironment adminJerseyEnvironment) {
+        // This will handle the user's session token.
+        final AuthFilter<String, User> tokenBearerAuthFilter = new OAuthCredentialAuthFilter.Builder<User>()
+                .setAuthenticator(this.petite.getBean(TokenAuthenticator.class))
+                .setAuthorizer(this.petite.getBean(UserRoleAuthorizer.class))
+                .setPrefix("Bearer")
+                .setRealm("ideahub")
+                .buildAuthFilter();
+        final AuthDynamicFeature authDynamicFeature = new AuthDynamicFeature(tokenBearerAuthFilter);
+
+        environment.jersey().register(authDynamicFeature);
+        adminJerseyEnvironment.register(authDynamicFeature);
+        // This one provides the ability to authorize user's roles.
+        environment.jersey().register(RolesAllowedDynamicFeature.class);
+        adminJerseyEnvironment.register(RolesAllowedDynamicFeature.class);
+        // This provides the ability to inject User objects to resource method
+        // parameters.
+        final AuthValueFactoryProvider.Binder<User> authValueFactoryProvider = new AuthValueFactoryProvider.Binder<>(
+                User.class);
+        environment.jersey().register(authValueFactoryProvider);
+        adminJerseyEnvironment.register(authValueFactoryProvider);
     }
 }
