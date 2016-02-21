@@ -28,6 +28,10 @@
 			templateUrl: 'app/explore/explore.html',
 			controller: 'HomeController'
 		}).
+			when('/profile', {
+			templateUrl: 'app/profile/profile.html',
+			controller: 'ProfileController'
+		}).
 		otherwise({
 			redirectTo: '/home'
 		});
