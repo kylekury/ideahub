@@ -1,16 +1,19 @@
 package com.ideahub.dao;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-
-import com.ideahub.model.Idea;
-
-import io.dropwizard.hibernate.AbstractDAO;
-import jodd.petite.meta.PetiteBean;
-import jodd.petite.meta.PetiteInject;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.google.common.base.Optional;
+import com.ideahub.model.Idea;
+
+import io.dropwizard.hibernate.AbstractDAO;
+
+import jodd.petite.meta.PetiteBean;
+import jodd.petite.meta.PetiteInject;
 
 @PetiteBean
 public class IdeaDAO extends AbstractDAO<Idea> {
@@ -18,36 +21,43 @@ public class IdeaDAO extends AbstractDAO<Idea> {
     public IdeaDAO(final SessionFactory sessionFactory) {
         super(sessionFactory);
     }
-    
-    public Idea create(Idea idea) {
+
+    public Idea create(final Idea idea) {
         return this.persist(idea);
     }
 
     public Optional<Idea> findById(final long ideaId) {
-        Criteria criteria = this.criteria()
+        final Criteria criteria = this.criteria()
                 .add(Restrictions.eq("id", ideaId));
 
         return Optional.fromNullable(this.uniqueResult(criteria));
     }
 
-    public Optional<Idea> findByUserId(Long aUserId) {
+    public Optional<Idea> findByUserId(final Long aUserId) {
         final Criteria criteria = this.criteria()
                 .add(Restrictions.idEq(aUserId));
         return Optional.fromNullable(this.uniqueResult(criteria));
     }
-    
+
     public boolean delete(final long userId, final long ideaId) {
-        Criteria criteria = this.criteria()
+        final Criteria criteria = this.criteria()
                 .add(Restrictions.eq("id", ideaId))
                 .add(Restrictions.eq("userId", userId));
-        
+
         final Idea foundIdea = this.uniqueResult(criteria);
         if (foundIdea != null) {
             this.currentSession().delete(foundIdea);
-            
+
             return true;
         }
-        
+
         return false;
+    }
+
+    public List<Idea> findRecent(final int maxResults) {
+        final Criteria criteria = this.criteria()
+                .addOrder(Order.desc("createdAt"))
+                .setMaxResults(maxResults);
+        return this.list(criteria);
     }
 }
