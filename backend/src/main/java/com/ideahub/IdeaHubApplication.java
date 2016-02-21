@@ -10,6 +10,7 @@ import com.github.scribejava.apis.GitHubApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.ideahub.model.Idea;
+import com.ideahub.model.IdeaCollaborator;
 import com.ideahub.model.IdeaPart;
 import com.ideahub.model.IdeaPartSuggestion;
 import com.ideahub.model.IdeaPartSuggestionVote;
@@ -44,7 +45,8 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
             IdeaPartVote.class,
             IdeaPartType.class,
             IdeaPartSuggestion.class,
-            IdeaPartSuggestionVote.class) {
+            IdeaPartSuggestionVote.class,
+            IdeaCollaborator.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(
                 final IdeaHubConfiguration configuration) {

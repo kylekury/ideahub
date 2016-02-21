@@ -33,6 +33,7 @@ public class IdeaDefinitionCache {
     private IdeaPartTypeDAO ideaPartTypeDAO;
     
     private Map<Integer, IdeaPartType> ideaPartTypes;
+    private Map<String, IdeaPartType> ideaPartTypesByName;
     private List<IdeaPartType> ideaPartsAsList;
         
     public List<IdeaPartType> getIdeaDefinition() {
@@ -40,7 +41,17 @@ public class IdeaDefinitionCache {
         
         return ideaPartsAsList;
     }
-    
+
+    public Map<String, IdeaPartType> getIdeaPartTypesByName() {
+        loadDefinitions();
+
+        return ideaPartTypesByName;
+    }
+
+    public void setIdeaPartTypeDAO(IdeaPartTypeDAO ideaPartTypeDAO) {
+        this.ideaPartTypeDAO = ideaPartTypeDAO;
+    }
+
     public boolean isPartTypeAllowedMultiple(final int ideaPartTypeId) throws IdeaPartTypeNotFoundException {
         loadDefinitions();
         
@@ -52,12 +63,14 @@ public class IdeaDefinitionCache {
     }
     
     private void loadDefinitions() {
-        if (ideaPartTypes == null) {
+        if ((ideaPartTypes == null) && (ideaPartTypesByName == null)) {
             // This will purge any existing data, very inefficient 
             ideaPartTypes = new HashMap<>();
+            ideaPartTypesByName = new HashMap<>();
             
             for (IdeaPartType ideaPartType : ideaPartTypeDAO.getIdeaDefinition()) {
                 ideaPartTypes.put(ideaPartType.getId(), ideaPartType);
+                ideaPartTypesByName.put(ideaPartType.getName(), ideaPartType);
             }
             
             ideaPartsAsList = new ArrayList<>(ideaPartTypes.values());

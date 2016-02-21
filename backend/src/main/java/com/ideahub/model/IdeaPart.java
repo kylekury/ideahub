@@ -28,8 +28,9 @@ import lombok.ToString;
 
 /**
  * 
- * An IdeaPart is exactly as described, it is a single part of an idea. It's effectively generic, but the IdeaPartType will contain metadata which modifies how
- * it's rendered to the user on the client.
+ * An IdeaPart is exactly as described, it is a single part of an idea. 
+ * It's effectively generic, but the IdeaPartType will contain metadata which
+ * modifies how it's rendered to the user on the client.
  * 
  * @author kyle
  */
@@ -49,12 +50,12 @@ public class IdeaPart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
-
+    
     // I think we need to reference just the id here instead of the object
     // as we'd run into a double-binding issue in a previous project
     @Column(name = "user_id", nullable = false)
     private long userId;
-
+    
     // I think we need to reference just the id here instead of the object
     // as we'd run into a double-binding issue in a previous project
     @Column(name = "idea_id", nullable = false)
@@ -73,10 +74,10 @@ public class IdeaPart {
 
     @Column(name = "content", nullable = false)
     private String content;
-
+    
     @Column(name = "justification", nullable = false)
     private String justification;
-
+        
     @OneToMany(cascade = { CascadeType.ALL })
     @JoinColumn(name = "idea_part_id") // Which column in the referenced table will be joined
     private Set<IdeaPartSuggestion> ideaPartSuggestions;
