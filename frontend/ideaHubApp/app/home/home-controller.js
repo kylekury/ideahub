@@ -6,9 +6,30 @@
         .module('ideaHubApp')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['$q', '$scope','ApiService','Restangular','DefinitionFactory'];
+    HomeController.$inject = ['$q', '$scope','Restangular'];
 
-    function HomeController($q, $scope, ApiService, Restangular, Definition) {
+    function HomeController($q, $scope, Restangular) {
+
+
+        //Initialize
+        $scope.definition_list= [];  
+        $scope.recentIdea_list= [];          
+        
+        getIdeas ();
+        getRecentIedas();
+
+        
+        //Get Recent
+        function getRecentIedas (){
+            var recentIdea = Restangular.all('/idea/recent')
+            recentIdea.getList().then(
+                function(response) {
+                    $scope.recentIdea_list = response;
+                }, function(error) {
+                    return null;
+                }
+            );  
+        }
 
         // {
         // "name": "elevator_pitch",
@@ -17,30 +38,19 @@
         //     "name_text": "Elevator Pitch",
         //     "justification_text": "How will this entice someone to want to know more about your idea?"
         // }
-        $scope.definition_list= [];
+        function getIdeas (){
+            var definition = Restangular.all('/idea/definition')
+            definition.getList().then(
+                function(response) {
+                    //console.log(response);
+                    //return parseResponseDataToArray(response);
+                    $scope.definition_list = response;
 
-        ApiService.getDefinition().then(
-            function(response){
-                $scope.definition_list = parseResponseDataToDefinitionArray(response);
-                //console.log($scope.definition_list);
-            }
-        );
-
-        function parseResponseDataToDefinitionArray(response) {
-            var data = [];
-            if (response) {
-                angular.forEach(response, function(value, key) {
-                    data.push(new Definition(value));
-                });
-            }
-            return data;
+                }, function(error) {
+                    return null;
+                }
+            );  
         }
-
-
-
-
-
-        
 
     }
 
