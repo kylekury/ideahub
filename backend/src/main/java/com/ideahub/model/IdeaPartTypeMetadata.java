@@ -21,6 +21,8 @@ public class IdeaPartTypeMetadata implements Serializable {
     private static final long serialVersionUID = 7804576875753054455L;
     
     private String nameText;
+
+    private String nameToolTip;
     
     private String justificationText;
 }
