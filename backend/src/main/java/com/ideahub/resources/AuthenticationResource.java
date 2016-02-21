@@ -65,6 +65,7 @@ public class AuthenticationResource {
         if (existingUser.isPresent()) {
             user = existingUser.get();
             user.setOauthToken(sessionToken);
+            user.setAvatarUrl(githubUser.getAvatarUrl());
         } else {
             user = User.builder()
                     .email(email)
