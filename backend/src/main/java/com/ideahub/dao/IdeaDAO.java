@@ -1,17 +1,19 @@
 package com.ideahub.dao;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-
-import com.ideahub.model.Idea;
-import com.ideahub.model.IdeaPart;
-
-import io.dropwizard.hibernate.AbstractDAO;
-import jodd.petite.meta.PetiteBean;
-import jodd.petite.meta.PetiteInject;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.google.common.base.Optional;
+import com.ideahub.model.Idea;
+
+import io.dropwizard.hibernate.AbstractDAO;
+
+import jodd.petite.meta.PetiteBean;
+import jodd.petite.meta.PetiteInject;
 
 @PetiteBean
 public class IdeaDAO extends AbstractDAO<Idea> {
@@ -20,34 +22,34 @@ public class IdeaDAO extends AbstractDAO<Idea> {
         super(sessionFactory);
     }
 
-    public Idea createOrUpdate(Idea idea) {
+    public Idea createOrUpdate(final Idea idea) {
         if (idea.getId() == null) {
             return this.persist(idea);
         }
 
         // Hibernate is a POS when it comes to partial updates so we have to write our own :/
-        Idea cleanIdea = this.get(idea.getId());
-        
+        final Idea cleanIdea = this.get(idea.getId());
+
         idea.setUserId(cleanIdea.getUserId());
 
         return (Idea)this.currentSession().merge(idea);
     }
 
     public Optional<Idea> findById(final long ideaId) {
-        Criteria criteria = this.criteria()
+        final Criteria criteria = this.criteria()
                 .add(Restrictions.eq("id", ideaId));
 
         return Optional.fromNullable(this.uniqueResult(criteria));
     }
 
-    public Optional<Idea> findByUserId(Long aUserId) {
+    public Optional<Idea> findByUserId(final Long aUserId) {
         final Criteria criteria = this.criteria()
                 .add(Restrictions.idEq(aUserId));
         return Optional.fromNullable(this.uniqueResult(criteria));
     }
 
     public boolean delete(final long userId, final long ideaId) {
-        Criteria criteria = this.criteria()
+        final Criteria criteria = this.criteria()
                 .add(Restrictions.eq("id", ideaId))
                 .add(Restrictions.eq("userId", userId));
 
@@ -59,5 +61,12 @@ public class IdeaDAO extends AbstractDAO<Idea> {
         }
 
         return false;
+    }
+
+    public List<Idea> findRecent(final int maxResults) {
+        final Criteria criteria = this.criteria()
+                .addOrder(Order.desc("createdAt"))
+                .setMaxResults(maxResults);
+        return this.list(criteria);
     }
 }
