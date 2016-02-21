@@ -31,7 +31,9 @@ var cbpAnimatedHeader = (function() {
 			classie.add( header, 'navbar-shrink' );
 		}
 		else {
-			classie.remove( header, 'navbar-shrink' );
+			if(location.hash === "#/home"){
+				classie.remove( header, 'navbar-shrink' );
+			}
 		}
 		didScroll = false;
 	}

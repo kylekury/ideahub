@@ -48,14 +48,14 @@ input.form-control, select.form-control, textarea.form-control {
   font-weight: normal;
 }
 
+.dark {
+  background: rgba(0,0,0,0.7);
+}
+
 
 /* Sections */
 section {
   padding: 50px 0
-}
-
-.profile, .explore, .dashboard {
-  padding-top: 100px;
 }
 
 .project {
