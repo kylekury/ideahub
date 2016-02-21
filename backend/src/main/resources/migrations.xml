@@ -196,7 +196,7 @@
         <insert tableName="idea_part_type">
             <column name="id">1</column>
             <column name="name">name</column>
-            <column name="metadata">{"nameText": "Idea Name", ""justificationText": "How does the name tie into what your idea is about?"}</column>
+            <column name="metadata">{"nameText": "Idea Name", "justificationText": "How does the name tie into what your idea is about?"}</column>
             <column name="allow_multiple">0</column>
         </insert>
         <insert tableName="idea_part_type">
