@@ -17,8 +17,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -54,7 +52,7 @@ public class Idea {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private long id;
+    private Long id;
 
     // I think we need to reference just the id here instead of the object
     // as we'd run into a double-binding issue in a previous project
@@ -72,8 +70,7 @@ public class Idea {
     @Column(name = "is_private", nullable = false)
     private boolean isPrivate;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
+    @Column(name = "created_at", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @Generated(GenerationTime.INSERT)
     private Date createdAt;
 }
