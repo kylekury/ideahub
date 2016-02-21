@@ -76,61 +76,66 @@ public class CollaborationResource {
     @UnitOfWork
     @PermitAll
     public Response inviteCollaborator(@Auth final User authenticatedUser,
-                           @PathParam("ideaId") final long ideaId,
-                           @PathParam("userEmail") final String targetUserEmail) throws Exception {
+                                       @PathParam("ideaId") final long ideaId,
+                                       @PathParam("userEmail") final String targetUserEmail) throws Exception {
         Response result = (Response.status(Response.Status.NOT_FOUND)).build();
+        User targetUser = null;
         try {
-            final Optional<IdeaCollaborator> collaborator = this.ideaCollaboratorDAO.findById(authenticatedUser.getId(), ideaId);
-            result = (Response.ok()).build();
-        } catch (Exception e) {
-            User targetUser = null;
-            Idea idea = null;
-            IdeaPartType type = null;
-            String transactionId = null;
+            targetUser = this.userDAO.findByEmail(targetUserEmail).get();
             try {
-                targetUser = userDAO.findByEmail(targetUserEmail).get();
-                idea = ideaDAO.findById(ideaId).get();
-                type = ideaPartTypeDAO.findById(idea.getIdeaParts().iterator().next().getIdeaPartTypeId()).get();
-                String fromName = authenticatedUser.getName();
-                String anIdea = type.getName();
-                String to = targetUser.getEmail();
-                String toName = targetUser.getName();
-                String targetTransactionId = IdeaInvitation.generateTransactionId();
-                int attempt = 0;
-                while (attempt < maxAttempts) {
-                    try {
-                        transactionId = ElasticSendMailService
-                                .sendElasticEmail(fromName, anIdea, to, toName, targetTransactionId,
-                                        String.valueOf(ideaId), true);
-                        break;
-                    } catch (SendInviteException inviteAttempt) {
-                        attempt++;
-                        if (attempt >= maxAttempts) {
-                            result = (Response.status(Response.Status.SERVICE_UNAVAILABLE)).build();
+                final Optional<IdeaCollaborator> collaborator = this.ideaCollaboratorDAO.findById(targetUser.getId(), ideaId);
+                // preventing from resend invites already sent
+                result = (Response.ok()).build();
+            } catch (Exception noCollaborator) {
+                Idea idea = null;
+                IdeaPartType type = null;
+                String transactionId = null;
+                try {
+                    idea = ideaDAO.findById(ideaId).get();
+                    type = ideaPartTypeDAO.findById(idea.getIdeaParts().iterator().next().getIdeaPartTypeId()).get();
+                    String fromName = authenticatedUser.getName();
+                    String anIdea = type.getName();
+                    String to = targetUser.getEmail();
+                    String toName = targetUser.getName();
+                    String targetTransactionId = IdeaInvitation.generateTransactionId();
+                    int attempt = 0;
+                    while (attempt < maxAttempts) {
+                        try {
+                            transactionId = ElasticSendMailService
+                                    .sendElasticEmail(fromName, anIdea, to, toName, targetTransactionId,
+                                            String.valueOf(ideaId), true);
                             break;
+                        } catch (SendInviteException inviteAttempt) {
+                            attempt++;
+                            if (attempt >= maxAttempts) {
+                                result = (Response.status(Response.Status.SERVICE_UNAVAILABLE)).build();
+                                break;
+                            }
+                            continue;
                         }
-                        continue;
                     }
+                    if ((transactionId != null) && (result.equals(Response.Status.NOT_FOUND))) {
+                        final IdeaInvitation invitation = IdeaInvitation.builder()
+                                .acceptedState(false)
+                                .inviteState(true)
+                                .createdDate(new Date(System.currentTimeMillis()))
+                                .transactionId(targetTransactionId)
+                                .build();
+                        this.ideaInvitationDAO.create(invitation);
+                        IdeaCollaborator collaborator = IdeaCollaborator.builder()
+                                .idea(idea)
+                                .user(targetUser)
+                                .invitation(invitation)
+                                .build();
+                        this.ideaCollaboratorDAO.create(collaborator);
+                        result = (Response.accepted()).build();
+                    }
+                } catch (Exception e){
+                    result = (Response.status(Response.Status.INTERNAL_SERVER_ERROR)).build();
                 }
-                if ((transactionId != null) && (result.equals(Response.Status.NOT_FOUND))) {
-                    final IdeaInvitation invitation = IdeaInvitation.builder()
-                            .acceptedState(false)
-                            .inviteState(true)
-                            .createdDate(new Date(System.currentTimeMillis()))
-                            .transactionId(targetTransactionId)
-                            .build();
-                    this.ideaInvitationDAO.create(invitation);
-                    IdeaCollaborator collaborator = IdeaCollaborator.builder()
-                            .idea(idea)
-                            .user(targetUser)
-                            .invitation(invitation)
-                            .build();
-                    this.ideaCollaboratorDAO.create(collaborator);
-                    result = (Response.accepted()).build();
-                }
-            } catch (Exception noUser) {
-                // can't send to non registered user
             }
+        } catch (Exception noEmailAddressFound) {
+            // email not found no need to change the response
         }
         return result;
     }

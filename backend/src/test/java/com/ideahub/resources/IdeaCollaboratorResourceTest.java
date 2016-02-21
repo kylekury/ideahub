@@ -116,8 +116,22 @@ public class IdeaCollaboratorResourceTest {
         assertThat(collaboratorFound.get().getUser().getEmail().equals(userB.getEmail())).isTrue();
         assertThat(collaboratorFound.get().getIdea().getId() == ideaFound.get().getId()).isTrue();
         try {
+            final Response response = resource.inviteCollaborator(userA, idea.getId(), userB.getEmail());
+            assertThat(response.getStatus() == Response.Status.OK.getStatusCode()).isTrue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            final Response response = resource.inviteCollaborator(userA, idea.getId(), "userB@test.com");
+            assertThat(response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()).isTrue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
             final Response response = resource.getIdeaInvitation(userB,idea.getId(),invitation.getTransactionId());
-            assertThat(response.getStatus()).isEqualTo(HttpStatus.ACCEPTED_202);
+            assertThat(response.getStatus() == Response.Status.OK.getStatusCode()).isTrue();
         } catch (Exception e) {
             e.printStackTrace();
         }
