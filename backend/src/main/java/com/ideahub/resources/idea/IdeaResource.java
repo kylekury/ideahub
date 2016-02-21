@@ -13,13 +13,13 @@ import org.slf4j.LoggerFactory;
 
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.common.base.Optional;
 import com.ideahub.dao.IdeaDAO;
 import com.ideahub.exceptions.UserDoesntOwnIdeaException;
 import com.ideahub.model.Idea;
+import com.ideahub.model.User;
 
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import jodd.petite.meta.PetiteBean;
 import lombok.AllArgsConstructor;
@@ -38,7 +38,7 @@ public class IdeaResource {
     @ExceptionMetered
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public Optional<Idea> getIdea(@PathParam("ideaId") final long ideaId) throws Exception {
+    public Optional<Idea> getIdea(@Auth final User authenticatedUser, @PathParam("ideaId") final long ideaId) throws Exception {
         // TODO: Replace this with user lookup, anonymous view is fine as well.
         // final long userId = authenticatedUser.getId();
         final long userId = 1L;
@@ -58,12 +58,12 @@ public class IdeaResource {
     @ExceptionMetered
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public Idea createIdea(/*@Auth final User authenticatedUser*/) throws Exception {
+    public Idea createIdea(@Auth final User authenticatedUser) throws Exception {
         Idea idea = new Idea();
 
-        // TODO: Update this to use the authenticated user
-        idea.setUserId(1L);
-        // idea.setUserId(authenticatedUser.getId());
+        // Just in case the user tries to create an idea under someone else's account
+        idea.setUserId(authenticatedUser.getId());
+        
         return ideaDAO.create(idea);
     }
     
@@ -73,11 +73,7 @@ public class IdeaResource {
     @ExceptionMetered
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public boolean deleteIdea(/*@Auth final User authenticatedUser*/ @PathParam("ideaId") final long ideaId) throws Exception {
-        // TODO: Update this to use the authenticated user
-        final long userId = 1L;
-        //final long userId = authenticatedUser.getId();
-        
-        return ideaDAO.delete(userId, ideaId);
+    public boolean deleteIdea(@Auth final User authenticatedUser, @PathParam("ideaId") final long ideaId) throws Exception {
+        return ideaDAO.delete(authenticatedUser.getId(), ideaId);
     }
 }
