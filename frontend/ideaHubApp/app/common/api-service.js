@@ -11,42 +11,47 @@
 
 	function ApiService(Restangular, $rootScope, $q) {
 
-        //http://169.44.56.200:8080/idea/1
+        // http://169.44.56.200:8080/idea/1
 		// URI: /idea/definition
 		// Method: GET
 		// Headers: 'Authorization: Bearer TXwyoVskhA9/utoHWUhPeLgVLYpCeoIKfKNX+0NDHUT5rCZSWToH4rOMIgKcfKNcQckCuYcucizVoWHbInQQLg=='
 		// Accept: application/json;
-        this.getDefinition = function  () {
-            var definition = Restangular.all('/idea/definition')
-			return definition.getList().then(
-	            function(response) {
-	            	//console.log(response);
-	                //return parseResponseDataToArray(response);
-	                return response;
-	            }, function(error) {
-			        return null;
-	            }
-        	);	
-        }
+
+		// function getRecentIedas (){
+		//           ApiService.getRecentIdeas().then(
+		//               function(response){
+		//                   $scope.recentIdea_list = response;
+		//               }
+		//           );
+		//       }
+
+   //      this.getDefinition = function () {
+   //          var definition = Restangular.all('/idea/definition')
+			// return definition.getList().then(
+	  //           function(response) {
+	  //           	//console.log(response);
+	  //               //return parseResponseDataToArray(response);
+	  //               return response;
+	  //           }, function(error) {
+			//         return null;
+	  //           }
+   //      	);	
+   //      }
 
 
-        //Create an idea
-		// URI: /idea
-		// Method: POST
-		// Headers:
-		//     Accept: application/json;
-
-		// Output:
-		//     {
-		//         "id": 1,
-		//         "user_id": 1,
-		//         "is_private": 0
-		//     }
-
-        this.createIdea = function (data) {
+   //      //http://169.44.56.200:8080/idea/recent
+   //      this.getRecentIdeas = function () {
+   //      	var recentIdea = Restangular.all('/idea/recent')
+			// return recentIdea.getList().then(
+	  //           function(response) {
+	  //               return response;
+	  //           }, function(error) {
+			//         return null;
+	  //           }
+   //      	);	
+   //      }
 
 
-        }
 
 
 
