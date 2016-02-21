@@ -4,11 +4,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 
-import com.ideahub.model.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.base.Optional;
+import com.ideahub.model.Idea;
+import com.ideahub.model.IdeaCollaborator;
+import com.ideahub.model.IdeaPart;
+import com.ideahub.model.IdeaPartSuggestion;
+import com.ideahub.model.IdeaPartType;
+import com.ideahub.model.User;
 
 public class UserDAOTest {
     private UserDAO dao;
@@ -29,6 +34,7 @@ public class UserDAOTest {
                 .email("abc@def.com")
                 .username("abcdef")
                 .oauthToken("token")
+                .avatarUrl("whatever")
                 .build();
         this.testUtil.getSession().save(user);
 

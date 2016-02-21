@@ -67,13 +67,14 @@ public class IdeaResource {
     @ExceptionMetered
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public Optional<Idea> getIdea(@Auth final User user, @PathParam("ideaId") final long ideaId)
-            throws Exception {
+    public Optional<Idea> getIdea(@Auth final User authenticatedUser,
+            @PathParam("ideaId") final long ideaId) throws Exception {
         final Optional<Idea> idea = this.ideaDAO.findById(ideaId);
 
         // TODO: There needs to be an OR condition here that also checks whether
         // they're a collaborator
-        if (idea.isPresent() && idea.get().isPrivate() && idea.get().getUserId() != user.getId()) {
+        if (idea.isPresent() && idea.get().isPrivate()
+                && idea.get().getUserId() != authenticatedUser.getId()) {
             throw new UserDoesntOwnIdeaException();
         }
 
@@ -86,12 +87,9 @@ public class IdeaResource {
     @Consumes
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public Idea createIdea(/* @Auth final User authenticatedUser */) throws Exception {
+    public Idea createIdea(@Auth final User authenticatedUser) throws Exception {
         final Idea idea = new Idea();
-
-        // TODO: Update this to use the authenticated user
-        idea.setUserId(1L);
-        // idea.setUserId(authenticatedUser.getId());
+        idea.setUserId(authenticatedUser.getId());
         return this.ideaDAO.create(idea);
     }
 
@@ -102,16 +100,14 @@ public class IdeaResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public List<IdeaPart> updateIdeaParts(/*
-                                           * @Auth final User authenticatedUser,
-                                           */ final List<IdeaPart> ideaParts)
-            throws UserDoesntOwnIdeaPartException,
-            UserNotAllowedToCreateMultipleIdeaPartsOfTypeException, IdeaPartTypeNotFoundException {
+    public List<IdeaPart> updateIdeaParts(@Auth final User authenticatedUser,
+            final List<IdeaPart> ideaParts)
+                    throws UserDoesntOwnIdeaPartException,
+                    UserNotAllowedToCreateMultipleIdeaPartsOfTypeException,
+                    IdeaPartTypeNotFoundException {
         // TODO: This is inefficient, batch calls to the DB where possible
         for (IdeaPart ideaPart : ideaParts) {
-            // TODO: Update this to use the authenticated user
-            // final long userId = authenticatedUser.getId();
-            final long userId = 1L;
+            final long userId = authenticatedUser.getId();
 
             if (ideaPart.getId() != null
                     && !this.ideaPartDAO.userOwnsIdeaPart(userId, ideaPart.getId())) {
@@ -120,7 +116,8 @@ public class IdeaResource {
 
             // Don't allow someone to add more parts than the type allows
             if (ideaPart.getId() == null) {
-                if (!this.ideaDefinitionCache.isPartTypeAllowedMultiple(ideaPart.getIdeaPartTypeId())) {
+                if (!this.ideaDefinitionCache
+                        .isPartTypeAllowedMultiple(ideaPart.getIdeaPartTypeId())) {
                     final int currentTypeCount = this.ideaPartDAO.countPartsByType(userId,
                             ideaPart.getIdeaPartTypeId());
 

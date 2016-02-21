@@ -11,6 +11,9 @@
             <column name="is_private" type="TINYINT(1)">
                 <constraints nullable="false"/>
             </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="created_at" type="TIMESTAMP(19)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-2">
@@ -48,6 +51,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="justification" type="VARCHAR(255)"/>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="created_at" type="TIMESTAMP(19)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
         
         <createTable tableName="idea_part_vote">
@@ -131,6 +137,7 @@
             <column name="oauth_token" type="VARCHAR(88)"/>
             <column name="username" type="VARCHAR(100)"/>
             <column name="email" type="VARCHAR(100)"/>
+            <column name="avatar_url" type="VARCHAR(500)"/>
         </createTable>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-8">
