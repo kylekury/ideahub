@@ -54,6 +54,9 @@ public class User implements Principal {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
+    @Column(name = "avatar_url")
+    private String avatarUrl;
+
     @Override
     public String getName() {
         return this.username;

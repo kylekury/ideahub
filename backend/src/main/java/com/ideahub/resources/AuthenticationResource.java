@@ -69,6 +69,7 @@ public class AuthenticationResource {
             user = User.builder()
                     .email(email)
                     .username(githubUser.getLogin())
+                    .avatarUrl(githubUser.getAvatarUrl())
                     .oauthToken(this.authenticationService.generateSessionToken())
                     .build();
         }
