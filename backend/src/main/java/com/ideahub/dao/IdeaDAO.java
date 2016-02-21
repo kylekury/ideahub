@@ -114,8 +114,13 @@ public class IdeaDAO extends AbstractDAO<Idea> {
         }
         
         // TODO: Move magic numbers into an enum somewhere
-        idea.setName(idea.getIdeaParts().get(1).getContent());
-        idea.setElevatorPitch(idea.getIdeaParts().get(2).getContent());
+        if (idea.getIdeaParts().containsKey(1)) {
+            idea.setName(idea.getIdeaParts().get(1).getContent());
+        }
+        
+        if (idea.getIdeaParts().containsKey(2)) {
+            idea.setElevatorPitch(idea.getIdeaParts().get(2).getContent());
+        }
         
         idea.setUserName(userDAO.findById(idea.getUserId()).get().getName());
         
