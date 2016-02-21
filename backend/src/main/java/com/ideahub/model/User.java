@@ -42,10 +42,10 @@ public class User implements Principal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    @JsonIgnore
     private long id;
 
     @Column(name = "oauth_token")
+    @JsonIgnore
     private String oauthToken;
 
     @Column(name = "username", unique = true, nullable = false)

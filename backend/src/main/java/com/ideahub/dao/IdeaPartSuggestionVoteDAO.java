@@ -29,4 +29,11 @@ public class IdeaPartSuggestionVoteDAO extends AbstractDAO<IdeaPartSuggestionVot
     public Optional<IdeaPartSuggestionVote> voteOnPartSuggestion(final IdeaPartSuggestionVote ideaPartSuggestionVote) {
         return Optional.fromNullable(this.persist(ideaPartSuggestionVote));
     }
+    
+    public int countVotesByIdeaId(final long ideaId) {
+        Criteria criteria = this.criteria()
+                .add(Restrictions.eqOrIsNull("ideaId", ideaId));
+        
+        return criteria.list().size();
+    }
 }

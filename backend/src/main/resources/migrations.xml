@@ -82,6 +82,9 @@
             <column name="user_id" type="BIGINT(20)">
                 <constraints nullable="false"/>
             </column>
+            <column name="idea_id" type="BIGINT(20)">
+                <constraints nullable="false"/>
+            </column>
             <column name="idea_part_id" type="BIGINT(20)">
                 <constraints nullable="false"/>
             </column>
@@ -160,6 +163,9 @@
         <createIndex indexName="fk_idea_part_suggestion_idea_part1_idx" tableName="idea_part_suggestion">
             <column name="idea_part_id"/>
         </createIndex>
+        <createIndex indexName="fk_idea_part_suggestion_idea1_idx" tableName="idea_part_suggestion">
+            <column name="idea_id"/>
+        </createIndex>
         <createIndex indexName="fk_idea_part_suggestion_vote_idea_part_suggestion1_idx" tableName="idea_part_suggestion_vote">
             <column name="idea_part_suggestion_id"/>
         </createIndex>
@@ -193,6 +199,7 @@
     </changeSet>
     <changeSet author="kyle" id="1455957189141-22">
         <addForeignKeyConstraint baseColumnNames="idea_part_id" baseTableName="idea_part_suggestion" constraintName="fk_idea_part_suggestion_idea_part1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="idea_part"/>
+        <addForeignKeyConstraint baseColumnNames="idea_id" baseTableName="idea_part_suggestion" constraintName="fk_idea_part_suggestion_idea1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="idea"/>
         <addForeignKeyConstraint baseColumnNames="idea_part_suggestion_id" baseTableName="idea_part_suggestion_vote" constraintName="fk_idea_part_suggestion_vote_idea_part_suggestion1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="idea_part_suggestion"/>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-23">
@@ -571,12 +578,11 @@
         <insert tableName="idea_part_suggestion">
             <column name="id">1</column>
             <column name="user_id">5</column>
+            <column name="idea_id">1</column>
             <column name="idea_part_id">2</column>
             <column name="suggestion">Can we make this process backed by science, and put that into the pitch?</column>
             <column name="upvotes">6</column>
             <column name="downvotes">0</column>
         </insert>
     </changeSet>
-    
-    
 </databaseChangeLog>
