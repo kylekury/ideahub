@@ -63,7 +63,7 @@ public class CollaborationResource {
         if ((authenticatedUser.getId() == collaborator.getId().getUserId()) &&
                 (collaborator.getInvitation().getCreatedDate().before(new Date(System.currentTimeMillis()))) &&
                 (collaborator.getInvitation().getTransactionId().equals(transactionId))) {
-            result = (Response.accepted()).build();
+            result = (Response.ok()).build();
         }
         return result;
     }
@@ -78,10 +78,10 @@ public class CollaborationResource {
     public Response inviteCollaborator(@Auth final User authenticatedUser,
                            @PathParam("ideaId") final long ideaId,
                            @PathParam("userEmail") final String targetUserEmail) throws Exception {
-        Response result = (Response.status(404)).build();
+        Response result = (Response.status(Response.Status.NOT_FOUND)).build();
         try {
             final Optional<IdeaCollaborator> collaborator = this.ideaCollaboratorDAO.findById(authenticatedUser.getId(), ideaId);
-            // No need to send invitation
+            result = (Response.ok()).build();
         } catch (Exception e) {
             User targetUser = null;
             Idea idea = null;
@@ -106,12 +106,13 @@ public class CollaborationResource {
                     } catch (SendInviteException inviteAttempt) {
                         attempt++;
                         if (attempt >= maxAttempts) {
-                            /// throw new Exception to retry later
+                            result = (Response.status(Response.Status.SERVICE_UNAVAILABLE)).build();
+                            break;
                         }
                         continue;
                     }
                 }
-                if (transactionId != null) {
+                if ((transactionId != null) && (result.equals(Response.Status.NOT_FOUND))) {
                     final IdeaInvitation invitation = IdeaInvitation.builder()
                             .acceptedState(false)
                             .inviteState(true)
