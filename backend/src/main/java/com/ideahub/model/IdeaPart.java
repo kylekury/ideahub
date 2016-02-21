@@ -2,23 +2,22 @@ package com.ideahub.model;
 
 import java.util.Set;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,8 +41,9 @@ import lombok.ToString;
 @ToString(exclude = { "ideaPartType", "ideaPartSuggestions" })
 @Entity
 @Table(name = "idea_part")
-@DynamicUpdate
+@DynamicUpdate(true)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_EMPTY)
 public class IdeaPart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,14 +64,12 @@ public class IdeaPart {
     @Column(name = "idea_part_type_id", nullable = false)
     private int ideaPartTypeId;
 
-    // @Column(name = "idea_part_type_id", nullable = false)
-    // private int ideaPartTypeId;
-
+    // Up/downvotes are stored as Integer vs. int, so we can omit the fields and not have them overwritten on update.
     @Column(name = "upvotes", nullable = false)
-    private int upvotes;
+    private Integer upvotes;
 
     @Column(name = "downvotes", nullable = false)
-    private int downvotes;
+    private Integer downvotes;
 
     @Column(name = "content", nullable = false)
     private String content;

@@ -56,6 +56,17 @@ Output:
     }
 ```
 
+### Delete an idea
+
+```
+URI: /idea/{ideaId}
+Method: DELETE
+Headers:
+    Accept: application/json;
+    
+Output: true
+```
+
 ### Load an idea
 
 ```
@@ -126,54 +137,134 @@ Input:
     [{
         "user_id": 1,
         "idea_id": 1,
-        "idea_part_type_id": 1,
+        "idea_part_type_id": 7,
         "content": "Cool Awesome Idea",
         "justification": "It's awesome"
     },
      {
         "user_id": 1,
         "idea_id": 1,
-        "idea_part_type_id": 3,
+        "idea_part_type_id": 7,
         "content": "Feature B",
         "justification": "It's really cool, so yeah."
     },
      {
-        "id": 3,
+        "id": 15,
         "user_id": 1,
         "idea_id": 1,
-        "idea_part_id": 2,
+        "idea_part_type_id": 7,
         "content": "New Feature C Name.",
         "justification": "It's a great update!"
     }]
     
 Output:
     [{
-        "id": 1,
+        "id": 33,
         "user_id": 1,
         "idea_id": 1,
-        "idea_part_type_id": 3,
-        "upvotes": 0,
-        "downvotes": 0,
-        "content": "Awesome Idea",
+        "idea_part_type_id": 7,
+        "content": "Cool Awesome Idea",
         "justification": "It's awesome"
     }, {
-        "id": 2,
+        "id": 34,
         "user_id": 1,
         "idea_id": 1,
-        "idea_part_type_id": 3,
-        "upvotes": 0,
-        "downvotes": 0,
-        "content": "Pitch Me.",
-        "justification": "OK?"
-    },
-    {
-        "id": 3,
+        "idea_part_type_id": 7,
+        "content": "Feature B",
+        "justification": "It's really cool, so yeah."
+    }, {
+        "id": 15,
         "user_id": 1,
         "idea_id": 1,
-        "idea_part_type_id": 3,
-        "upvotes": 0,
-        "downvotes": 0,
+        "idea_part_type_id": 7,
+        "upvotes": 3,
+        "downvotes": 3,
         "content": "New Feature C Name.",
         "justification": "It's a great update!"
     }]
+```
+
+### Delete Idea Part
+
+```
+URI: /idea/part/{ideaPartId}
+Method: DELETE
+Headers:
+    Accept: application/json;
+    
+Output: true
+```
+
+### Get an idea part w/ suggestions
+
+```
+URI: /idea/part/{ideaPartId}
+Method: GET
+Headers:
+    Accept: application/json;
+    
+Output: { See update /idea/part output }
+```
+
+
+### Vote on an idea part
+
+```
+URI: /idea/part/{ideaPartId}/[upvote|downvote]
+Method: PUT
+Headers:
+    Accept: application/json;
+    
+Output: {See update /idea/part output}
+```
+
+
+### Create or update an idea part suggestion
+
+```
+URI: /idea/part/suggestion
+Method: PUT
+Headers:
+    Accept: application/json;
+
+* If you supply "id" it will update the suggestion, provided you are the owner of it.
+    
+Input:
+    {
+        "user_id": 1,
+        "idea_part_id": 2,
+        "suggestion": "Maybe make it a little more accessible to users."
+    }
+    
+Output: 
+    {
+        "id": 4,
+        "idea_part_id": 2,
+        "user_id": 1,
+        "suggestion": "Maybe make it a little more accessible to users.",
+        "upvotes": 0,
+        "downvotes": 0
+    }
+```
+
+### Delete Idea Part Suggestion
+
+```
+URI: /idea/part/suggestion/{ideaPartSuggestionId}
+Method: DELETE
+Headers:
+    Accept: application/json;
+    
+Output: true
+```
+
+### Vote on an idea part suggestion
+
+```
+URI: /idea/part/{ideaPartSuggestionId}/[upvote|downvote]
+Method: PUT
+Headers:
+    Accept: application/json;
+    
+Output: {See update /idea/part/suggestion output}
 ```

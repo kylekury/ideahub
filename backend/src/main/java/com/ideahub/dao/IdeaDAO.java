@@ -28,4 +28,19 @@ public class IdeaDAO extends AbstractDAO<Idea> {
         
         return Optional.fromNullable(this.uniqueResult(criteria));
     }
+    
+    public boolean delete(final long userId, final long ideaId) {
+        Criteria criteria = this.criteria()
+                .add(Restrictions.eq("id", ideaId))
+                .add(Restrictions.eq("userId", userId));
+        
+        final Idea foundIdea = this.uniqueResult(criteria);
+        if (foundIdea != null) {
+            this.currentSession().delete(foundIdea);
+            
+            return true;
+        }
+        
+        return false;
+    }
 }

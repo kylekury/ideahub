@@ -5,7 +5,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +14,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -27,43 +27,35 @@ import lombok.ToString;
 
 /**
  * 
- * And Idea is formed from several parts, and can be influenced by 
- * creator-chosen collaborators, whom can suggest improvements to the idea.
+ * Represents a user's vote on an idea part.
  * 
- * Links an owner to all of the pieces of an idea.
- *  
  * @author kyle
- *
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(of = { "id" })
-@ToString(exclude = { "ideaParts", "ideaCollaborators" })
+@ToString
 @Entity
-@Table(name = "idea")
+@Table(name = "idea_part_vote")
 @DynamicUpdate(true)
-@JsonInclude(Include.NON_NULL)
-public class Idea {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class IdeaPartVote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private long id;
-    
-    // I think we need to reference just the id here instead of the object
-    // as we'd run into a double-binding issue in a previous project
+    private Long id;
+
     @Column(name = "user_id", nullable = false)
     private long userId;
-        
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-    @JoinColumn(name = "idea_id") // Which column in the referenced table will be joined
-    private Set<IdeaPart> ideaParts;
-    
-    // TODO: Uncomment this when collaborators are added
-//    @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "idea")
-//    private Set<IdeaCollaborator> ideaCollaborators;
-    
-    @Column(name = "is_private", nullable = false)
-    private boolean isPrivate;
+
+    @Column(name = "idea_id", nullable = false)
+    private long ideaId;
+
+    @Column(name = "idea_part_id", nullable = false)
+    private long ideaPartId;
+
+    @Column(name = "vote_count", nullable = false)
+    private int voteCount;
 }
