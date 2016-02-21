@@ -23,5 +23,5 @@ public class IdeaCollaboratorId implements Serializable {
     private int userId;
 
     @Column(name = "idea_id ", nullable = false)
-    private int ideaId;
+    private long ideaId;
 }
