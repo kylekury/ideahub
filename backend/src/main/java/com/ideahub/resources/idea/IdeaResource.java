@@ -1,10 +1,9 @@
 package com.ideahub.resources.idea;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,7 +24,6 @@ import com.google.common.base.Optional;
 import com.ideahub.dao.IdeaDAO;
 import com.ideahub.exceptions.UserDoesntOwnIdeaException;
 import com.ideahub.model.Idea;
-import com.ideahub.model.RecentIdea;
 import com.ideahub.model.User;
 
 import io.dropwizard.auth.Auth;
@@ -92,26 +90,15 @@ public class IdeaResource {
     @Timed
     @ExceptionMetered
     @UnitOfWork
-    public List<RecentIdea> getRecentIdeas(@QueryParam("total") final Optional<Integer> total) {
+    public Set<Idea> getRecentIdeas(@QueryParam("total") final Optional<Integer> total) {
         int totalParameter;
         if (!total.isPresent()) {
             totalParameter = MAX_NUMBER_OF_RECENT_IDEAS;
         } else {
             totalParameter = total.get();
         }
-        final Set<Idea> ideas = new HashSet<>(this.ideaDAO.findRecent(Math.min(totalParameter, MAX_NUMBER_OF_RECENT_IDEAS)));
-        final List<RecentIdea> recentIdeas = new ArrayList<>(ideas.size());
-        ideas.stream().forEach(idea -> {
-            final RecentIdea recentIdea = RecentIdea.builder()
-                    .id(idea.getId())
-                    .userId(idea.getUserId())
-                    .title(idea.getIdeaParts().get(1).getContent())
-                    .description(idea.getIdeaParts().get(2).getContent())
-                    .build();
-            recentIdeas.add(recentIdea);
-        });
-
-        return recentIdeas;
+        final Set<Idea> ideas = new TreeSet<>(this.ideaDAO.findRecent(Math.min(totalParameter, MAX_NUMBER_OF_RECENT_IDEAS)));
+        return ideas;
     }
 
     @PUT
