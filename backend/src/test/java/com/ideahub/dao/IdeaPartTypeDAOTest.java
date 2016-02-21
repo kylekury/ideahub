@@ -1,6 +1,7 @@
 package com.ideahub.dao;
 
 import com.google.common.base.Optional;
+import com.ideahub.cache.IdeaDefinitionCache;
 import com.ideahub.model.IdeaPartType;
 import com.ideahub.model.IdeaPartTypeMetadata;
 import org.hibernate.exception.GenericJDBCException;
@@ -46,26 +47,6 @@ public class IdeaPartTypeDAOTest {
         final Optional<IdeaPartType> notFoundIdeaType = dao.findByName("abc@def.com");
         assertThat(notFoundIdeaType.isPresent()).isFalse();
         final Optional<IdeaPartType> foundIdeaType = dao.findByName(name);
-        assertThat(foundIdeaType.isPresent()).isTrue();
-    }
-
-    @Test
-    public void testFindCachedName() {
-        final IdeaPartType ideaTypeA = IdeaPartType.builder()
-                .name("Type ABC")
-                .metadata(new IdeaPartTypeMetadata("A text", "just text"))
-                .build();
-        testUtil.getSession().save(ideaTypeA);
-
-        final IdeaPartType ideaTypeB = IdeaPartType.builder()
-                .name("Type ABCD")
-                .metadata(new IdeaPartTypeMetadata("A text", "just text"))
-                .build();
-        testUtil.getSession().save(ideaTypeB);
-
-        final Optional<IdeaPartType> notFoundIdeaType = dao.findCachedName("abc@def.com");
-        assertThat(notFoundIdeaType.isPresent()).isFalse();
-        final Optional<IdeaPartType> foundIdeaType = dao.findCachedName("Type ABC");
         assertThat(foundIdeaType.isPresent()).isTrue();
     }
 }

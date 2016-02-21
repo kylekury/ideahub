@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Optional;
+import com.ideahub.cache.IdeaDefinitionCache;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 
@@ -16,6 +17,7 @@ import org.hibernate.criterion.Restrictions;
 
 @PetiteBean
 public class IdeaPartTypeDAO extends AbstractDAO<IdeaPartType> {
+
     @PetiteInject
     public IdeaPartTypeDAO(final SessionFactory sessionFactory) {
         super(sessionFactory);
@@ -26,30 +28,10 @@ public class IdeaPartTypeDAO extends AbstractDAO<IdeaPartType> {
     }
 
     public Optional<IdeaPartType> findByName(String aTypeName) {
-        final Criteria criteria = this.criteria()
-                .add(Restrictions.eq("name", aTypeName));
-        return Optional.fromNullable(this.uniqueResult(criteria));
-    }
-
-    public Optional<IdeaPartType> findCachedName(String aTypeName) {
+        IdeaDefinitionCache cache = new IdeaDefinitionCache();
+        cache.setIdeaPartTypeDAO(this);
         IdeaPartType result = null;
-        for (IdeaPartType partType : getIdeaDefinition()) {
-            if (partType.getName().equals(aTypeName)) {
-                result = partType;
-                break;
-            }
-        }
-        return Optional.fromNullable(result);
-    }
-
-    public Optional<IdeaPartType> findCachedNameS(String aTypeName) {
-        IdeaPartType result = null;
-        for (IdeaPartType partType : getIdeaDefinition()) {
-            if (partType.getName().equals(aTypeName)) {
-                result = partType;
-                break;
-            }
-        }
+        result = cache.getIdeaPartTypesByName().get(aTypeName);
         return Optional.fromNullable(result);
     }
 }
