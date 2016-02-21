@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html data-ng-app="ideaHubApp" ng-strict-di>
+<html data-ng-app="ideaHubApp">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
@@ -91,6 +91,9 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/moment/moment.js"></script>
     <script src="bower_components/extras.angular.plus/ngplus-overlay.js"></script>
+
+    <script src="bower_components/restangular/dist/restangular.js"></script>
+    <script src="bower_components/lodash/lodash.js"></script>
     <!-- endinject -->
 
     <!-- inject-theme:js -->
@@ -102,6 +105,10 @@
 
     <!-- inject:js -->
     <script src="app/app.js"></script>
+
+    <script src="/app/common/api-service.js"></script>
+    <script src="/app/common/definition-factory.js"></script>
+
     <script src="app/home/home-controller.js"></script>
     <script src="app/login/login-controller.js"></script>
 
