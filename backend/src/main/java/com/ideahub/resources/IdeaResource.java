@@ -2,6 +2,7 @@ package com.ideahub.resources;
 
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -27,12 +28,14 @@ import com.ideahub.model.User;
 
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
+
 import jodd.petite.meta.PetiteBean;
 import lombok.AllArgsConstructor;
 
 @Path("/idea")
 @PetiteBean
 @AllArgsConstructor
+@Produces(MediaType.APPLICATION_JSON)
 public class IdeaResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(IdeaResource.class);
 
@@ -44,25 +47,26 @@ public class IdeaResource {
     @Path("/definition")
     @Timed
     @ExceptionMetered
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes
     @UnitOfWork
+    @PermitAll
     public List<IdeaPartType> getIdeaDefinition(@Auth final User authenticatedUser) throws Exception {
-        return ideaPartTypeDAO.getIdeaDefinition();
+        return this.ideaPartTypeDAO.getIdeaDefinition();
     }
 
     @POST
     @Timed
     @ExceptionMetered
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public Idea createIdea(/*@Auth final User authenticatedUser*/) throws Exception {
-        Idea idea = new Idea();
+        final Idea idea = new Idea();
 
         // TODO: Update this to use the authenticated user
         idea.setUserId(1L);
         // idea.setUserId(authenticatedUser.getId());
-        return ideaDAO.create(idea);
+        return this.ideaDAO.create(idea);
     }
 
     @PUT
@@ -80,20 +84,20 @@ public class IdeaResource {
             // final long userId = authenticatedUser.getId();
             final long userId = 1L;
 
-            if (ideaPart.getId() != null && !ideaPartDAO.userOwnsIdeaPart(userId, ideaPart.getId())) {
+            if (ideaPart.getId() != null && !this.ideaPartDAO.userOwnsIdeaPart(userId, ideaPart.getId())) {
                 throw new UserDoesntOwnIdeaPartException();
             }
 
             // Don't allow someone to add more parts than the type allows
             if (ideaPart.getId() == null) {
-                int currentTypeCount = ideaPartDAO.countPartsByType(userId, ideaPart.getIdeaPartType());
+                final int currentTypeCount = this.ideaPartDAO.countPartsByType(userId, ideaPart.getIdeaPartType());
 
                 if (!ideaPart.getIdeaPartType().isAllowMultiple() && currentTypeCount > 0) {
                     throw new UserNotAllowedToCreateMultipleIdeaPartsOfTypeException();
                 }
             }
 
-            /*ideaPart = */ideaPartDAO.updateIdeaPart(ideaPart);
+            /*ideaPart = */this.ideaPartDAO.updateIdeaPart(ideaPart);
         //}
 
         return ideaPart;

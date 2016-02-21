@@ -33,5 +33,46 @@ public class UserDAOTest {
 
         final Optional<User> userFound = this.dao.findByEmail("abc@def.com");
         assertThat(userFound.isPresent()).isTrue();
+        assertThat(userFound.get()).isEqualTo(user);
+    }
+
+    @Test
+    public void testFindByEmailNotFound() {
+        final User user = User.builder()
+                .email("abc@def.com")
+                .username("abcdef")
+                .oauthToken("token")
+                .build();
+        this.testUtil.getSession().save(user);
+
+        final Optional<User> userFound = this.dao.findByEmail("wrong");
+        assertThat(userFound.isPresent()).isFalse();
+    }
+
+    @Test
+    public void testFindByOAuthToken() {
+        final User user = User.builder()
+                .email("abc@def.com")
+                .username("abcdef")
+                .oauthToken("token")
+                .build();
+        this.testUtil.getSession().save(user);
+
+        final Optional<User> userFound = this.dao.openSessionAndFindByOAuthToken("token");
+        assertThat(userFound.isPresent()).isTrue();
+        assertThat(userFound.get()).isEqualTo(user);
+    }
+
+    @Test
+    public void testFindByOAuthTokenNotFound() {
+        final User user = User.builder()
+                .email("abc@def.com")
+                .username("abcdef")
+                .oauthToken("token")
+                .build();
+        this.testUtil.getSession().save(user);
+
+        final Optional<User> userFound = this.dao.openSessionAndFindByOAuthToken("notfound");
+        assertThat(userFound.isPresent()).isFalse();
     }
 }

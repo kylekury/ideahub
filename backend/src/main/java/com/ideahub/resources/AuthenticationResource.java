@@ -3,14 +3,14 @@ package com.ideahub.resources;
 import java.net.URI;
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriInfo;
 
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Sha512Hash;
@@ -30,6 +30,7 @@ import com.github.scribejava.core.model.Token;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.model.Verifier;
 import com.github.scribejava.core.oauth.OAuth20Service;
+import com.google.common.base.Optional;
 import com.google.common.net.HttpHeaders;
 import com.ideahub.dao.UserDAO;
 import com.ideahub.model.User;
@@ -62,8 +63,7 @@ public class AuthenticationResource {
     @ExceptionMetered
     @Consumes
     @UnitOfWork
-    public Response login(@Context final UriInfo uriInfo,
-            @Auth final User authenticatedUser) throws Exception {
+    public Response login() throws Exception {
         return Response.temporaryRedirect(URI.create(this.oauthService.getAuthorizationUrl()))
                 .build();
     }
@@ -74,10 +74,7 @@ public class AuthenticationResource {
     @ExceptionMetered
     @Consumes
     @UnitOfWork
-    public Response authorizedCallback(@QueryParam("code") final String code,
-            @Auth final User authenticatedUser) throws Exception {
-        // TODO(mtakaki): Find the parameter where the authorization token will
-        // be sent.
+    public Response authorizedCallback(@QueryParam("code") final String code) throws Exception {
         final Verifier verifier = new Verifier(code);
         final Token accessToken = this.oauthService.getAccessToken(verifier);
         final OAuthRequest request = new OAuthRequest(Verb.GET, USER_RESOURCE_URL,
@@ -104,16 +101,41 @@ public class AuthenticationResource {
                 new TypeReference<List<Email>>() {
                 });
 
+        // TODO(mitsuo): Handle missing emails case.
+        final Optional<User> existingUser = this.userDAO.findByEmail(emails.get(0).getEmail());
         // Creating our own token
         final SimpleHash sessionToken = new Sha512Hash(this.randomNumberGenerator.nextBytes());
 
-        final User user = User.builder()
-                .email(emails.get(0).getEmail())
-                .username(githubUser.getLogin())
-                .oauthToken(sessionToken.toBase64())
-                .build();
+        User user;
+        if (existingUser.isPresent()) {
+            user = existingUser.get();
+        } else {
+            user = User.builder()
+                    // TODO(mitsuo): Handle missing emails case.
+                    .email(emails.get(0).getEmail())
+                    .username(githubUser.getLogin())
+                    .oauthToken(sessionToken.toBase64())
+                    .build();
+        }
         this.userDAO.save(user);
 
         return Response.ok().header(HttpHeaders.AUTHORIZATION, user.getOauthToken()).build();
+    }
+
+    @DELETE
+    @Timed
+    @ExceptionMetered
+    @Consumes
+    @UnitOfWork
+    @PermitAll
+    public Response logout(@Auth final User authenticatedUser) {
+        if (authenticatedUser != null) {
+            final User user = this.userDAO.findById(authenticatedUser.getId()).get();
+            user.setOauthToken(null);
+            this.userDAO.save(user);
+            return Response.ok().build();
+        } else {
+            return Response.status(Status.BAD_REQUEST).build();
+        }
     }
 }

@@ -1,6 +1,8 @@
 package com.ideahub.model;
 // Generated Feb 20, 2016 12:32:19 AM by Hibernate Tools 4.3.1
 
+import java.security.Principal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,14 +33,14 @@ import lombok.ToString;
 @Entity
 @Table(name = "user")
 @DynamicUpdate
-public class User {
+public class User implements Principal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     @JsonIgnore
     private long id;
 
-    @Column(name = "oauth_token", nullable = false)
+    @Column(name = "oauth_token")
     private String oauthToken;
 
     @Column(name = "username", unique = true, nullable = false)
@@ -47,14 +49,21 @@ public class User {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
+    @Override
+    public String getName() {
+        return this.username;
+    }
+
     // TODO: Uncomment this when we get collaborators in
     // @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "user")
     // private Set<IdeaCollaborator> ideaCollaborators = new HashSet<>(0);
-//    @OneToMany(cascade = { CascadeType.ALL })
-//    @JoinColumn(name = "user_id") // Which column in the referenced table will be joined
-//    private Set<Idea> ideas;
+    // @OneToMany(cascade = { CascadeType.ALL })
+    // @JoinColumn(name = "user_id") // Which column in the referenced table
+    // will be joined
+    // private Set<Idea> ideas;
 
-//    @OneToMany(cascade = { CascadeType.ALL })
-//    @JoinColumn(name = "user_id") // Which column in the referenced table will be joined
-//    private Set<IdeaPartSuggestion> ideaPartSuggestions;
+    // @OneToMany(cascade = { CascadeType.ALL })
+    // @JoinColumn(name = "user_id") // Which column in the referenced table
+    // will be joined
+    // private Set<IdeaPartSuggestion> ideaPartSuggestions;
 }
