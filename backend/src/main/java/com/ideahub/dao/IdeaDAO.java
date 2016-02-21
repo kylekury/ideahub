@@ -22,7 +22,6 @@ import io.dropwizard.hibernate.AbstractDAO;
 import jodd.petite.meta.PetiteBean;
 import jodd.petite.meta.PetiteInject;
 
-
 @PetiteBean
 public class IdeaDAO extends AbstractDAO<Idea> {
     // TODO: This naughty and bad
@@ -114,34 +113,38 @@ public class IdeaDAO extends AbstractDAO<Idea> {
         if (idea == null) {
             return idea;
         }
-        
+
         // TODO: Move magic numbers into an enum somewhere
         if (idea.getIdeaParts().containsKey(1)) {
             idea.setName(idea.getIdeaParts().get(1).getContent());
         }
-        
+
         if (idea.getIdeaParts().containsKey(2)) {
             idea.setElevatorPitch(idea.getIdeaParts().get(2).getContent());
         }
-        
+
         idea.setUserName(userDAO.findById(idea.getUserId()).get().getName());
-        
+
         int votes = 0;
         int contributions = 0;
-        for (IdeaPart ideaPart : idea.getIdeaParts().values()) {
-            votes += ideaPart.getUpvotes();
-            votes += ideaPart.getDownvotes();
-            
-            for (IdeaPartSuggestion ideaPartSuggestion : ideaPart.getIdeaPartSuggestions()) {
-                votes += ideaPartSuggestion.getUpvotes();
-                votes += ideaPartSuggestion.getDownvotes();
+        if (idea.getIdeaParts() != null) {
+            for (IdeaPart ideaPart : idea.getIdeaParts().values()) {
+                votes += ideaPart.getUpvotes();
+                votes += ideaPart.getDownvotes();
+
+                if (ideaPart.getIdeaPartSuggestions() != null) {
+                    for (IdeaPartSuggestion ideaPartSuggestion : ideaPart.getIdeaPartSuggestions()) {
+                        votes += ideaPartSuggestion.getUpvotes();
+                        votes += ideaPartSuggestion.getDownvotes();
+                    }
+                    contributions += ideaPart.getIdeaPartSuggestions().size();
+                }
             }
-            contributions += ideaPart.getIdeaPartSuggestions().size();
         }
-        
+
         idea.setVotes(votes);
         idea.setContributions(contributions);
-        
+
         return idea;
     }
 
@@ -149,12 +152,12 @@ public class IdeaDAO extends AbstractDAO<Idea> {
         final Criteria criteria = this.criteria()
                 .addOrder(Order.desc("createdAt"))
                 .setMaxResults(maxResults);
-        
+
         List<Idea> ideas = this.list(criteria);
         for (Idea idea : ideas) {
             reconcileIdeaSummary(idea);
         }
-        
+
         return ideas;
     }
 }
