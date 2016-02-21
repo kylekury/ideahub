@@ -20,7 +20,7 @@ public class IdeaDAOTest {
     public void setup() {
         this.testUtil = new HibernateDAOTestUtil(
                 Arrays.asList(User.class, Idea.class, IdeaPart.class, IdeaPartType.class,
-                        IdeaPartSuggestion.class, IdeaCollaborator.class));
+                        IdeaPartSuggestion.class, IdeaCollaborator.class, IdeaInvitation.class));
 
         this.userDAO = new UserDAO(this.testUtil.getSessionFactory());
         this.ideaDAO = new IdeaDAO(this.testUtil.getSessionFactory());

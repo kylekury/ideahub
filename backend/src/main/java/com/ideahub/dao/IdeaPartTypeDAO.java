@@ -34,4 +34,12 @@ public class IdeaPartTypeDAO extends AbstractDAO<IdeaPartType> {
         result = cache.getIdeaPartTypesByName().get(aTypeName);
         return Optional.fromNullable(result);
     }
+
+    public Optional<IdeaPartType> findById(int anId) {
+        IdeaDefinitionCache cache = new IdeaDefinitionCache();
+        cache.setIdeaPartTypeDAO(this);
+        IdeaPartType result = null;
+        result = (cache.getIdeaPartTypes()).get(anId);
+        return Optional.fromNullable(result);
+    }
 }

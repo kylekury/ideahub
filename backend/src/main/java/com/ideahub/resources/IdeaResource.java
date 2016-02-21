@@ -12,6 +12,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.ideahub.dao.IdeaCollaboratorDAO;
+import com.ideahub.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,10 +28,6 @@ import com.ideahub.exceptions.IdeaPartTypeNotFoundException;
 import com.ideahub.exceptions.UserDoesntOwnIdeaException;
 import com.ideahub.exceptions.UserDoesntOwnIdeaPartException;
 import com.ideahub.exceptions.UserNotAllowedToCreateMultipleIdeaPartsOfTypeException;
-import com.ideahub.model.Idea;
-import com.ideahub.model.IdeaPart;
-import com.ideahub.model.IdeaPartType;
-import com.ideahub.model.User;
 
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -49,6 +47,7 @@ public class IdeaResource {
     private final IdeaDAO ideaDAO;
     private final IdeaPartDAO ideaPartDAO;
     private final IdeaPartTypeDAO ideaPartTypeDAO;
+    private final IdeaCollaboratorDAO ideaCollaboratorDAO;
 
     @GET
     @Path("/definition")
@@ -71,11 +70,13 @@ public class IdeaResource {
             @PathParam("ideaId") final long ideaId) throws Exception {
         final Optional<Idea> idea = this.ideaDAO.findById(ideaId);
 
-        // TODO: There needs to be an OR condition here that also checks whether
-        // they're a collaborator
-        if (idea.isPresent() && idea.get().isPrivate()
-                && idea.get().getUserId() != authenticatedUser.getId()) {
-            throw new UserDoesntOwnIdeaException();
+        if ((idea.isPresent() && idea.get().isPrivate()
+                && idea.get().getUserId() != authenticatedUser.getId())) {
+            try {
+                final Optional<IdeaCollaborator> collaborator = this.ideaCollaboratorDAO.findById(authenticatedUser.getId(), ideaId);
+            } catch (Exception e) {
+                throw new UserDoesntOwnIdeaException();
+            }
         }
 
         return idea;

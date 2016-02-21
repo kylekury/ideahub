@@ -3,6 +3,7 @@ package com.ideahub.model;
 
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -32,6 +33,7 @@ public class IdeaCollaborator {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "invite_status", nullable = false)
-    private Byte inviteStatus;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idea_invitation_id")
+    private IdeaInvitation invitation;
 }

@@ -126,6 +126,18 @@
             <version>2.3.3</version>
             <scope>test</scope>
         </dependency>
+        <!-- Generate transactionId for the invites -->
+        <dependency>
+            <groupId>com.github.mifmif</groupId>
+            <artifactId>generex</artifactId>
+            <version>0.0.4</version>
+        </dependency>
+        <!-- Better UUID generation -->
+        <dependency>
+            <groupId>com.fasterxml.uuid</groupId>
+            <artifactId>java-uuid-generator</artifactId>
+            <version>3.1.3</version>
+        </dependency>
     </dependencies>
 
     <build>
