@@ -30,8 +30,11 @@ import com.ideahub.exceptions.UserNotAllowedToCreateMultipleIdeaPartsOfTypeExcep
 import com.ideahub.model.Idea;
 import com.ideahub.model.IdeaPart;
 import com.ideahub.model.IdeaPartVote;
+import com.ideahub.model.User;
 
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
+
 import jodd.petite.meta.PetiteBean;
 import lombok.AllArgsConstructor;
 
@@ -57,13 +60,13 @@ public class IdeaPartResource {
         // final long userId = authenticatedUser.getId();
         final long userId = 1L;
 
-        Optional<IdeaPart> ideaPart = ideaPartDAO.findById(ideaPartId);
+        final Optional<IdeaPart> ideaPart = this.ideaPartDAO.findById(ideaPartId);
 
         if (!ideaPart.isPresent()) {
             return ideaPart;
         }
 
-        Optional<Idea> idea = ideaDAO.findById(ideaPart.get().getIdeaId());
+        final Optional<Idea> idea = this.ideaDAO.findById(ideaPart.get().getIdeaId());
 
         // TODO: There needs to be an OR condition here that also checks whether they're a collaborator
         if (idea.isPresent() && idea.get().isPrivate() && idea.get().getUserId() != userId) {
@@ -81,22 +84,21 @@ public class IdeaPartResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public List<IdeaPart> updateIdeaParts(/* @Auth final User authenticatedUser, */ final List<IdeaPart> ideaParts)
+    public List<IdeaPart> updateIdeaParts(@Auth final User authenticatedUser, final List<IdeaPart> ideaParts)
             throws UserDoesntOwnIdeaPartException, UserNotAllowedToCreateMultipleIdeaPartsOfTypeException, IdeaPartTypeNotFoundException {
         // TODO: This is inefficient, batch calls to the DB where possible
         for (IdeaPart ideaPart : ideaParts) {
             // TODO: Update this to use the authenticated user
-            // final long userId = authenticatedUser.getId();
-            final long userId = 1L;
+             final long userId = authenticatedUser.getId();
 
-            if (ideaPart.getId() != null && !ideaPartDAO.userOwnsIdeaPart(userId, ideaPart.getId())) {
+            if (ideaPart.getId() != null && !this.ideaPartDAO.userOwnsIdeaPart(userId, ideaPart.getId())) {
                 throw new UserDoesntOwnIdeaPartException();
             }
 
             // Don't allow someone to add more parts than the type allows
             if (ideaPart.getId() == null) {
-                if (!ideaDefinitionCache.isPartTypeAllowedMultiple(ideaPart.getIdeaPartTypeId())) {
-                    int currentTypeCount = ideaPartDAO.countPartsByType(userId, ideaPart.getIdeaPartTypeId());
+                if (!this.ideaDefinitionCache.isPartTypeAllowedMultiple(ideaPart.getIdeaPartTypeId())) {
+                    final int currentTypeCount = this.ideaPartDAO.countPartsByType(userId, ideaPart.getIdeaPartTypeId());
 
                     if (currentTypeCount > 0) {
                         throw new UserNotAllowedToCreateMultipleIdeaPartsOfTypeException();
@@ -104,7 +106,7 @@ public class IdeaPartResource {
                 }
             }
 
-            ideaPart = ideaPartDAO.createOrUpdateIdeaPart(ideaPart);
+            ideaPart = this.ideaPartDAO.createOrUpdateIdeaPart(ideaPart);
         }
 
         return ideaParts;
@@ -116,12 +118,10 @@ public class IdeaPartResource {
     @ExceptionMetered
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public boolean deleteIdeaPart(/* @Auth final User authenticatedUser */ @PathParam("ideaPartId") final long ideaPartId) throws Exception {
-        // TODO: Update this to use the authenticated user
-        final long userId = 1L;
-        // final long userId = authenticatedUser.getId();
+    public boolean deleteIdeaPart(@Auth final User authenticatedUser, @PathParam("ideaPartId") final long ideaPartId) throws Exception {
+         final long userId = authenticatedUser.getId();
 
-        return ideaPartDAO.delete(userId, ideaPartId);
+        return this.ideaPartDAO.delete(userId, ideaPartId);
     }
 
     @PUT
@@ -131,9 +131,9 @@ public class IdeaPartResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public Optional<IdeaPart> upvote(/* @Auth final User authenticatedUser, */ @PathParam("ideaPartId") final long ideaPartId)
+    public Optional<IdeaPart> upvote(@Auth final User authenticatedUser, @PathParam("ideaPartId") final long ideaPartId)
             throws Exception {
-        return vote(ideaPartId, 1);
+        return this.vote(ideaPartId, 1, authenticatedUser);
     }
 
     @PUT
@@ -143,39 +143,37 @@ public class IdeaPartResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public Optional<IdeaPart> downvote(/* @Auth final User authenticatedUser, */ @PathParam("ideaPartId") final long ideaPartId)
+    public Optional<IdeaPart> downvote(@Auth final User authenticatedUser, @PathParam("ideaPartId") final long ideaPartId)
             throws Exception {
-        return vote(ideaPartId, -1);
+        return this.vote(ideaPartId, -1, authenticatedUser);
     }
 
-    private Optional<IdeaPart> vote(final long ideaPartId, final int voteCount) throws Exception {
-        // TODO: Update this to use the authenticated user
-        // final long userId = authenticatedUser.getId();
-        final long userId = 1L;
+    private Optional<IdeaPart> vote(final long ideaPartId, final int voteCount, final User authenticatedUser) throws Exception {
+        final long userId = authenticatedUser.getId();
 
-        final Optional<IdeaPart> ideaPart = ideaPartDAO.findById(ideaPartId);
+        final Optional<IdeaPart> ideaPart = this.ideaPartDAO.findById(ideaPartId);
 
         if (!ideaPart.isPresent()) {
             return ideaPart;
         }
 
-        final Idea parentIdea = ideaDAO.findById(ideaPart.get().getIdeaId()).get();
+        final Idea parentIdea = this.ideaDAO.findById(ideaPart.get().getIdeaId()).get();
 
         // TODO: If the idea is private, only collaborators may vote on any part
         // if (parentIdea.isPrivate() && !isCollaboratorOnIdea)
 
         if (!parentIdea.isPrivate()) {
-            if (ideaPartVoteDAO.hasUserVotedOnPart(userId, ideaPartId)) {
+            if (this.ideaPartVoteDAO.hasUserVotedOnPart(userId, ideaPartId)) {
                 throw new UserAlreadyVotedOnIdeaPartSuggestionException();
             }
 
-            ideaPartVoteDAO.voteOnPart(IdeaPartVote.builder()
+            this.ideaPartVoteDAO.voteOnPart(IdeaPartVote.builder()
                     .userId(userId)
                     .ideaId(parentIdea.getId())
                     .ideaPartId(ideaPartId)
                     .voteCount(voteCount).build());
 
-            return ideaPartDAO.vote(ideaPartId, voteCount);
+            return this.ideaPartDAO.vote(ideaPartId, voteCount);
         }
 
         return ideaPart;

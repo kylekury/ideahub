@@ -56,6 +56,22 @@ Output:
     }
 ```
 
+### Update an idea's privacy
+
+```
+URI: /idea/private/{isPrivate}
+Method: PUT
+Headers:
+    Accept: application/json;
+    
+Output:
+    {
+        "id": 1,
+        "user_id": 1,
+        "is_private": 0
+    }
+```
+
 ### Delete an idea
 
 ```
