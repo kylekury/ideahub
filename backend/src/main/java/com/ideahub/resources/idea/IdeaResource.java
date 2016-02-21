@@ -2,7 +2,9 @@ package com.ideahub.resources.idea;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -28,6 +30,7 @@ import com.ideahub.model.User;
 
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
+
 import jodd.petite.meta.PetiteBean;
 import lombok.AllArgsConstructor;
 
@@ -96,21 +99,15 @@ public class IdeaResource {
         } else {
             totalParameter = total.get();
         }
-        final List<Idea> ideas = this.ideaDAO.findRecent(Math.min(totalParameter, MAX_NUMBER_OF_RECENT_IDEAS));
+        final Set<Idea> ideas = new HashSet<>(this.ideaDAO.findRecent(Math.min(totalParameter, MAX_NUMBER_OF_RECENT_IDEAS)));
         final List<RecentIdea> recentIdeas = new ArrayList<>(ideas.size());
         ideas.stream().forEach(idea -> {
             final RecentIdea recentIdea = RecentIdea.builder()
                     .id(idea.getId())
                     .userId(idea.getUserId())
+                    .title(idea.getIdeaParts().get(1).getContent())
+                    .description(idea.getIdeaParts().get(2).getContent())
                     .build();
-            idea.getIdeaParts().stream().filter(ideaPart -> ideaPart.getIdeaPartTypeId() == 1L
-                    || ideaPart.getIdeaPartTypeId() == 2L).forEach(ideaPart -> {
-                        if (ideaPart.getIdeaPartTypeId() == 1L) {
-                            recentIdea.setTitle(ideaPart.getContent());
-                        } else {
-                            recentIdea.setDescription(ideaPart.getContent());
-                        }
-            });
             recentIdeas.add(recentIdea);
         });
 
@@ -139,10 +136,10 @@ public class IdeaResource {
         idea.get().setPrivate(isPrivate);
 
         this.ideaDAO.createOrUpdate(idea.get());
-        
+
         return idea;
     }
-    
+
     @GET
     @Path("/popular")
     @Timed
@@ -150,6 +147,6 @@ public class IdeaResource {
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public List<Idea> getPopularIdeas() throws Exception {
-        return ideaDAO.findPopularIdeas();
+        return this.ideaDAO.findPopularIdeas();
     }
 }
