@@ -52,7 +52,7 @@ public class Idea {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private long id;
+    private Long id;
 
     // I think we need to reference just the id here instead of the object
     // as we'd run into a double-binding issue in a previous project

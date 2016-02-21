@@ -22,8 +22,17 @@ public class IdeaDAO extends AbstractDAO<Idea> {
         super(sessionFactory);
     }
 
-    public Idea create(final Idea idea) {
-        return this.persist(idea);
+    public Idea createOrUpdate(final Idea idea) {
+        if (idea.getId() == null) {
+            return this.persist(idea);
+        }
+
+        // Hibernate is a POS when it comes to partial updates so we have to write our own :/
+        final Idea cleanIdea = this.get(idea.getId());
+
+        idea.setUserId(cleanIdea.getUserId());
+
+        return (Idea)this.currentSession().merge(idea);
     }
 
     public Optional<Idea> findById(final long ideaId) {

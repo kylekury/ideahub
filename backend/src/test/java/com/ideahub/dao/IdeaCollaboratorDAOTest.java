@@ -73,7 +73,7 @@ public class IdeaCollaboratorDAOTest {
 
         IdeaCollaboratorId collabId = IdeaCollaboratorId.builder()
                 .userId((int) userB.getId())
-                .ideaId((int) idea.getId())
+                .ideaId(idea.getId())
                 .build();
 
         final IdeaCollaborator collab = IdeaCollaborator.builder()

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -45,14 +46,11 @@ public class IdeaResource {
     @ExceptionMetered
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public Optional<Idea> getIdea(@PathParam("ideaId") final long ideaId) throws Exception {
-//        final long userId = authenticatedUser.getId();
-        final long userId = 1;
-
+    public Optional<Idea> getIdea(@Auth final User authenticatedUser, @PathParam("ideaId") final long ideaId) throws Exception {
         final Optional<Idea> idea = this.ideaDAO.findById(ideaId);
 
         // TODO: There needs to be an OR condition here that also checks whether they're a collaborator
-        if (idea.isPresent() && idea.get().isPrivate() && idea.get().getUserId() != userId) {
+        if (idea.isPresent() && idea.get().isPrivate() && idea.get().getUserId() != authenticatedUser.getId()) {
             throw new UserDoesntOwnIdeaException();
         }
 
@@ -70,8 +68,9 @@ public class IdeaResource {
         idea.setCreatedAt(new Date());
         // Just in case the user tries to create an idea under someone else's account
         idea.setUserId(authenticatedUser.getId());
+        idea.setPrivate(false);
 
-        return this.ideaDAO.create(idea);
+        return this.ideaDAO.createOrUpdate(idea);
     }
 
     @DELETE
@@ -97,5 +96,31 @@ public class IdeaResource {
             totalParameter = total.get();
         }
         return this.ideaDAO.findRecent(Math.min(totalParameter, MAX_NUMBER_OF_RECENT_IDEAS));
+    }
+
+    @PUT
+    @Path("/{ideaId}/private/{isPrivate}")
+    @Timed
+    @ExceptionMetered
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    public Optional<Idea> updateIdeaPrivacy(@Auth final User authenticatedUser, @PathParam("ideaId") final long ideaId, @PathParam("isPrivate") final boolean isPrivate) throws Exception {
+        // TODO: Eventually we'll need to check the user's account subscription to see if they
+        // are allowed to have any more private ideas.
+        final Optional<Idea> idea = this.ideaDAO.findById(ideaId);
+
+        if (!idea.isPresent()) {
+            return idea;
+        }
+
+        if (idea.get().getUserId() != authenticatedUser.getId()) {
+            throw new UserDoesntOwnIdeaException();
+        }
+
+        idea.get().setPrivate(isPrivate);
+
+        this.ideaDAO.createOrUpdate(idea.get());
+
+        return idea;
     }
 }
