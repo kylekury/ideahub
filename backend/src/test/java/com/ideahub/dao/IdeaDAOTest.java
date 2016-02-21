@@ -8,18 +8,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.ideahub.model.*;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.base.Optional;
-import com.ideahub.model.Idea;
-import com.ideahub.model.IdeaCollaborator;
-import com.ideahub.model.IdeaPart;
-import com.ideahub.model.IdeaPartSuggestion;
-import com.ideahub.model.IdeaPartType;
-import com.ideahub.model.IdeaPartTypeMetadata;
-import com.ideahub.model.User;
 
 public class IdeaDAOTest {
     private UserDAO userDAO;

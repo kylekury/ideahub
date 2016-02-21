@@ -16,7 +16,7 @@ public class ElasticSendMailService {
 
     public static String sendElasticEmail(String fromName, String anIdea, String to,
                                           String toName, String inviteId, String ideaId, boolean sendEmail) throws SendInviteException {
-        String result;
+        String result = null;
         if (sendEmail) {
             String userName = "623c65ce-c629-4f1c-ae4d-cfc3cebfa241";
             String apiKey = "623c65ce-c629-4f1c-ae4d-cfc3cebfa241";
@@ -57,10 +57,11 @@ public class ElasticSendMailService {
             } catch (Exception e) {
                 throw new SendInviteException();
             }
+        } else {
+            result = "f74b9f96-f89a-4cfe-813f-5f86df1cb37f";
         }
-        result = "f74b9f96-f89a-4cfe-813f-5f86df1cb37f";
         String regex = "^[\\w]{8}-([\\w]{4}-){3}[\\w]{12}$";
 
-        return  result.matches(regex) ? result : null;
+        return  ((result != null) && (result.matches(regex))) ? result : null;
     }
 }
