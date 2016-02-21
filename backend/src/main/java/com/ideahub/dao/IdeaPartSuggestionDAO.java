@@ -102,4 +102,11 @@ public class IdeaPartSuggestionDAO extends AbstractDAO<IdeaPartSuggestion> {
         
         return foundPartSuggestion;
     }
+    
+    public int countSuggestionsByIdeaId(final long ideaId) {
+        Criteria criteria = this.criteria()
+                .add(Restrictions.eqOrIsNull("ideaId", ideaId));
+        
+        return criteria.list().size();
+    }
 }

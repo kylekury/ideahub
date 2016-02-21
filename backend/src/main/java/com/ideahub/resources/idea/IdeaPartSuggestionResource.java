@@ -64,6 +64,8 @@ public class IdeaPartSuggestionResource {
         // if (parentIdea.isPrivate() && !isCollaboratorOnIdea)
 
         if (!parentIdea.isPrivate() || parentIdeaPart.get().getUserId() == userId) {
+            // TODO: This is gross
+            ideaPartSuggestion.setIdeaId(parentIdeaPart.get().getIdeaId());
             ideaPartSuggestion = this.ideaPartSuggestionDAO.createOrUpdateIdeaPartSuggestion(ideaPartSuggestion);
         }
 

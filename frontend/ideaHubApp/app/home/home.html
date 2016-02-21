@@ -3,11 +3,52 @@
     <div class="container">
         <div class="intro-text">
             <div class="intro-lead-in"><span>Too Many Ideas Die</span></div>
-            <div class="intro-heading"><span>Ideas don't have to die</span></div>
+            <div class="intro-heading blue"><span>Ideas don't have to die</span></div>
             <a href="#newIdeas" class="page-scroll btn btn-xl header-cta">Show Me Rescued Ideas</a>
         </div>
     </div>
 </header>
+
+<!-- content: "This is a better system than trying to organize yourself in Excel or Word."
+created_at: 1456044669000
+id: 5
+idea_id: 1
+idea_part_type_id: 3
+justification: "People need a structured way to visualize their ideas, so they can actually execute."
+user_id: 1
+ -->
+
+Recent
+<table class="table">
+    <tr ng-repeat="ideas in recentIdea_list">
+            <td>{{ideas.id}}</td>
+            <td>{{ideas.user_id}}</td>
+            <td>
+                <div class="row" ng-repeat = "idea_part in ideas.idea_parts">
+                    <p>{{idea_part.id}}</p>
+                    <p>{{idea_part.idea_id}}</p>
+                    <p>{{idea_part.idea_part_type_id}}</p>
+                    <p>{{idea_part.justification}}</p>
+                    <p>{{idea_part.user_id}}</p>
+                </div>
+            </td>
+    </tr>
+</table>
+
+
+Get ideas
+<table class="table">
+    <tr ng-repeat="defintion in definition_list">
+            <td>{{defintion.name}}</td>
+            <td>{{defintion.allow_multiple}}</td>
+            <td>{{defintion.metadata.name_text}}</td>
+            <td>{{defintion.metadata.name_tool_tip}}</td>
+            <td>{{defintion.metadata.justification_text}}</td>
+    </tr>
+</table>
+
+
+
 
 <!-- New Ideas Section -->
 <section id="newIdeas">

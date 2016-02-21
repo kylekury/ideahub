@@ -33,21 +33,29 @@ input.form-control, select.form-control, textarea.form-control {
 .intro-lead-in span, .intro-heading span {
 }
 
-.header-cta, .login-cta {
-  background: black;
+.navbar-default .nav li a.login-cta {
+  background: url(../img/github_icon.png) center left no-repeat;
+  padding-left: 36px;
 }
 
-.login-cta:hover {
+.blue {
+  color: #2baea6;
+}
+
+.header-cta {
+  background: transparent;
+  border: 2px solid white;
+  font-weight: normal;
+}
+
+.dark {
   background: rgba(0,0,0,0.7);
 }
+
 
 /* Sections */
 section {
   padding: 50px 0
-}
-
-.profile, .explore, .dashboard {
-  padding-top: 100px;
 }
 
 .project {

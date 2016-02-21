@@ -6,6 +6,7 @@
 	  .module('ideaHubApp', [
 	    // 'ngResource',
 	       'ngRoute',
+	       'restangular'
 	    // 'ngSanitize',
 	    // 'ngTouch',
 	    // 'ngAnimate',
@@ -44,6 +45,29 @@
 			redirectTo: '/home'
 		});
 	}]);
+
+	ideaHubApp.config(function(RestangularProvider) {    
+
+	    var apiBaseUrl = "http://169.44.56.200:8080";
+		RestangularProvider.setBaseUrl(apiBaseUrl);    
+
+		// Headers: 'Authorization: Bearer TXwyoVskhA9/utoHWUhPeLgVLYpCeoIKfKNX+0NDHUT5rCZSWToH4rOMIgKcfKNcQckCuYcucizVoWHbInQQLg=='
+		// RestangularProvider.setDefaultHeaders({Authorization:'Bearer '+ StorageService.get("access_token")});         
+        
+        //var tempToken = 'sA5H93yFaHJv/MZJtQKazZ9Vl3ELISi91sl/s3Os/gxhKkVqyOKYF2S7PKiby0uvhE6ObqPUyLOirtfnCBjjIA==';
+        //var tempToken = '';
+        //RestangularProvider.setDefaultHeaders({Authorization:'Bearer '+tempToken});
+
+        RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
+            var responseData = response.data;    
+            return responseData;
+        });
+
+        RestangularProvider.setResponseExtractor(function (response, operation, what) {
+            return response;
+        });
+
+	});  
 
 
 

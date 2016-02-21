@@ -44,6 +44,11 @@ public class IdeaPartSuggestion {
 
     // I think we need to reference just the id here instead of the object
     // as we'd run into a double-binding issue in a previous project
+    @Column(name = "idea_id", nullable = false)
+    private long ideaId;
+    
+    // I think we need to reference just the id here instead of the object
+    // as we'd run into a double-binding issue in a previous project
     @Column(name = "idea_part_id", nullable = false)
     private long ideaPartId;
 

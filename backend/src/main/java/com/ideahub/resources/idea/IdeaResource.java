@@ -28,7 +28,6 @@ import com.ideahub.model.User;
 
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
-
 import jodd.petite.meta.PetiteBean;
 import lombok.AllArgsConstructor;
 
@@ -140,7 +139,17 @@ public class IdeaResource {
         idea.get().setPrivate(isPrivate);
 
         this.ideaDAO.createOrUpdate(idea.get());
-
+        
         return idea;
+    }
+    
+    @GET
+    @Path("/popular")
+    @Timed
+    @ExceptionMetered
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    public List<Idea> getPopularIdeas() throws Exception {
+        return ideaDAO.findPopularIdeas();
     }
 }
