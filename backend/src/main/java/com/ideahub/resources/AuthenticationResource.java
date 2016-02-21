@@ -8,6 +8,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 import com.codahale.metrics.annotation.ExceptionMetered;
@@ -76,7 +77,18 @@ public class AuthenticationResource {
         }
         this.userDAO.save(user);
 
-        return Response.ok().header(HttpHeaders.AUTHORIZATION, user.getOauthToken()).build();
+        return Response
+                .temporaryRedirect(URI.create("http://169.44.56.200"))
+                .header(HttpHeaders.AUTHORIZATION, sessionToken)
+                .cookie(new NewCookie(
+                        "ideahub_token",
+                        sessionToken,
+                        "/",
+                        "169.44.56.200",
+                        null,
+                        7 * 24 * 60 * 60, // good for a week
+                        false))
+                .build();
     }
 
     @DELETE
@@ -89,6 +101,8 @@ public class AuthenticationResource {
         final User user = this.userDAO.findById(authenticatedUser.getId()).get();
         user.setOauthToken(null);
         this.userDAO.save(user);
-        return Response.ok().build();
+        return Response.ok()
+                .cookie(new NewCookie("ideahub_token", "", "/", "169.44.56.200", null, 0, true))
+                .build();
     }
 }
