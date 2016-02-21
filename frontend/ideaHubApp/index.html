@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html data-ng-app="ideaHubApp" ng-strict-di>
+<html data-ng-app="ideaHubApp">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
@@ -23,6 +23,7 @@
     <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat|Sail|Concert+One' rel='stylesheet' type='text/css' />
     <!-- endinject -->
 
     <!-- inject:css -->
@@ -44,7 +45,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll logo" href="#page-top">ideaHub</a>
+                <a class="navbar-brand page-scroll logo" href="#page-top"><img src="img/logo_ideahub.png"></img></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -90,6 +91,9 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/moment/moment.js"></script>
     <script src="bower_components/extras.angular.plus/ngplus-overlay.js"></script>
+
+    <script src="bower_components/restangular/dist/restangular.js"></script>
+    <script src="bower_components/lodash/lodash.js"></script>
     <!-- endinject -->
 
     <!-- inject-theme:js -->
@@ -101,6 +105,10 @@
 
     <!-- inject:js -->
     <script src="app/app.js"></script>
+
+    <script src="/app/common/api-service.js"></script>
+    <script src="/app/common/definition-factory.js"></script>
+
     <script src="app/home/home-controller.js"></script>
     <script src="app/login/login-controller.js"></script>
 

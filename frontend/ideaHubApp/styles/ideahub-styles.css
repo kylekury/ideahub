@@ -31,24 +31,31 @@ input.form-control, select.form-control, textarea.form-control {
 /* Home Banner */
 
 .intro-lead-in span, .intro-heading span {
-  background: rgba(254, 209, 54, 0.8);
 }
 
-.header-cta, .login-cta {
-  background: black;
+.navbar-default .nav li a.login-cta {
+  background: url(../img/github_icon.png) center left no-repeat;
+  padding-left: 36px;
 }
 
-.login-cta:hover {
+.blue {
+  color: #2baea6;
+}
+
+.header-cta {
+  background: transparent;
+  border: 2px solid white;
+  font-weight: normal;
+}
+
+.dark {
   background: rgba(0,0,0,0.7);
 }
+
 
 /* Sections */
 section {
   padding: 50px 0
-}
-
-.profile, .explore {
-  padding-top: 100px;
 }
 
 .project {
@@ -112,4 +119,37 @@ section {
 
 .profile__photo img {
   height: 150px;
+}
+
+/* Dashboard Page */
+
+.dashboard__content {
+  padding: 10px 50px;
+}
+.dashboard__sidenav {
+  background: #1F1F1F;
+  margin-top: 10px;
+  padding-bottom: 20px;
+}
+.dashboard__ideapart {
+  padding-left: 50px;
+}
+.discussion__profileImg {
+  width: 64px;
+  height: 64px;
+}
+.dashbaord__discussion .media-list {
+  padding: 50px;
+  padding-bottom: 0px;
+}
+.dashbaord__discussion .media {
+  margin-bottom: 30px;
+}
+
+.dashbaord__discussion .media-heading {
+  display: inline-block;
+}
+.dashbaord__discussion .discussion__thumps-up {
+  font-size: 1.3em;
+  display: inline-block;
 }

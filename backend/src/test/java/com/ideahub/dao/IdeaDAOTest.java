@@ -3,9 +3,12 @@ package com.ideahub.dao;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,7 +49,7 @@ public class IdeaDAOTest {
 
         final IdeaPartType ideaType = IdeaPartType.builder()
                 .name("Type A")
-                .metadata(new IdeaPartTypeMetadata("A text", "tooltip","just text"))
+                .metadata(new IdeaPartTypeMetadata("A text", "tooltip", "just text"))
                 .build();
         this.testUtil.getSession().save(ideaType);
 
@@ -59,7 +62,7 @@ public class IdeaDAOTest {
                 .userId(userFound.get().getId())
                 .ideaId(1)
                 .build();
-        Map<Integer, IdeaPart> ideaPartMap = new HashMap<>();
+        final Map<Integer, IdeaPart> ideaPartMap = new HashMap<>();
         ideaPartMap.put(1, ideaPart);
 
         final Idea idea = Idea.builder()
@@ -70,5 +73,136 @@ public class IdeaDAOTest {
 
         final Optional<Idea> ideaFound = this.ideaDAO.findByUserId(userFound.get().getId());
         assertThat(ideaFound.isPresent()).isTrue();
+    }
+
+    @Test
+    public void testFindRecent() {
+        final User user = User.builder()
+                .email("abc@def.com")
+                .username("abcdef")
+                .oauthToken("token")
+                .build();
+        this.testUtil.getSession().save(user);
+
+        final IdeaPartType ideaType = IdeaPartType.builder()
+                .name("Type A")
+                .metadata(new IdeaPartTypeMetadata("A text", "tooltip", "just text"))
+                .build();
+        this.testUtil.getSession().save(ideaType);
+
+        final IdeaPart ideaPart = IdeaPart.builder()
+                .content("Content text")
+                .justification("justif")
+                .downvotes(0)
+                .upvotes(0)
+                .ideaPartTypeId(ideaType.getId())
+                .userId(user.getId())
+                .ideaId(1)
+                .build();
+        final Map<Integer, IdeaPart> ideaPartMap = new HashMap<>();
+        ideaPartMap.put(1, ideaPart);
+
+        final Idea idea = Idea.builder()
+                .ideaParts(ideaPartMap)
+                .userId(user.getId())
+                .build();
+        this.testUtil.getSession().save(idea);
+
+        final List<Idea> ideas = this.ideaDAO.findRecent(10);
+
+        assertThat(ideas).hasSize(1).containsOnly(idea);
+    }
+
+    @Test
+    public void testFindRecentMultipleIdeas() {
+        final User user = User.builder()
+                .email("abc@def.com")
+                .username("abcdef")
+                .oauthToken("token")
+                .build();
+        this.testUtil.getSession().save(user);
+
+        final IdeaPartType ideaType = IdeaPartType.builder()
+                .name("Type A")
+                .metadata(new IdeaPartTypeMetadata("A text", "tooltip", "just text"))
+                .build();
+        this.testUtil.getSession().save(ideaType);
+
+        final IdeaPart ideaPart = IdeaPart.builder()
+                .content("Content text")
+                .justification("justif")
+                .downvotes(0)
+                .upvotes(0)
+                .ideaPartTypeId(ideaType.getId())
+                .userId(user.getId())
+                .ideaId(1)
+                .build();
+        final Map<Integer, IdeaPart> ideaPartMap = new HashMap<>();
+        ideaPartMap.put(1, ideaPart);
+
+        final Idea idea = Idea.builder()
+                .ideaParts(ideaPartMap)
+                .userId(user.getId())
+                .build();
+        this.testUtil.getSession().save(idea);
+
+        final Idea idea2 = Idea.builder()
+                .ideaParts(ideaPartMap)
+                .userId(user.getId())
+                .build();
+        this.testUtil.getSession().save(idea2);
+
+        final List<Idea> ideas = this.ideaDAO.findRecent(10);
+
+        assertThat(ideas).hasSize(2).containsOnly(idea, idea2);
+    }
+
+    @Test
+    public void testFindRecentMultipleIdeasLimitToOne() {
+        final User user = User.builder()
+                .email("abc@def.com")
+                .username("abcdef")
+                .oauthToken("token")
+                .build();
+        this.testUtil.getSession().save(user);
+
+        final IdeaPartType ideaType = IdeaPartType.builder()
+                .name("Type A")
+                .metadata(new IdeaPartTypeMetadata("A text", "tooltip", "just text"))
+                .build();
+        this.testUtil.getSession().save(ideaType);
+
+        final IdeaPart ideaPart = IdeaPart.builder()
+                .content("Content text")
+                .justification("justif")
+                .downvotes(0)
+                .upvotes(0)
+                .ideaPartTypeId(ideaType.getId())
+                .userId(user.getId())
+                .ideaId(1)
+                .build();
+        final Map<Integer, IdeaPart> ideaPartMap = new HashMap<>();
+        ideaPartMap.put(1, ideaPart);
+
+        final Idea idea = Idea.builder()
+                .ideaParts(ideaPartMap)
+                .userId(user.getId())
+                .createdAt(DateTime.parse("2015-01-15").toDate())
+                .build();
+        this.testUtil.getSession().save(idea);
+
+        final Idea idea2 = Idea.builder()
+                .ideaParts(ideaPartMap)
+                .userId(user.getId())
+                .createdAt(new Date())
+                .build();
+        this.testUtil.getSession().save(idea2);
+
+        this.testUtil.getSession().close();
+        this.testUtil.openSession();
+
+        final List<Idea> ideas = this.ideaDAO.findRecent(1);
+
+        assertThat(ideas).hasSize(1).containsExactly(idea2);
     }
 }
