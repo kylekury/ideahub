@@ -1,12 +1,24 @@
 package com.ideahub.model;
 
+import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicUpdate;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -19,12 +31,12 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * 
- * And Idea is formed from several parts, and can be influenced by 
+ *
+ * And Idea is formed from several parts, and can be influenced by
  * creator-chosen collaborators, whom can suggest improvements to the idea.
- * 
+ *
  * Links an owner to all of the pieces of an idea.
- *  
+ *
  * @author kyle
  *
  */
@@ -43,14 +55,15 @@ public class Idea {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private long id;
-    
+
     // I think we need to reference just the id here instead of the object
     // as we'd run into a double-binding issue in a previous project
     @Column(name = "user_id", nullable = false)
     private long userId;
-        
+
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-    @JoinColumn(name = "idea_id") // Which column in the referenced table will be joined
+    @JoinColumn(name = "idea_id") // Which column in the referenced table will
+                                  // be joined
     private Set<IdeaPart> ideaParts;
 
     @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "idea")
@@ -58,4 +71,9 @@ public class Idea {
 
     @Column(name = "is_private", nullable = false)
     private boolean isPrivate;
+
+    @Column(name = "created_at", insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Generated(GenerationTime.INSERT)
+    private Date createdAt;
 }
