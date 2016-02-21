@@ -43,6 +43,7 @@ section {
 }
 
 
+
 /* Idea Boxes */
 
 .ideabox {
@@ -65,4 +66,18 @@ section {
 
 .ideabox__votes, .ideabox__label {
   display: block;
+}
+
+/* Login Page */
+
+.login {
+  display: flex;
+  height: 100vh;
+}
+
+.login__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
