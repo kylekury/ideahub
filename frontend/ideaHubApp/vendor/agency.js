@@ -16,7 +16,9 @@ $(function() {
     var _onhashchange = function(){
 		if(location.hash != "#/home"){
 			$("nav.navbar").addClass("navbar-shrink");
+			return;
 		}
+		$("nav.navbar").removeClass("navbar-shrink");
 	};
     _onhashchange();
     window.onhashchange = _onhashchange;
