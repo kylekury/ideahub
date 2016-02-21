@@ -37,6 +37,7 @@ public class IdeaDAO extends AbstractDAO<Idea> {
     }
     
     public boolean delete(final long userId, final long ideaId) {
+        boolean result = false;
         Criteria criteria = this.criteria()
                 .add(Restrictions.eq("id", ideaId))
                 .add(Restrictions.eq("userId", userId));
@@ -45,9 +46,8 @@ public class IdeaDAO extends AbstractDAO<Idea> {
         if (foundIdea != null) {
             this.currentSession().delete(foundIdea);
             
-            return true;
+            result = true;
         }
-        
-        return false;
+        return result;
     }
 }
