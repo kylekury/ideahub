@@ -48,7 +48,7 @@ public class IdeaDAOTest {
                 .justification("justif")
                 .downvotes(0)
                 .upvotes(0)
-                .ideaPartType(ideaType)
+                .ideaPartTypeId(ideaType.getId())
                 .userId(userFound.get().getId())
                 .ideaId(1)
                 .build();
