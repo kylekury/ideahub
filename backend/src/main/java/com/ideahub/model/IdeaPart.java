@@ -10,14 +10,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,13 +42,13 @@ import lombok.ToString;
 @ToString(exclude = { "ideaPartType", "ideaPartSuggestions" })
 @Entity
 @Table(name = "idea_part")
-@DynamicUpdate
+@DynamicUpdate(true)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_EMPTY)
 public class IdeaPart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    @JsonIgnore
     private Long id;
     
     // I think we need to reference just the id here instead of the object
@@ -60,20 +60,18 @@ public class IdeaPart {
     // as we'd run into a double-binding issue in a previous project
     @Column(name = "idea_id", nullable = false)
     private long ideaId;
-    
-    @ManyToOne
-    @JoinColumn(name = "idea_part_type_id")
-    private IdeaPartType ideaPartType;
-    
-//    @Column(name = "idea_part_type_id", nullable = false)
-//    private int ideaPartTypeId;
-    
+
+    // We can leave this just as a reference because we're keeping the types as a in-memory cache
+    @Column(name = "idea_part_type_id", nullable = false)
+    private int ideaPartTypeId;
+
+    // Up/downvotes are stored as Integer vs. int, so we can omit the fields and not have them overwritten on update.
     @Column(name = "upvotes", nullable = false)
-    private int upvotes;
-    
+    private Integer upvotes;
+
     @Column(name = "downvotes", nullable = false)
-    private int downvotes;
-    
+    private Integer downvotes;
+
     @Column(name = "content", nullable = false)
     private String content;
     

@@ -16,10 +16,15 @@ import com.ideahub.model.Idea;
 import com.ideahub.model.IdeaCollaborator;
 import com.ideahub.model.IdeaPart;
 import com.ideahub.model.IdeaPartSuggestion;
+import com.ideahub.model.IdeaPartSuggestionVote;
 import com.ideahub.model.IdeaPartType;
+import com.ideahub.model.IdeaPartVote;
 import com.ideahub.model.User;
 import com.ideahub.resources.AuthenticationResource;
-import com.ideahub.resources.IdeaResource;
+import com.ideahub.resources.idea.IdeaDefinitionResource;
+import com.ideahub.resources.idea.IdeaPartResource;
+import com.ideahub.resources.idea.IdeaPartSuggestionResource;
+import com.ideahub.resources.idea.IdeaResource;
 
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -32,7 +37,6 @@ import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-
 import jodd.petite.PetiteContainer;
 import jodd.petite.config.AutomagicPetiteConfigurator;
 
@@ -46,8 +50,10 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
             User.class,
             Idea.class,
             IdeaPart.class,
+            IdeaPartVote.class,
             IdeaPartType.class,
             IdeaPartSuggestion.class,
+            IdeaPartSuggestionVote.class,
             IdeaCollaborator.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(
@@ -134,6 +140,9 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
     protected void registerResources(final Environment environment) {
         environment.jersey().register(this.petite.getBean(AuthenticationResource.class));
         environment.jersey().register(this.petite.getBean(IdeaResource.class));
+        environment.jersey().register(this.petite.getBean(IdeaDefinitionResource.class));
+        environment.jersey().register(this.petite.getBean(IdeaPartResource.class));
+        environment.jersey().register(this.petite.getBean(IdeaPartSuggestionResource.class));
     }
 
     private void registerAuthentication(final IdeaHubConfiguration configuration,

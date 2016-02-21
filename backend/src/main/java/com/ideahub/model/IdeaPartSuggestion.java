@@ -10,6 +10,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,13 +34,13 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "idea_part_suggestion")
-@DynamicUpdate
+@DynamicUpdate(true)
+@JsonInclude(Include.NON_NULL)
 public class IdeaPartSuggestion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    @JsonIgnore
-    private long id;
+    private Long id;
 
     // I think we need to reference just the id here instead of the object
     // as we'd run into a double-binding issue in a previous project
@@ -53,9 +55,11 @@ public class IdeaPartSuggestion {
     @Column(name = "suggestion", nullable = false)
     private String suggestion;
     
+    // Up/downvotes need to be Integer vs. int, so we can omit them from being updated
+    
     @Column(name = "upvotes", nullable = false)
-    private int upvotes;
+    private Integer upvotes;
     
     @Column(name = "downvotes", nullable = false)
-    private int downvotes;
+    private Integer downvotes;
 }

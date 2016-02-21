@@ -120,13 +120,13 @@ public class IdeaResource {
 
             // Don't allow someone to add more parts than the type allows
             if (ideaPart.getId() == null) {
-                final int currentTypeCount = this.ideaPartDAO.countPartsByType(userId,
-                        ideaPart.getIdeaPartType().getId());
+                if (!this.ideaDefinitionCache.isPartTypeAllowedMultiple(ideaPart.getIdeaPartTypeId())) {
+                    final int currentTypeCount = this.ideaPartDAO.countPartsByType(userId,
+                            ideaPart.getIdeaPartTypeId());
 
-                if (!this.ideaDefinitionCache
-                        .isPartTypeAllowedMultiple(ideaPart.getIdeaPartType().getId())
-                        && currentTypeCount > 0) {
-                    throw new UserNotAllowedToCreateMultipleIdeaPartsOfTypeException();
+                    if (currentTypeCount > 0) {
+                        throw new UserNotAllowedToCreateMultipleIdeaPartsOfTypeException();
+                    }
                 }
             }
 

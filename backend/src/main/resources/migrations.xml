@@ -49,6 +49,24 @@
             </column>
             <column name="justification" type="VARCHAR(255)"/>
         </createTable>
+        
+        <createTable tableName="idea_part_vote">
+            <column name="id" autoIncrement="true" type="BIGINT(20)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="BIGINT(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idea_id" type="BIGINT(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idea_part_id" type="BIGINT(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vote_count" type="TINYINT(1)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-4">
         <createTable tableName="idea_part_suggestion">
@@ -68,6 +86,27 @@
                 <constraints nullable="false"/>
             </column>
             <column defaultValueNumeric="0" name="downvotes" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <createTable tableName="idea_part_suggestion_vote">
+            <column name="id" autoIncrement="true" type="BIGINT(20)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="BIGINT(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idea_id" type="BIGINT(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idea_part_id" type="BIGINT(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idea_part_suggestion_id" type="BIGINT(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vote_count" type="TINYINT(1)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -101,6 +140,9 @@
         <createIndex indexName="fk_idea_part_idea1_idx" tableName="idea_part">
             <column name="idea_id"/>
         </createIndex>
+        <createIndex indexName="fk_idea_part_vote_idea_part_idx" tableName="idea_part_vote">
+            <column name="idea_part_id"/>
+        </createIndex>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-14">
         <createIndex indexName="fk_idea_part_idea_part_type1_idx" tableName="idea_part">
@@ -110,6 +152,9 @@
     <changeSet author="kyle" id="1455957189141-15">
         <createIndex indexName="fk_idea_part_suggestion_idea_part1_idx" tableName="idea_part_suggestion">
             <column name="idea_part_id"/>
+        </createIndex>
+        <createIndex indexName="fk_idea_part_suggestion_vote_idea_part_suggestion1_idx" tableName="idea_part_suggestion_vote">
+            <column name="idea_part_suggestion_id"/>
         </createIndex>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-16">
@@ -134,12 +179,14 @@
     </changeSet>
     <changeSet author="kyle" id="1455957189141-20">
         <addForeignKeyConstraint baseColumnNames="idea_id" baseTableName="idea_part" constraintName="fk_idea_part_idea1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="idea"/>
+        <addForeignKeyConstraint baseColumnNames="idea_part_id" baseTableName="idea_part_vote" constraintName="fk_idea_part_vote_idea_part1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="idea_part"/>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-21">
         <addForeignKeyConstraint baseColumnNames="idea_part_type_id" baseTableName="idea_part" constraintName="fk_idea_part_idea_part_type1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="idea_part_type"/>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-22">
         <addForeignKeyConstraint baseColumnNames="idea_part_id" baseTableName="idea_part_suggestion" constraintName="fk_idea_part_suggestion_idea_part1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="idea_part"/>
+        <addForeignKeyConstraint baseColumnNames="idea_part_suggestion_id" baseTableName="idea_part_suggestion_vote" constraintName="fk_idea_part_suggestion_vote_idea_part_suggestion1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="idea_part_suggestion"/>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-23">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="idea_part_suggestion" constraintName="fk_idea_part_suggestion_user1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
