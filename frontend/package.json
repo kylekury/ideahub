@@ -6,6 +6,7 @@
   "scripts": {
     "setup": "npm install -g requirejs; npm run copy-assets",
     "build": "npm run js; npm run css:prod; npm run jade; npm run copy-images",
+    "build-backup": "npm run js; npm run css:prod; npm run jade; npm run copy-images",
     "copy-assets": "cp node_modules/jquery/dist/jquery.min.js assets/javascript/vendor; cp node_modules/underscore/underscore-min.js assets/javascript/vendor; npm run copy-requirejs",
     "copy-requirejs": "cp node_modules/requirejs/require.js $npm_package_config_output_path/js/;",
     "copy-images": "cp -R -f -p assets/images $npm_package_config_output_path/",
