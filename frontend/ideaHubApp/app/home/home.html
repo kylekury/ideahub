@@ -9,6 +9,20 @@
     </div>
 </header>
 
+
+
+<table class="table">
+    <tr ng-repeat="defintion in definition_list">
+            <td>{{defintion.name}}</td>
+            <td>{{defintion.allow_multiple}}</td>
+            <td>{{defintion.metadata.name_text}}</td>
+            <td>{{defintion.metadata.name_tool_tip}}</td>
+            <td>{{defintion.metadata.justification_text}}</td>
+    </tr>
+</table>
+
+
+
 <!-- New Ideas Section -->
 <section id="newIdeas">
     <div class="container">
