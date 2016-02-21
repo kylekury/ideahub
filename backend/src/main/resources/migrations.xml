@@ -11,7 +11,7 @@
             <column name="is_private" type="TINYINT(1)">
                 <constraints nullable="false"/>
             </column>
-            <column defaultValueComputed="CURRENT_TIMESTAMP" name="created_at" type="TIMESTAMP(19)">
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="created_at" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -51,7 +51,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="justification" type="VARCHAR(255)"/>
-            <column defaultValueComputed="CURRENT_TIMESTAMP" name="created_at" type="TIMESTAMP(19)">
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="created_at" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
         </createTable>
