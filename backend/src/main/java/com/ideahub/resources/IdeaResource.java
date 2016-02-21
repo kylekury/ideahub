@@ -65,8 +65,8 @@ public class IdeaResource {
     @Path("/{ideaId}")
     @Timed
     @ExceptionMetered
-    @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
+    @PermitAll
     public Optional<Idea> getIdea(@Auth final User authenticatedUser,
             @PathParam("ideaId") final long ideaId) throws Exception {
         final Optional<Idea> idea = this.ideaDAO.findById(ideaId);
@@ -85,8 +85,8 @@ public class IdeaResource {
     @Timed
     @ExceptionMetered
     @Consumes
-    @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
+    @PermitAll
     public Idea createIdea(@Auth final User authenticatedUser) throws Exception {
         final Idea idea = new Idea();
         idea.setUserId(authenticatedUser.getId());
@@ -98,8 +98,8 @@ public class IdeaResource {
     @Timed
     @ExceptionMetered
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
+    @PermitAll
     public List<IdeaPart> updateIdeaParts(@Auth final User authenticatedUser,
             final List<IdeaPart> ideaParts)
                     throws UserDoesntOwnIdeaPartException,
