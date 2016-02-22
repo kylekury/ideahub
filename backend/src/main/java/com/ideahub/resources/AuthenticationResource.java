@@ -78,7 +78,7 @@ public class AuthenticationResource {
         this.userDAO.save(user);
 
         return Response
-                .temporaryRedirect(URI.create("http://169.44.56.200"))
+                .temporaryRedirect(URI.create("http://169.44.56.200/#/dashboard"))
                 .header(HttpHeaders.AUTHORIZATION, sessionToken)
                 .cookie(new NewCookie(
                         "ideahub_token",
