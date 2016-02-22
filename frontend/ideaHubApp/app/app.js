@@ -51,16 +51,6 @@
 	    var apiBaseUrl = "http://169.44.56.200:8080";
 		RestangularProvider.setBaseUrl(apiBaseUrl);    
 
-		// Headers: 'Authorization: Bearer TXwyoVskhA9/utoHWUhPeLgVLYpCeoIKfKNX+0NDHUT5rCZSWToH4rOMIgKcfKNcQckCuYcucizVoWHbInQQLg=='
-		// RestangularProvider.setDefaultHeaders({Authorization:'Bearer '+ StorageService.get("access_token")});         
-        
-        //var tempToken = 'sA5H93yFaHJv/MZJtQKazZ9Vl3ELISi91sl/s3Os/gxhKkVqyOKYF2S7PKiby0uvhE6ObqPUyLOirtfnCBjjIA==';
-        //var tempToken = '';
-        //RestangularProvider.setDefaultHeaders({Authorization:'Bearer '+tempToken});
-
-		//var tookenCookie = $cookies.get('ideahub_token');
-		//RestangularProvider.setDefaultHeaders({Authorization:'Bearer '+tookenCookie});
-
         RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
             var responseData = response.data;    
             return responseData;
@@ -74,8 +64,6 @@
 
 	ideaHubApp.run(['$rootScope', '$cookies', 'Restangular',
 	    function ($rootScope, $cookies, Restangular) {
-
-	        //$cookies.put('ideahub_token','sA5H93yFaHJv/MZJtQKazZ9Vl3ELISi91sl/s3Os/gxhKkVqyOKYF2S7PKiby0uvhE6ObqPUyLOirtfnCBjjIA==');		
 
 	    	var tookenCookie = $cookies.get('ideahub_token');
 	    	console.log("======tookenCookie=========");
