@@ -1,7 +1,6 @@
 package com.ideahub.dao;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -61,13 +60,23 @@ public class IdeaDAO extends AbstractDAO<Idea> {
         return Optional.fromNullable(this.reconcileIdeaSummary(this.uniqueResult(criteria)));
     }
 
+    public Set<Idea> findListByUserId(final Long userId) {
+        final Criteria criteria = this.criteria()
+                .add(Restrictions.eq("userId", userId));
+        final Set<Idea> ideas = new LinkedHashSet<Idea>(this.list(criteria));
+        for (final Idea idea : ideas) {
+            this.reconcileIdeaSummary(idea);
+        }
+        return ideas;
+    }
+
     @SuppressWarnings("unchecked")
-    public Set<Idea> findPopularIdeas(int limit) {
+    public Set<Idea> findPopularIdeas(final int limit) {
         // Holy fuck this ugly haha
-        Query topPartVotes = this.currentSession()
+        final Query topPartVotes = this.currentSession()
                 .createSQLQuery(
                         String.format("select i.id from idea i left outer join idea_part_vote v ON i.id = v.idea_id group by i.id LIMIT %d", limit / 2));
-        Query topPartSuggestionVotes = this.currentSession()
+        final Query topPartSuggestionVotes = this.currentSession()
                 .createSQLQuery(String.format("select i.id from idea i left outer join idea_part_suggestion_vote v ON i.id = v.idea_id group by i.id LIMIT %d",
                         limit / 2));
 
@@ -94,7 +103,7 @@ public class IdeaDAO extends AbstractDAO<Idea> {
 
         return ideas;
     }
-    
+
     public Set<Idea> findRecent(final int maxResults) {
         final Criteria criteria = this.criteria()
                 .addOrder(Order.desc("createdAt"))

@@ -10,8 +10,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Type;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,10 +18,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * 
+ *
  * Contains a developer-friendly name and metadata for the client for
  * each different idea part type.
- * 
+ *
  * @author kyle
  */
 @Data
@@ -39,15 +37,14 @@ public class IdeaPartType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    @JsonIgnore
     private int id;
-    
+
     @Column(name = "name", nullable = false, unique = true)
     private String name;
-    
+
     @Column(name = "allow_multiple", nullable = false)
     private boolean allowMultiple;
-    
+
     @Type(type = "com.ideahub.model.userType.IdeaPartTypeMetadataUserType")
     @Column(name = "metadata", nullable = false)
     private IdeaPartTypeMetadata metadata;

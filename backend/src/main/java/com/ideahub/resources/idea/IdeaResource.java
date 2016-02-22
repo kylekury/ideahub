@@ -35,6 +35,7 @@ import com.ideahub.model.views.IdeaFeedView;
 
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
+
 import jodd.petite.meta.PetiteBean;
 import lombok.AllArgsConstructor;
 
@@ -68,12 +69,21 @@ public class IdeaResource {
         return idea;
     }
 
+    @GET
+    @Timed
+    @ExceptionMetered
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    public Set<Idea> getIdea(@Auth final User authenticatedUser) {
+        return this.ideaDAO.findListByUserId(authenticatedUser.getId());
+    }
+
     @POST
     @Timed
     @ExceptionMetered
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public Idea createIdea(@Auth final User authenticatedUser, NewIdea ideaContent) throws Exception {
+    public Idea createIdea(@Auth final User authenticatedUser, final NewIdea ideaContent) throws Exception {
         Idea idea = new Idea();
 
         idea.setCreatedAt(new Date());
@@ -84,7 +94,7 @@ public class IdeaResource {
         // TODO: This is not ideal as we have to double-save here *sigh
         idea = this.ideaDAO.createOrUpdate(idea);
 
-        Map<Integer, IdeaPart> defaultParts = new HashMap<>();
+        final Map<Integer, IdeaPart> defaultParts = new HashMap<>();
         defaultParts.put(1, IdeaPart.builder().ideaId(idea.getId()).content(ideaContent.getName()).ideaPartTypeId(1).upvotes(0).downvotes(0).build());
         defaultParts.put(2, IdeaPart.builder().ideaId(idea.getId()).content(ideaContent.getElevatorPitch()).ideaPartTypeId(2).upvotes(0).downvotes(0).build());
 
@@ -110,9 +120,9 @@ public class IdeaResource {
     @UnitOfWork
     @JsonView(IdeaFeedView.class)
     public Set<Idea> getRecentIdeas(@QueryParam("total") final Optional<Integer> total) throws Exception {
-        int totalParameter = total.isPresent() ? Math.min(total.get(), MAX_NUMBER_OF_RECENT_IDEAS) : MAX_NUMBER_OF_RECENT_IDEAS;
+        final int totalParameter = total.isPresent() ? Math.min(total.get(), MAX_NUMBER_OF_RECENT_IDEAS) : MAX_NUMBER_OF_RECENT_IDEAS;
 
-        return ideaFeedCache.getIdeaFeed(IdeaFeedType.RECENT, totalParameter);
+        return this.ideaFeedCache.getIdeaFeed(IdeaFeedType.RECENT, totalParameter);
     }
 
     @GET
@@ -123,10 +133,10 @@ public class IdeaResource {
     @UnitOfWork
     @JsonView(IdeaFeedView.class)
     public Set<Idea> getPopularIdeas(@QueryParam("total") final Optional<Integer> total) throws Exception {
-        int totalParameter = total.isPresent() ? Math.min(total.get(), MAX_NUMBER_OF_POPULAR_IDEAS) : MAX_NUMBER_OF_POPULAR_IDEAS;
+        final int totalParameter = total.isPresent() ? Math.min(total.get(), MAX_NUMBER_OF_POPULAR_IDEAS) : MAX_NUMBER_OF_POPULAR_IDEAS;
 
         // TODO: If pagination is supplied, then we should go straight to the DB
-        return ideaFeedCache.getIdeaFeed(IdeaFeedType.POPULAR, totalParameter);
+        return this.ideaFeedCache.getIdeaFeed(IdeaFeedType.POPULAR, totalParameter);
     }
 
     @PUT
