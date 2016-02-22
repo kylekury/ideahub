@@ -6,13 +6,15 @@
         .module('ideaHubApp')
         .controller('ProjectController', ProjectController);
 
-    ProjectController.$inject = ['$q', '$scope','Restangular', '$location', '$location', '$cookies'];
+    ProjectController.$inject = ['$q', '$scope','Restangular','$routeParams', '$location', '$cookies'];
 
-    function ProjectController($q, $scope, Restangular, $location,$cookies) {
+    function ProjectController($q, $scope, Restangular, $routeParams, $location, $cookies) {
 
-    	console.log("ProfileController");
+    	console.log("ProjectController");
 
+        
         var tookenCookie = $cookies.get('ideahub_token');
+
         if(angular.isUndefined(tookenCookie) || tookenCookie == ""){
             $location.path('/login');
         }
@@ -43,11 +45,11 @@
     			function(response){
     				console.log(response);
 
-    				var projectId = response.id;
+    				var ideaId = response.id;
 
-    				console.log(projectId);
+    				console.log(ideaId);
 
-                    $location.path('/project/'+projectId);
+                    $location.path('/dashboard/'+ideaId);
 
     			},
     			function(error){
