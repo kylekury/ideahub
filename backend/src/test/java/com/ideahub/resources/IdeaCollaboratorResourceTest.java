@@ -1,34 +1,49 @@
-package com.ideahub.dao;
+package com.ideahub.resources;
 
 import com.google.common.base.Optional;
+import com.ideahub.dao.*;
 import com.ideahub.model.*;
+import com.ideahub.resources.idea.CollaborationResource;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import java.sql.*;
+import javax.ws.rs.core.Response;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class IdeaCollaboratorDAOTest {
+@RunWith(MockitoJUnitRunner.class)
+public class IdeaCollaboratorResourceTest {
     private UserDAO userDAO;
     private IdeaDAO ideaDAO;
     private IdeaCollaboratorDAO collaboratorDAO;
+    private IdeaInvitationDAO invitationDAO;
+    private IdeaPartTypeDAO ideaPartTypeDAO;
+
+    private CollaborationResource resource;
+
     private HibernateDAOTestUtil testUtil;
+
 
     @Before
     public void setup() {
         this.testUtil = new HibernateDAOTestUtil(
                 Arrays.asList(User.class, Idea.class, IdeaPart.class, IdeaPartType.class
                         ,IdeaPartSuggestion.class, IdeaCollaborator.class, IdeaInvitation.class));
-
         this.userDAO = new UserDAO(this.testUtil.getSessionFactory());
-        this.ideaDAO = new IdeaDAO(this.testUtil.getSessionFactory(), this.userDAO);
+        this.ideaDAO = new IdeaDAO(this.testUtil.getSessionFactory(), userDAO);
         this.collaboratorDAO = new IdeaCollaboratorDAO(this.testUtil.getSessionFactory());
+        this.invitationDAO = new IdeaInvitationDAO(this.testUtil.getSessionFactory());
+        this.ideaPartTypeDAO = new IdeaPartTypeDAO(this.testUtil.getSessionFactory());
+
+        this.resource = new CollaborationResource(this.userDAO, this.ideaDAO, this.collaboratorDAO,
+                this.invitationDAO, this.ideaPartTypeDAO);
     }
 
     @Test
-    public void testFindById() {
+    public void testSendMatchInvitation() {
         final User userA = User.builder()
                 .email("abc@def.com")
                 .username("abcdef")
@@ -60,11 +75,11 @@ public class IdeaCollaboratorDAOTest {
                 .userId(userFound.get().getId())
                 .ideaId(1)
                 .build();
-        Map<Integer, IdeaPart> ideaPartMap = new HashMap<>();
-        ideaPartMap.put(1, ideaPart);
+        Map<Integer, IdeaPart> ideaPartSet = new HashMap<>();
+        ideaPartSet.put(0,ideaPart);
 
         final Idea idea = Idea.builder()
-                .ideaParts(ideaPartMap)
+                .ideaParts(ideaPartSet)
                 .userId(userFound.get().getId())
                 .build();
         this.testUtil.getSession().save(idea);
@@ -79,7 +94,7 @@ public class IdeaCollaboratorDAOTest {
         final IdeaInvitation invitation = IdeaInvitation.builder()
                 .acceptedState(false)
                 .inviteState(true)
-                .transactionId("test-transaction-id")
+                .transactionId(IdeaInvitation.generateTransactionId())
                 .createdDate(new java.sql.Date(System.currentTimeMillis()))
                 .build();
         testUtil.getSession().save(invitation);
@@ -91,12 +106,31 @@ public class IdeaCollaboratorDAOTest {
                 .invitation(invitation)
                 .build();
         this.testUtil.getSession().save(collab);
-
         final Optional<IdeaCollaborator> collaboratorFound = this.collaboratorDAO
                 .findById(userB.getId(), ideaFound.get().getId());
 
         assertThat(collaboratorFound.isPresent()).isTrue();
         assertThat(collaboratorFound.get().getUser().getEmail().equals(userB.getEmail())).isTrue();
         assertThat(collaboratorFound.get().getIdea().getId() == ideaFound.get().getId()).isTrue();
+        try {
+            final Response response = resource.inviteCollaborator(userA, idea.getId(), userB.getEmail());
+            assertThat(response.getStatus() == Response.Status.OK.getStatusCode()).isTrue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            final Response response = resource.inviteCollaborator(userA, idea.getId(), "userB@test.com");
+            assertThat(response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()).isTrue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            final Response response = resource.getIdeaInvitation(userB,idea.getId(),invitation.getTransactionId());
+            assertThat(response.getStatus() == Response.Status.OK.getStatusCode()).isTrue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

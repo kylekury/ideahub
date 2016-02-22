@@ -16,7 +16,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="kyle" id="1455957189141-2">
+    <changeSet author="massanori" id="1455957189141-2">
         <createTable tableName="idea_collaborator">
             <column name="user_id" type="BIGINT(20)">
                 <constraints nullable="false"/>
@@ -24,7 +24,26 @@
             <column name="idea_id" type="BIGINT(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="invite_status" type="TINYINT(3)"/>
+            <column name="idea_invitation_id" type="BIGINT(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="idea_invitation">
+            <column name="id" autoIncrement="true" type="BIGINT(20)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="transation_id" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="invite_state" type="TINYINT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="accepted_state" type="TINYINT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="DATETIME">
+                <constraints nullable="false" unique="true"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-3">
@@ -143,8 +162,9 @@
             <column name="avatar_url" type="VARCHAR(500)"/>
         </createTable>
     </changeSet>
-    <changeSet author="kyle" id="1455957189141-8">
+    <changeSet author="massanori" id="1455957189141-8">
         <addPrimaryKey columnNames="user_id, idea_id" constraintName="PRIMARY" tableName="idea_collaborator"/>
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="idea_invitation"/>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-13">
         <createIndex indexName="fk_idea_part_idea1_idx" tableName="idea_part">
@@ -180,9 +200,12 @@
             <column name="user_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="kyle" id="1455957189141-18">
+    <changeSet author="massanori" id="1455957189141-18">
         <createIndex indexName="fk_user_has_idea_idea1_idx" tableName="idea_collaborator">
             <column name="idea_id"/>
+        </createIndex>
+        <createIndex indexName="fk_idea_collaborator_idea_invitation1_idx" tableName="idea_collaborator">
+            <column name="idea_invitation_id"/>
         </createIndex>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-19">
@@ -210,6 +233,7 @@
     </changeSet>
     <changeSet author="kyle" id="1455957189141-25">
         <addForeignKeyConstraint baseColumnNames="idea_id" baseTableName="idea_collaborator" constraintName="fk_user_has_idea_idea1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="idea"/>
+        <addForeignKeyConstraint baseColumnNames="idea_invivation_id" baseTableName="idea_collaborator" constraintName="fk_idea_collaborator_idea_invitation1_idx" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="idea_invitation"/>
     </changeSet>
     <changeSet author="kyle" id="1455957189141-26">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="idea_collaborator" constraintName="fk_user_has_idea_user1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
