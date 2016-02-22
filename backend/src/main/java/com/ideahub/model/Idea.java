@@ -86,4 +86,6 @@ public class Idea {
     private transient int contributions;
 
     private transient String userName;
+
+    private transient String avatarUrl;
 }
