@@ -1,7 +1,8 @@
 package com.ideahub.cache;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -35,16 +36,16 @@ public class IdeaFeedCache {
     }
 
     private final long cacheTimeoutInSeconds = 10;
-    private final int cacheSize = 5;
+    private final int cacheSize = 100;
 
-    private LoadingCache<IdeaFeedType, List<Idea>> feedCache;
+    private LoadingCache<IdeaFeedType, Set<Idea>> feedCache;
 
-    public List<Idea> getIdeaFeed(IdeaFeedType feedType, int itemsToReturn) throws ExecutionException {
+    public Set<Idea> getIdeaFeed(IdeaFeedType feedType, int itemsToReturn) throws ExecutionException {
         if (feedCache == null) {
             feedCache = CacheBuilder.newBuilder()
                     .expireAfterWrite(cacheTimeoutInSeconds, TimeUnit.SECONDS)
-                    .build(new CacheLoader<IdeaFeedType, List<Idea>>() {
-                        public List<Idea> load(IdeaFeedType key) { // no checked exception
+                    .build(new CacheLoader<IdeaFeedType, Set<Idea>>() {
+                        public Set<Idea> load(IdeaFeedType key) { // no checked exception
                             switch (key) {
                             case RECENT:
                                 return ideaDAO.findRecent(cacheSize);
@@ -53,7 +54,7 @@ public class IdeaFeedCache {
                             }
 
                             // This should never happen
-                            return new ArrayList<>();
+                            return new HashSet<>();
                         }
                     });
         }

@@ -6,11 +6,11 @@
 	  .module('ideaHubApp', [
 	    // 'ngResource',
 	       'ngRoute',
-	       'restangular'
+	       'restangular',
 	    // 'ngSanitize',
 	    // 'ngTouch',
 	    // 'ngAnimate',
-	    // 'ngCookies'
+	       'ngCookies'
 	  ]);
 
 
@@ -58,6 +58,9 @@
         //var tempToken = '';
         //RestangularProvider.setDefaultHeaders({Authorization:'Bearer '+tempToken});
 
+		//var tookenCookie = $cookies.get('ideahub_token');
+		//RestangularProvider.setDefaultHeaders({Authorization:'Bearer '+tookenCookie});
+
         RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
             var responseData = response.data;    
             return responseData;
@@ -69,6 +72,17 @@
 
 	});  
 
+	ideaHubApp.run(['$rootScope', '$cookies', 'Restangular',
+	    function ($rootScope, $cookies, Restangular) {
 
+	        //$cookies.put('ideahub_token','sA5H93yFaHJv/MZJtQKazZ9Vl3ELISi91sl/s3Os/gxhKkVqyOKYF2S7PKiby0uvhE6ObqPUyLOirtfnCBjjIA==');		
+
+	    	var tookenCookie = $cookies.get('ideahub_token');
+	    	console.log("======tookenCookie=========");
+	    	console.log(tookenCookie);
+	    	console.log("======ENDtookenCookie=========");
+    		Restangular.setDefaultHeaders({Authorization:'Bearer '+tookenCookie});
+
+	}]);
 
 })();
