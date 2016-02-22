@@ -69,21 +69,31 @@ section {
 /* Idea Boxes */
 
 .ideabox {
-  background: #f7f7f7;
+  background: #f0f0f0;
   display: flex;
   flex-direction: row;
   margin-bottom: 30px;
 }
 
+.ideabox hr {
+  border-color: rgba(0,0,0,0.2);
+}
+
 .ideabox__heading {
+  color: #1eaca7;
   margin: 15px 0;
   text-transform: none;
 }
 
 .ideabox__side {
+  background: #ececec;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.ideabox__side .light {
+  font-weight: normal;
 }
 
 .ideabox__votes, .ideabox__label {
@@ -91,6 +101,10 @@ section {
 }
 
 /* Login Page */
+
+#newIdeas .container, #popularIdeas .container{
+  padding: 10px 150px;
+}
 
 .login {
   display: flex;
@@ -158,7 +172,9 @@ section {
 }
 
 .circle-avatar{
-  width:50px;
-  height:50px;
+  width:30px;
+  height:30px;
   border-radius: 50%;
+  border: 2px solid white;
+  margin-right:10px;
 }

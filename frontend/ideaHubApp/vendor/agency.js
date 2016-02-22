@@ -1,34 +1,27 @@
-/*!
- * Agency v1.0.x (http://startbootstrap.com/template-overviews/agency)
- * Copyright 2013-2016 Start Bootstrap
- * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
- */
-
-// jQuery for page scrolling feature - requires jQuery Easing plugin
 $(function() {
-    $('a.page-scroll').bind('click', function(event) {
-        var $anchor = $(this);
-        $('html, body').stop().animate({
-            scrollTop: $($anchor.attr('href')).offset().top
-        }, 1500, 'easeInOutExpo');
-        event.preventDefault();
-    });
+    var _bindAnchorLinks = function(){
+        console.log("binding for " + location.hash);
+        console.log("length is " + $('.page-scroll').length);
+        $('.page-scroll').click(function() {
+            var $anchor = $(this);
+            $('html, body').stop().animate({
+                scrollTop: $($anchor.attr('data-href')).offset().top
+            }, 1500, 'easeInOutExpo');
+        });
+    };
     var _onhashchange = function(){
 		if(location.hash != "#/home"){
 			$("nav.navbar").addClass("navbar-shrink");
 			return;
 		}
 		$("nav.navbar").removeClass("navbar-shrink");
+        
 	};
+    _bindAnchorLinks();
     _onhashchange();
     window.onhashchange = _onhashchange;
-	
+    window.onload = _bindAnchorLinks;
 });
-
-// Highlight the top nav as scrolling occurs
-$('body').scrollspy({
-    target: '.navbar-fixed-top'
-})
 
 // Closes the Responsive Menu on Menu Item Click
 $('.navbar-collapse ul li a:not(.dropdown-toggle)').click(function() {
