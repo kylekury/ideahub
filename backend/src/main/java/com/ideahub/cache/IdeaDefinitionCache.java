@@ -48,10 +48,6 @@ public class IdeaDefinitionCache {
         return ideaPartTypesByName;
     }
 
-    public Map<Integer, IdeaPartType> getIdeaPartTypes() {
-        return ideaPartTypes;
-    }
-
     public void setIdeaPartTypeDAO(IdeaPartTypeDAO ideaPartTypeDAO) {
         this.ideaPartTypeDAO = ideaPartTypeDAO;
     }
