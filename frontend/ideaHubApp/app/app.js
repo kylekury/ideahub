@@ -37,6 +37,10 @@
 			templateUrl: 'app/project/project.html',
 			controller: 'ProjectController'
 		}).
+			when('/project/:projectId', {
+			templateUrl: 'app/project/project-detail.html',
+			controller: 'ProjectDetailController'
+		}).
 			when('/dashboard', {
 			templateUrl: 'app/dashboard/dashboard.html',
 			controller: 'DashboardController'
