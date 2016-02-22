@@ -1,10 +1,8 @@
-package com.ideahub.resources;
+package com.ideahub.resources.idea;
 
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
-import com.google.common.base.Strings;
-import com.ideahub.cache.IdeaDefinitionCache;
 import com.ideahub.dao.*;
 import com.ideahub.exceptions.SendInviteException;
 import com.ideahub.model.*;
