@@ -1,5 +1,6 @@
 package com.ideahub;
 
+import com.ideahub.model.*;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
@@ -12,14 +13,6 @@ import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.ideahub.auth.TokenAuthenticator;
 import com.ideahub.auth.UserRoleAuthorizer;
-import com.ideahub.model.Idea;
-import com.ideahub.model.IdeaCollaborator;
-import com.ideahub.model.IdeaPart;
-import com.ideahub.model.IdeaPartSuggestion;
-import com.ideahub.model.IdeaPartSuggestionVote;
-import com.ideahub.model.IdeaPartType;
-import com.ideahub.model.IdeaPartVote;
-import com.ideahub.model.User;
 import com.ideahub.resources.AuthenticationResource;
 import com.ideahub.resources.idea.IdeaDefinitionResource;
 import com.ideahub.resources.idea.IdeaPartResource;
@@ -55,7 +48,8 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
             IdeaPartType.class,
             IdeaPartSuggestion.class,
             IdeaPartSuggestionVote.class,
-            IdeaCollaborator.class) {
+            IdeaCollaborator.class,
+            IdeaInvitation.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(
                 final IdeaHubConfiguration configuration) {
