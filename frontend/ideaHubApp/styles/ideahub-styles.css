@@ -38,6 +38,10 @@ input.form-control, select.form-control, textarea.form-control {
   padding-left: 36px;
 }
 
+.navbar .navbar-brand {
+  margin-right: 0.4em;
+}
+
 .blue {
   color: #2baea6;
 }
@@ -46,6 +50,18 @@ input.form-control, select.form-control, textarea.form-control {
   background: transparent;
   border: 2px solid white;
   font-weight: normal;
+}
+
+a.explore-cta {
+  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: white;
+  display: inline-block;
+  padding-top: 17px;
+}
+
+a:hover.explore-cta {
+  color: #1eaca7;
+  text-decoration: none;
 }
 
 .dark {
