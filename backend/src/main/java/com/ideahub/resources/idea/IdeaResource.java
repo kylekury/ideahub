@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -36,6 +37,7 @@ import lombok.AllArgsConstructor;
 @Path("/idea")
 @PetiteBean
 @AllArgsConstructor
+@Consumes
 @Produces(MediaType.APPLICATION_JSON)
 public class IdeaResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(IdeaResource.class);

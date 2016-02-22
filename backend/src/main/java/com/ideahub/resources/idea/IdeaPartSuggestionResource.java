@@ -35,6 +35,8 @@ import lombok.AllArgsConstructor;
 @Path("/idea/part/suggestion")
 @PetiteBean
 @AllArgsConstructor
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes
 public class IdeaPartSuggestionResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(IdeaPartSuggestionResource.class);
 
@@ -47,7 +49,6 @@ public class IdeaPartSuggestionResource {
     @Timed
     @ExceptionMetered
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public IdeaPartSuggestion updateIdeaPartSuggestion(@Auth final User authenticatedUser, IdeaPartSuggestion ideaPartSuggestion) throws Exception {
         final long userId = authenticatedUser.getId();
@@ -76,7 +77,6 @@ public class IdeaPartSuggestionResource {
     @Path("/{ideaPartSuggestionId}")
     @Timed
     @ExceptionMetered
-    @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public boolean deleteIdeaPartSuggestion(@Auth final User authenticatedUser, @PathParam("ideaPartSuggestionId") final long ideaPartSuggestionId)
             throws Exception {
@@ -89,8 +89,6 @@ public class IdeaPartSuggestionResource {
     @Path("/{ideaPartSuggestionId}/upvote")
     @Timed
     @ExceptionMetered
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public Optional<IdeaPartSuggestion> upvote(@Auth final User authenticatedUser, @PathParam("ideaPartSuggestionId") final long ideaPartSuggestionId)
             throws Exception {
@@ -101,8 +99,6 @@ public class IdeaPartSuggestionResource {
     @Path("/{ideaPartSuggestionId}/downvote")
     @Timed
     @ExceptionMetered
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public Optional<IdeaPartSuggestion> downvote(@Auth final User authenticatedUser, @PathParam("ideaPartSuggestionId") final long ideaPartSuggestionId)
             throws Exception {

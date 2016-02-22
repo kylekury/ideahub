@@ -370,6 +370,31 @@
             <column name="user_id">1</column>
             <column name="is_private">0</column>
         </insert>
+        <insert tableName="idea">
+            <column name="id">2</column>
+            <column name="user_id">2</column>
+            <column name="is_private">0</column>
+        </insert>
+        <insert tableName="idea">
+            <column name="id">3</column>
+            <column name="user_id">3</column>
+            <column name="is_private">0</column>
+        </insert>
+        <insert tableName="idea">
+            <column name="id">4</column>
+            <column name="user_id">4</column>
+            <column name="is_private">0</column>
+        </insert>
+        <insert tableName="idea">
+            <column name="id">5</column>
+            <column name="user_id">5</column>
+            <column name="is_private">0</column>
+        </insert>
+        <insert tableName="idea">
+            <column name="id">6</column>
+            <column name="user_id">6</column>
+            <column name="is_private">0</column>
+        </insert>
     </changeSet>
     
     <changeSet author="fixtures" id="1455957189141-29">
@@ -595,6 +620,106 @@
             <column name="downvotes">3</column>
             <column name="content">GitHub for authentication.</column>
             <column name="justification">Most of the target audience uses GitHub, so make it pain-free.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">23</column>
+            <column name="user_id">2</column>
+            <column name="idea_id">2</column>
+            <column name="idea_part_type_id">1</column>
+            <column name="upvotes">15</column>
+            <column name="downvotes">2</column>
+            <column name="content">Puppies 4 sale</column>
+            <column name="justification">No.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">24</column>
+            <column name="user_id">2</column>
+            <column name="idea_id">2</column>
+            <column name="idea_part_type_id">2</column>
+            <column name="upvotes">11</column>
+            <column name="downvotes">3</column>
+            <column name="content">Find the perfect puppy today.</column>
+            <column name="justification">No.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">25</column>
+            <column name="user_id">3</column>
+            <column name="idea_id">3</column>
+            <column name="idea_part_type_id">1</column>
+            <column name="upvotes">22</column>
+            <column name="downvotes">2</column>
+            <column name="content">Hackathon Builder</column>
+            <column name="justification">No.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">26</column>
+            <column name="user_id">3</column>
+            <column name="idea_id">3</column>
+            <column name="idea_part_type_id">2</column>
+            <column name="upvotes">11</column>
+            <column name="downvotes">7</column>
+            <column name="content">Automatically generated hackathon projects.</column>
+            <column name="justification">No.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">27</column>
+            <column name="user_id">4</column>
+            <column name="idea_id">4</column>
+            <column name="idea_part_type_id">1</column>
+            <column name="upvotes">91</column>
+            <column name="downvotes">25</column>
+            <column name="content">Food Delivery Vehicle</column>
+            <column name="justification">No.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">28</column>
+            <column name="user_id">4</column>
+            <column name="idea_id">4</column>
+            <column name="idea_part_type_id">2</column>
+            <column name="upvotes">33</column>
+            <column name="downvotes">67</column>
+            <column name="content">Uber for dinner.</column>
+            <column name="justification">No.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">29</column>
+            <column name="user_id">5</column>
+            <column name="idea_id">5</column>
+            <column name="idea_part_type_id">1</column>
+            <column name="upvotes">91</column>
+            <column name="downvotes">25</column>
+            <column name="content">Catstagram</column>
+            <column name="justification">No.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">30</column>
+            <column name="user_id">5</column>
+            <column name="idea_id">5</column>
+            <column name="idea_part_type_id">2</column>
+            <column name="upvotes">33</column>
+            <column name="downvotes">67</column>
+            <column name="content">Instagram where only cats can have accounts.</column>
+            <column name="justification">No.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">31</column>
+            <column name="user_id">6</column>
+            <column name="idea_id">6</column>
+            <column name="idea_part_type_id">1</column>
+            <column name="upvotes">91</column>
+            <column name="downvotes">25</column>
+            <column name="content">Colandership</column>
+            <column name="justification">No.</column>
+        </insert>
+        <insert tableName="idea_part">
+            <column name="id">32</column>
+            <column name="user_id">6</column>
+            <column name="idea_id">6</column>
+            <column name="idea_part_type_id">2</column>
+            <column name="upvotes">33</column>
+            <column name="downvotes">67</column>
+            <column name="content">A colander-powered rocketship.</column>
+            <column name="justification">No.</column>
         </insert>
     </changeSet>
         
