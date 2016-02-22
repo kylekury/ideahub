@@ -19,7 +19,7 @@
                 <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
             </div>
         </div>
-        
+
         <!-- Recent
             <td>{{ideas.id}}</td>
             <td>{{ideas.user_id}}</td>
@@ -39,7 +39,7 @@
                 <h4 class="ideabox__heading">{{ideas.name}}</h4>
                 <p class="ideabox__summary text-muted">{{ideas.elevator_pitch}}</p>
                 <p class="ideabox__contrib">{{ideas.contributions}} Contributions</p>
-                <p class="ideabox__author"><img src="{{avatar_url}}"/> Created by {{ideas.user_name}}</p>
+                <p class="ideabox__author"><img src="{{ideas.avatar_url}}" class="circle-avatar"/> Created by {{ideas.user_name}}</p>
             </div>
         </div>
 
@@ -57,34 +57,29 @@
             </div>
         </div>
 
-        <!-- popular ideas -->
-        <div class="row text-center ideabox">
-            <div class="col-sm-4 text-center ideabox__side">
-                <h2>
-                	<span class="ideabox__votes">566</span>
-                	<span class="ideabox__label">VOTES</span>
-                </h2>
-            </div>
-            <div class="col-sm-6 text-left">
-                <h4 class="ideabox__heading">E-Commerce</h4>
-                <p class="ideabox__summary text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing el Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
-                <p class="ideabox__contrib">3 Contributions</p>
-                <p class="ideabox__author">Created by Someone</p>
-            </div>
-        </div>
+        <!-- Popular
+            <td>{{ideas.id}}</td>
+            <td>{{ideas.user_id}}</td>
+            <td>{{ideas.name}}</td>
+            <td>{{ideas.elevator_pitch}}</td>
+            <td>{{ideas.votes}}</td>
+            <td>{{ideas.contributions}}</td>
+            <td>{{ideas.user_name}}</td>
+         -->
 
-        <div class="row text-center ideabox">
+        <!-- popular ideas -->
+        <div class="row text-center ideabox" ng-repeat="ideas in popularIdea_list">
             <div class="col-sm-4 text-center ideabox__side">
                 <h2>
-                	<span class="ideabox__votes">966</span>
+                	<span class="ideabox__votes">{{ideas.votes}}</span>
                 	<span class="ideabox__label">VOTES</span>
                 </h2>
             </div>
             <div class="col-sm-6 text-left">
-                <h4 class="ideabox__heading">E-Commerce</h4>
-                <p class="ideabox__summary text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing el Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
-                <p class="ideabox__contrib">3 Contributions</p>
-                <p class="ideabox__author">Created by Someone</p>
+                <h4 class="ideabox__heading">{{ideas.name}}</h4>
+                <p class="ideabox__summary text-muted">{{ideas.elevator_pitch}}</p>
+                <p class="ideabox__contrib">{{ideas.contributions}} Contributions</p>
+                <p class="ideabox__author"><img src="{{ideas.avatar_url}}" class="circle-avatar"/> Created by {{ideas.user_name}}</p>
             </div>
         </div>
 

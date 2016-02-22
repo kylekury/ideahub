@@ -13,12 +13,12 @@
 
         //Initialize
         $scope.definition_list= [];  
-        $scope.recentIdea_list= [];          
+        $scope.recentIdea_list= [];    
+        $scope.popularIdea_list= [];             
         
-        getIdeas ();
-
         getRecentIedas();
-
+        getPopularIedas();
+      //getIdeas ();
         
         //Get Recent
         function getRecentIedas (){
@@ -31,6 +31,20 @@
                 }
             );  
         }
+        
+         //Get Recent
+        function getPopularIedas (){
+            var recentIdea = Restangular.all('/idea/popular')
+            recentIdea.getList().then(
+                function(response) {
+                    $scope.popularIdea_list = response;
+                }, function(error) {
+                    return null;
+                }
+            );  
+        }
+
+
 
         // {
         // "name": "elevator_pitch",
