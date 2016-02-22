@@ -130,6 +130,6 @@ public class IdeaResource {
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public List<Idea> getPopularIdeas() throws Exception {
-        return ideaDAO.findPopularIdeas();
+        return ideaDAO.findPopularIdeas(10);
     }
 }

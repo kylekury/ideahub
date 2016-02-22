@@ -126,6 +126,13 @@
             <version>2.3.3</version>
             <scope>test</scope>
         </dependency>
+        
+        <!-- Guava for caching -->
+        <dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>19.0</version>
+		</dependency>
     </dependencies>
 
     <build>

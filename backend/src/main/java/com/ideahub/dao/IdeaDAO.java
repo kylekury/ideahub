@@ -61,12 +61,14 @@ public class IdeaDAO extends AbstractDAO<Idea> {
 
     // TODO: This should be cached, since this is called on the homepage, and doesn't need to 100% accurate
     @SuppressWarnings("unchecked")
-    public List<Idea> findPopularIdeas() {
+    public List<Idea> findPopularIdeas(int limit) {
         // Holy fuck this ugly haha
         Query topPartVotes = this.currentSession()
-                .createSQLQuery("select i.id from idea i left outer join idea_part_vote v ON i.id = v.idea_id group by i.id LIMIT 5");
+                .createSQLQuery(
+                        String.format("select i.id from idea i left outer join idea_part_vote v ON i.id = v.idea_id group by i.id LIMIT %d", limit / 2));
         Query topPartSuggestionVotes = this.currentSession()
-                .createSQLQuery("select i.id from idea i left outer join idea_part_suggestion_vote v ON i.id = v.idea_id group by i.id LIMIT 5");
+                .createSQLQuery(String.format("select i.id from idea i left outer join idea_part_suggestion_vote v ON i.id = v.idea_id group by i.id LIMIT %d",
+                        limit / 2));
 
         List<BigInteger> topPartIds = topPartVotes.list();
         List<BigInteger> topPartSuggestionIds = topPartSuggestionVotes.list();
