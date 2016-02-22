@@ -10,10 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,7 +33,7 @@ public class IdeaCollaboratorResourceTest {
                 Arrays.asList(User.class, Idea.class, IdeaPart.class, IdeaPartType.class
                         ,IdeaPartSuggestion.class, IdeaCollaborator.class, IdeaInvitation.class));
         this.userDAO = new UserDAO(this.testUtil.getSessionFactory());
-        this.ideaDAO = new IdeaDAO(this.testUtil.getSessionFactory());
+        this.ideaDAO = new IdeaDAO(this.testUtil.getSessionFactory(), userDAO);
         this.collaboratorDAO = new IdeaCollaboratorDAO(this.testUtil.getSessionFactory());
         this.invitationDAO = new IdeaInvitationDAO(this.testUtil.getSessionFactory());
         this.ideaPartTypeDAO = new IdeaPartTypeDAO(this.testUtil.getSessionFactory());
@@ -78,8 +75,8 @@ public class IdeaCollaboratorResourceTest {
                 .userId(userFound.get().getId())
                 .ideaId(1)
                 .build();
-        Set<IdeaPart> ideaPartSet = new HashSet<>();
-        ideaPartSet.add(ideaPart);
+        Map<Integer, IdeaPart> ideaPartSet = new HashMap<>();
+        ideaPartSet.put(0,ideaPart);
 
         final Idea idea = Idea.builder()
                 .ideaParts(ideaPartSet)

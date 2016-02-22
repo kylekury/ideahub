@@ -92,7 +92,7 @@ public class CollaborationResource {
                 String transactionId = null;
                 try {
                     idea = ideaDAO.findById(ideaId).get();
-                    type = ideaPartTypeDAO.findById(idea.getIdeaParts().iterator().next().getIdeaPartTypeId()).get();
+                    type = ideaPartTypeDAO.findById(idea.getIdeaParts().get(0).getIdeaPartTypeId()).get();
                     String fromName = authenticatedUser.getName();
                     String anIdea = type.getName();
                     String to = targetUser.getEmail();
