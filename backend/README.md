@@ -48,6 +48,13 @@ Method: POST
 Headers:
     Accept: application/json;
     
+Input:
+    {
+        "name": "",
+        "elevator_pitch": "",
+        "private": ""
+    }
+    
 Output:
     {
         "id": 1,
