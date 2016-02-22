@@ -41,6 +41,8 @@ import lombok.AllArgsConstructor;
 @Path("/idea/part")
 @PetiteBean
 @AllArgsConstructor
+@Consumes
+@Produces(MediaType.APPLICATION_JSON)
 public class IdeaPartResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(IdeaPartResource.class);
 
@@ -53,7 +55,6 @@ public class IdeaPartResource {
     @Path("/{ideaPartId}")
     @Timed
     @ExceptionMetered
-    @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public Optional<IdeaPart> getIdeaPart(@PathParam("ideaPartId") final long ideaPartId) throws Exception {
         // TODO: Replace this with user lookup, anonymous view is fine as well.
@@ -81,8 +82,6 @@ public class IdeaPartResource {
     @PUT
     @Timed
     @ExceptionMetered
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public List<IdeaPart> updateIdeaParts(@Auth final User authenticatedUser, final List<IdeaPart> ideaParts)
             throws UserDoesntOwnIdeaPartException, UserNotAllowedToCreateMultipleIdeaPartsOfTypeException, IdeaPartTypeNotFoundException {
@@ -116,7 +115,6 @@ public class IdeaPartResource {
     @Path("/{ideaPartId}")
     @Timed
     @ExceptionMetered
-    @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public boolean deleteIdeaPart(@Auth final User authenticatedUser, @PathParam("ideaPartId") final long ideaPartId) throws Exception {
          final long userId = authenticatedUser.getId();
@@ -128,7 +126,6 @@ public class IdeaPartResource {
     @Path("/{ideaPartId}/upvote")
     @Timed
     @ExceptionMetered
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public Optional<IdeaPart> upvote(@Auth final User authenticatedUser, @PathParam("ideaPartId") final long ideaPartId)
@@ -140,8 +137,6 @@ public class IdeaPartResource {
     @Path("/{ideaPartId}/downvote")
     @Timed
     @ExceptionMetered
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public Optional<IdeaPart> downvote(@Auth final User authenticatedUser, @PathParam("ideaPartId") final long ideaPartId)
             throws Exception {
