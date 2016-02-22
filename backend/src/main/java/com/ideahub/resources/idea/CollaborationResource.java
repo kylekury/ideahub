@@ -61,6 +61,8 @@ public class CollaborationResource {
         if ((authenticatedUser.getId() == collaborator.getId().getUserId()) &&
                 (collaborator.getInvitation().getCreatedDate().before(new Date(System.currentTimeMillis()))) &&
                 (collaborator.getInvitation().getTransactionId().equals(transactionId))) {
+            collaborator.getInvitation().setAcceptedState(true);
+            this.ideaInvitationDAO.update(collaborator.getInvitation());
             result = (Response.ok()).build();
         }
         return result;

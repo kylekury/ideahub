@@ -3,7 +3,7 @@ package com.ideahub.resources;
 import com.google.common.base.Optional;
 import com.ideahub.dao.*;
 import com.ideahub.model.*;
-import org.eclipse.jetty.http.HttpStatus;
+import com.ideahub.resources.idea.CollaborationResource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

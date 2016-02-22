@@ -26,6 +26,13 @@ public class IdeaInvitationDAO extends AbstractDAO<IdeaInvitation> {
         return this.persist(invitation);
     }
 
+    public IdeaInvitation update(final IdeaInvitation invitation) {
+        final IdeaInvitation old = this.get(invitation.getId());
+
+        old.setAcceptedState(invitation.isAcceptedState());
+
+        return (IdeaInvitation) this.currentSession().merge(invitation);
+    }
     public Optional<IdeaInvitation> findById(final int id) {
         final Criteria criteria = this.criteria()
                 .add(Restrictions.eq("id", id));
