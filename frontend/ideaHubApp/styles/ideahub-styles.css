@@ -153,3 +153,9 @@ section {
   font-size: 1.3em;
   display: inline-block;
 }
+
+.circle-avatar{
+  width:50px;
+  height:50px;
+  border-radius: 50%;
+}
