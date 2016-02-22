@@ -4,7 +4,7 @@
         <div class="intro-text">
             <div class="intro-lead-in"><span>Too Many Ideas Die</span></div>
             <div class="intro-heading blue"><span>Ideas don't have to die</span></div>
-            <a href="#newIdeas" class="page-scroll btn btn-xl header-cta">Show Me Rescued Ideas</a>
+            <a href="#explore" class="page-scroll btn btn-xl header-cta">Show Me Rescued Ideas</a>
         </div>
     </div>
 </header>
@@ -36,7 +36,7 @@
                 IDEA</h2>
             </div>
             <div class="col-sm-6 text-left">
-                <h4 class="ideabox__heading">{{ideas.name}}</h4>
+                <a href="#dashboard/{{ideas.id}}"><h4 class="ideabox__heading">{{ideas.name}}</h4></a>
                 <p class="ideabox__summary text-muted">{{ideas.elevator_pitch}}</p>
                 <p class="ideabox__contrib">{{ideas.contributions}} Contributions</p>
                 <p class="ideabox__author"><img src="{{ideas.avatar_url}}" class="circle-avatar"/> Created by {{ideas.user_name}}</p>
@@ -76,7 +76,7 @@
                 </h2>
             </div>
             <div class="col-sm-6 text-left">
-                <h4 class="ideabox__heading">{{ideas.name}}</h4>
+                <a href="#dashboard/{{ideas.id}}"><h4 class="ideabox__heading">{{ideas.name}}</h4></a>
                 <p class="ideabox__summary text-muted">{{ideas.elevator_pitch}}</p>
                 <p class="ideabox__contrib">{{ideas.contributions}} Contributions</p>
                 <p class="ideabox__author"><img src="{{ideas.avatar_url}}" class="circle-avatar"/> Created by {{ideas.user_name}}</p>

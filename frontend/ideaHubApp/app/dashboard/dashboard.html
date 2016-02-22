@@ -3,12 +3,12 @@
 
     <div class="row profile__head">
         <div class="col-lg-4 text-center profile__photo">
-            <img src="img/mysteryman.png" alt="dolphin">
+            <img src="{{idea.avatar_url}}" alt="{{idea.user_name}}">
         </div>
         <div class="col-lg-6">
-            <h2>Liam Dolphin</h2>
+            <h2>{{idea.user_name}}</h2>
             <h4>1 Project</h4>
-             <h5><a href="" class="btn header-cta">New Project</a></h5>
+             <h5><a href="#project" class="btn header-cta">New Project</a></h5>
         </div>
     </div>
 
@@ -19,20 +19,37 @@
                 <ul class="nav nav-pills nav-stacked">
                     <li role="presentation" class="dropdown">
                         <div class="panel-heading">
-                            <h4><a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-  haspopup="true" aria-expanded="false">
-                              Project 1 <span class="caret"></span>
+                            <h4>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-  haspopup="true" aria-expanded="false">
+                              {{idea.name}} <span class="caret"></span>
                             </a></h4>
                         </div>
+                        <!-- 
                         <ul class="dropdown-menu">
                             <li role="presentation"><a href="#">Project 1</a></li>
                             <li role="presentation"><a href="#">Project 2</a></li>
                         </ul>
+                        -->
+                        
+                        <!-- <select class="form-control" class="dropdown">
+                            <option value="{{myidea.id}}" ng-repeat="myidea in myIdeaList">{{myidea.name}}</option>
+                        </select> -->
                     </li>
+
+
+                   <!-- 
                   <li role="presentation" class="active"><a href="#">Elevator Pitch</a></li>
                   <li role="presentation"><a href="#">Motivation</a></li>
                   <li role="presentation"><a href="#">Target Audience</a></li>
                   <li role="presentation"><a href="#">Platform</a></li>
                   <li role="presentation"><a href="#">Revenue Model</a></li>
+
+              -->
+
+                 <li role="presentation" ng-repeat="definition in definitionList">
+                    <a>{{definition.metadata.name_text}}</a>
+                 </li>
+
                 </ul>
             </aside>
 

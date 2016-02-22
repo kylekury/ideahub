@@ -32,7 +32,7 @@
                 </h2>
             </div>
             <div class="col-sm-6 text-left">
-                <h4 class="ideabox__heading">{{ideas.name}}</h4>
+                <a href="#dashboard/{{ideas.id}}"><h4 class="ideabox__heading">{{ideas.name}}</h4></a>
                 <p class="ideabox__summary text-muted">{{ideas.elevator_pitch}}</p>
                 <p class="ideabox__contrib">{{ideas.contributions}} Contributions</p>
                 <p class="ideabox__author"><img src="{{ideas.avatar_url}}" class="circle-avatar"/> Created by {{ideas.user_name}}</p>

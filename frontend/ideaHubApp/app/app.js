@@ -41,7 +41,7 @@
 			templateUrl: 'app/project/project-detail.html',
 			controller: 'ProjectDetailController'
 		}).
-			when('/dashboard', {
+			when('/dashboard/:ideaId', {
 			templateUrl: 'app/dashboard/dashboard.html',
 			controller: 'DashboardController'
 		}).
