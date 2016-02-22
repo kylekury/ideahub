@@ -1,5 +1,5 @@
 <!-- Explore Section -->
-<section class="explore">
+<section id="explore" class="explore">
 
     <div class="container">
         <!-- section header -->
@@ -21,20 +21,21 @@
 
         <!-- new ideas -->
         <div class="row text-center ideabox" ng-repeat="ideas in idea_list">
-            <div class="col-sm-4 text-center ideabox__side" ng-show="display.recent">
+            <div class="col-sm-3 text-center ideabox__side" ng-show="display.recent">
                 <h2>NEW<br>
                 IDEA</h2>
             </div>
-            <div class="col-sm-4 text-center ideabox__side" ng-show="display.popular">
+            <div class="col-sm-3 text-center ideabox__side" ng-show="display.popular">
                 <h2>
                     <span class="ideabox__votes">{{ideas.votes}}</span>
                     <span class="ideabox__label">VOTES</span>
                 </h2>
             </div>
-            <div class="col-sm-6 text-left">
+            <div class="col-sm-9 text-left">
                 <a href="#dashboard/{{ideas.id}}"><h4 class="ideabox__heading">{{ideas.name}}</h4></a>
                 <p class="ideabox__summary text-muted">{{ideas.elevator_pitch}}</p>
                 <p class="ideabox__contrib">{{ideas.contributions}} Contributions</p>
+                <hr>
                 <p class="ideabox__author"><img src="{{ideas.avatar_url}}" class="circle-avatar"/> Created by {{ideas.user_name}}</p>
             </div>
         </div>

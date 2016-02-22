@@ -118,7 +118,7 @@ section {
 
 /* Login Page */
 
-#newIdeas .container, #popularIdeas .container{
+#newIdeas .container, #popularIdeas .container, #explore .container {
   padding: 10px 150px;
 }
 
