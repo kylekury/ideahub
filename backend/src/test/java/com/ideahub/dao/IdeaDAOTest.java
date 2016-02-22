@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import com.ideahub.model.*;
 import org.joda.time.DateTime;
@@ -27,7 +27,7 @@ public class IdeaDAOTest {
                         IdeaPartSuggestion.class, IdeaCollaborator.class, IdeaInvitation.class));
 
         this.userDAO = new UserDAO(this.testUtil.getSessionFactory());
-        this.ideaDAO = new IdeaDAO(this.testUtil.getSessionFactory());
+        this.ideaDAO = new IdeaDAO(this.testUtil.getSessionFactory(), this.userDAO);
     }
 
     @Test
@@ -56,11 +56,11 @@ public class IdeaDAOTest {
                 .userId(userFound.get().getId())
                 .ideaId(1)
                 .build();
-        final Set<IdeaPart> ideaPartSet = new HashSet<>();
-        ideaPartSet.add(ideaPart);
+        final Map<Integer, IdeaPart> ideaPartMap = new HashMap<>();
+        ideaPartMap.put(1, ideaPart);
 
         final Idea idea = Idea.builder()
-                .ideaParts(ideaPartSet)
+                .ideaParts(ideaPartMap)
                 .userId(userFound.get().getId())
                 .build();
         this.testUtil.getSession().save(idea);
@@ -93,11 +93,11 @@ public class IdeaDAOTest {
                 .userId(user.getId())
                 .ideaId(1)
                 .build();
-        final Set<IdeaPart> ideaPartSet = new HashSet<>();
-        ideaPartSet.add(ideaPart);
+        final Map<Integer, IdeaPart> ideaPartMap = new HashMap<>();
+        ideaPartMap.put(1, ideaPart);
 
         final Idea idea = Idea.builder()
-                .ideaParts(ideaPartSet)
+                .ideaParts(ideaPartMap)
                 .userId(user.getId())
                 .build();
         this.testUtil.getSession().save(idea);
@@ -131,17 +131,17 @@ public class IdeaDAOTest {
                 .userId(user.getId())
                 .ideaId(1)
                 .build();
-        final Set<IdeaPart> ideaPartSet = new HashSet<>();
-        ideaPartSet.add(ideaPart);
+        final Map<Integer, IdeaPart> ideaPartMap = new HashMap<>();
+        ideaPartMap.put(1, ideaPart);
 
         final Idea idea = Idea.builder()
-                .ideaParts(ideaPartSet)
+                .ideaParts(ideaPartMap)
                 .userId(user.getId())
                 .build();
         this.testUtil.getSession().save(idea);
 
         final Idea idea2 = Idea.builder()
-                .ideaParts(ideaPartSet)
+                .ideaParts(ideaPartMap)
                 .userId(user.getId())
                 .build();
         this.testUtil.getSession().save(idea2);
@@ -175,18 +175,18 @@ public class IdeaDAOTest {
                 .userId(user.getId())
                 .ideaId(1)
                 .build();
-        final Set<IdeaPart> ideaPartSet = new HashSet<>();
-        ideaPartSet.add(ideaPart);
+        final Map<Integer, IdeaPart> ideaPartMap = new HashMap<>();
+        ideaPartMap.put(1, ideaPart);
 
         final Idea idea = Idea.builder()
-                .ideaParts(ideaPartSet)
+                .ideaParts(ideaPartMap)
                 .userId(user.getId())
                 .createdAt(DateTime.parse("2015-01-15").toDate())
                 .build();
         this.testUtil.getSession().save(idea);
 
         final Idea idea2 = Idea.builder()
-                .ideaParts(ideaPartSet)
+                .ideaParts(ideaPartMap)
                 .userId(user.getId())
                 .createdAt(new Date())
                 .build();

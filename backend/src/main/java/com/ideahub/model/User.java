@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.ideahub.model.views.SelfView;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,16 +44,17 @@ public class User implements Principal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    @JsonIgnore
     private long id;
 
     @Column(name = "oauth_token")
+    @JsonIgnore
     private String oauthToken;
 
     @Column(name = "username", unique = true, nullable = false)
     private String username;
 
     @Column(name = "email", unique = true, nullable = false)
+    @JsonView(SelfView.class)
     private String email;
 
     @Column(name = "avatar_url")
@@ -63,15 +66,18 @@ public class User implements Principal {
     }
 
     @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "user")
+    @JsonIgnore
     private Set<IdeaCollaborator> ideaCollaborators = new HashSet<>(0);
 
     @OneToMany(cascade = { CascadeType.ALL })
     @JoinColumn(name = "user_id") // Which column in the referenced table will
                                   // be joined
+    @JsonIgnore
     private Set<Idea> ideas;
 
     @OneToMany(cascade = { CascadeType.ALL })
     @JoinColumn(name = "user_id") // Which column in the referenced table will
                                   // be joined
+    @JsonIgnore
     private Set<IdeaPartSuggestion> ideaPartSuggestions;
 }

@@ -2,6 +2,8 @@ package com.ideahub.resources.idea;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -88,14 +90,15 @@ public class IdeaResource {
     @Timed
     @ExceptionMetered
     @UnitOfWork
-    public List<Idea> getRecentIdeas(@QueryParam("total") final Optional<Integer> total) {
+    public Set<Idea> getRecentIdeas(@QueryParam("total") final Optional<Integer> total) {
         int totalParameter;
         if (!total.isPresent()) {
             totalParameter = MAX_NUMBER_OF_RECENT_IDEAS;
         } else {
             totalParameter = total.get();
         }
-        return this.ideaDAO.findRecent(Math.min(totalParameter, MAX_NUMBER_OF_RECENT_IDEAS));
+        final Set<Idea> ideas = new TreeSet<>(this.ideaDAO.findRecent(Math.min(totalParameter, MAX_NUMBER_OF_RECENT_IDEAS)));
+        return ideas;
     }
 
     @PUT
@@ -122,5 +125,15 @@ public class IdeaResource {
         this.ideaDAO.createOrUpdate(idea.get());
 
         return idea;
+    }
+
+    @GET
+    @Path("/popular")
+    @Timed
+    @ExceptionMetered
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    public List<Idea> getPopularIdeas() throws Exception {
+        return this.ideaDAO.findPopularIdeas();
     }
 }

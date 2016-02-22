@@ -1,6 +1,7 @@
 package com.ideahub.model;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -62,7 +64,8 @@ public class Idea {
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     @JoinColumn(name = "idea_id") // Which column in the referenced table will
                                   // be joined
-    private Set<IdeaPart> ideaParts;
+    @MapKey(name = "ideaPartTypeId")
+    private Map<Integer, IdeaPart> ideaParts;
 
     @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "idea")
     private Set<IdeaCollaborator> ideaCollaborators;
@@ -73,4 +76,14 @@ public class Idea {
     @Column(name = "created_at", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+
+    private transient String name;
+
+    private transient String elevatorPitch;
+
+    private transient int votes;
+
+    private transient int contributions;
+
+    private transient String userName;
 }

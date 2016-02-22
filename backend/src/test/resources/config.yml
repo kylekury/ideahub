@@ -1,0 +1,55 @@
+clientId: 0b985cb6cb3f4c2d9961
+clientSecret: 43ef82cc8b4c1e45e6789e508a5bcfb4c161c835
+secretState: secret
+authCallback: http://localhost:8080/auth/authorized
+
+database:
+  # the name of your JDBC driver
+  driverClass: org.hsqldb.jdbcDriver
+
+  # the username
+  user: root
+
+  # the password
+  password: ""
+
+  # the JDBC URL
+  url: jdbc:hsqldb:mem:testdb
+
+  # any properties specific to your JDBC driver:
+  properties:
+    charSet: UTF-8
+    hibernate.dialect: org.hibernate.dialect.HSQLDialect
+    hibernate.show_sql: true
+    hibernate.hbm2ddl.auto: create
+
+  # the maximum amount of time to wait on an empty pool before throwing an exception
+  maxWaitForConnection: 1s
+
+  # the SQL query to run when validating a connection's liveness
+  validationQuery: SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS
+
+  # the minimum number of connections to keep open
+  minSize: 8
+
+  # the maximum number of connections to keep open
+  maxSize: 32
+
+  # whether or not idle connections should be validated
+  checkConnectionWhileIdle: true
+
+  checkConnectionOnBorrow: true
+  
+# Logging settings.
+logging:
+
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: INFO
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 0
+  adminConnectors:
+    - type: http
+      port: 0

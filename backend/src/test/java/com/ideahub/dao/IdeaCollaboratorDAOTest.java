@@ -23,7 +23,7 @@ public class IdeaCollaboratorDAOTest {
                         ,IdeaPartSuggestion.class, IdeaCollaborator.class, IdeaInvitation.class));
 
         this.userDAO = new UserDAO(this.testUtil.getSessionFactory());
-        this.ideaDAO = new IdeaDAO(this.testUtil.getSessionFactory());
+        this.ideaDAO = new IdeaDAO(this.testUtil.getSessionFactory(), this.userDAO);
         this.collaboratorDAO = new IdeaCollaboratorDAO(this.testUtil.getSessionFactory());
     }
 
@@ -60,11 +60,11 @@ public class IdeaCollaboratorDAOTest {
                 .userId(userFound.get().getId())
                 .ideaId(1)
                 .build();
-        Set<IdeaPart> ideaPartSet = new HashSet<>();
-        ideaPartSet.add(ideaPart);
+        Map<Integer, IdeaPart> ideaPartMap = new HashMap<>();
+        ideaPartMap.put(1, ideaPart);
 
         final Idea idea = Idea.builder()
-                .ideaParts(ideaPartSet)
+                .ideaParts(ideaPartMap)
                 .userId(userFound.get().getId())
                 .build();
         this.testUtil.getSession().save(idea);

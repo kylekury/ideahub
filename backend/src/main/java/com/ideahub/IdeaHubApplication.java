@@ -37,6 +37,7 @@ import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+
 import jodd.petite.PetiteContainer;
 import jodd.petite.config.AutomagicPetiteConfigurator;
 
@@ -45,8 +46,8 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
         new IdeaHubApplication().run(args);
     }
 
-    protected PetiteContainer petite;
-    private final HibernateBundle<IdeaHubConfiguration> hibernate = new HibernateBundle<IdeaHubConfiguration>(
+    private PetiteContainer petite;
+    protected final HibernateBundle<IdeaHubConfiguration> hibernate = new HibernateBundle<IdeaHubConfiguration>(
             User.class,
             Idea.class,
             IdeaPart.class,
