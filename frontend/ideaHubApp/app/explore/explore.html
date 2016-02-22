@@ -2,50 +2,44 @@
 <section class="explore">
 
     <div class="container">
-    	<!-- section header -->
+        <!-- section header -->
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h2 class="section-heading">Explore Ideas</h2>
-                <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                <h3 class="section-subheading text-muted">Explore these brilliant ideas from brilliant minds.</h3>
             </div>
         </div>
 
         <div class="row explore__filtertabs">
             <div class="col-lg-12 text-center">
-                <div class="btn-group" role="group" aria-label="...">
-                    <button type="button" class="btn btn-default active">Most Recent</button>
-                    <button type="button" class="btn btn-default">Popular</button>
+                <div class="btn-group" role="group" aria-label="filter">
+                    <button type="button" ng-click="showRecent()" ng-class="{'active': display.recent}" class="btn btn-default">Most Recent</button>
+                    <button type="button" ng-click="showPopular()" ng-class="{'active': display.popular}" class="btn btn-default">Popular</button>
                 </div>
             </div>
         </div>
 
         <!-- new ideas -->
-        <div class="row text-center ideabox">
-            <div class="col-sm-4 text-center ideabox__side">
+        <div class="row text-center ideabox" ng-repeat="ideas in idea_list">
+            <div class="col-sm-4 text-center ideabox__side" ng-show="display.recent">
                 <h2>NEW<br>
                 IDEA</h2>
             </div>
+            <div class="col-sm-4 text-center ideabox__side" ng-show="display.popular">
+                <h2>
+                    <span class="ideabox__votes">{{ideas.votes}}</span>
+                    <span class="ideabox__label">VOTES</span>
+                </h2>
+            </div>
             <div class="col-sm-6 text-left">
-                <h4 class="ideabox__heading">E-Commerce</h4>
-                <p class="ideabox__summary text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing el Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
-                <p class="ideabox__contrib">3 Contributions</p>
-                <p class="ideabox__author">Created by Someone</p>
+                <h4 class="ideabox__heading">{{ideas.name}}</h4>
+                <p class="ideabox__summary text-muted">{{ideas.elevator_pitch}}</p>
+                <p class="ideabox__contrib">{{ideas.contributions}} Contributions</p>
+                <p class="ideabox__author"><img src="{{ideas.avatar_url}}" class="circle-avatar"/> Created by {{ideas.user_name}}</p>
             </div>
         </div>
 
-        <div class="row text-center ideabox">
-            <div class="col-sm-4 text-center ideabox__side">
-                <h2>NEW<br>
-                IDEA</h2>
-            </div>
-            <div class="col-sm-6 text-left">
-                <h4 class="ideabox__heading">E-Commerce</h4>
-                <p class="ideabox__summary text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing el Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
-                <p class="ideabox__contrib">3 Contributions</p>
-                <p class="ideabox__author">Created by Someone</p>
-            </div>
-        </div>
-
+        <!--
         <div class="row explore__filtertabs">
             <div class="col-lg-12 text-center">
                 <div class="btn-group" role="group" aria-label="...">
@@ -55,6 +49,7 @@
                 </div>
             </div>
         </div>
+        -->
 
     </div>
 </section>

@@ -27,7 +27,7 @@
 		}).
 			when('/explore', {
 			templateUrl: 'app/explore/explore.html',
-			controller: 'HomeController'
+			controller: 'ExploreController'
 		}).
 			when('/profile', {
 			templateUrl: 'app/profile/profile.html',
