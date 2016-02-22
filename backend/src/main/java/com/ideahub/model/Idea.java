@@ -22,6 +22,8 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.ideahub.model.views.IdeaFeedView;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,11 +56,13 @@ public class Idea {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
+    @JsonView(IdeaFeedView.class)
     private Long id;
 
     // I think we need to reference just the id here instead of the object
     // as we'd run into a double-binding issue in a previous project
     @Column(name = "user_id", nullable = false)
+    @JsonView(IdeaFeedView.class)
     private long userId;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)

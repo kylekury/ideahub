@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.Optional;
 import com.ideahub.cache.IdeaFeedCache;
 import com.ideahub.cache.IdeaFeedCache.IdeaFeedType;
@@ -30,6 +31,7 @@ import com.ideahub.model.Idea;
 import com.ideahub.model.IdeaPart;
 import com.ideahub.model.User;
 import com.ideahub.model.hack.NewIdea;
+import com.ideahub.model.views.IdeaFeedView;
 
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -106,6 +108,7 @@ public class IdeaResource {
     @Timed
     @ExceptionMetered
     @UnitOfWork
+    @JsonView(IdeaFeedView.class)
     public Set<Idea> getRecentIdeas(@QueryParam("total") final Optional<Integer> total) throws Exception {
         int totalParameter = total.isPresent() ? Math.min(total.get(), MAX_NUMBER_OF_RECENT_IDEAS) : MAX_NUMBER_OF_RECENT_IDEAS;
 
@@ -118,6 +121,7 @@ public class IdeaResource {
     @ExceptionMetered
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
+    @JsonView(IdeaFeedView.class)
     public Set<Idea> getPopularIdeas(@QueryParam("total") final Optional<Integer> total) throws Exception {
         int totalParameter = total.isPresent() ? Math.min(total.get(), MAX_NUMBER_OF_POPULAR_IDEAS) : MAX_NUMBER_OF_POPULAR_IDEAS;
 
