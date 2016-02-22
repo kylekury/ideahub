@@ -5,7 +5,6 @@ import com.ideahub.model.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.*;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +19,7 @@ public class IdeaCollaboratorDAOTest {
     public void setup() {
         this.testUtil = new HibernateDAOTestUtil(
                 Arrays.asList(User.class, Idea.class, IdeaPart.class, IdeaPartType.class
-                        ,IdeaPartSuggestion.class, IdeaCollaborator.class, IdeaInvitation.class));
+                        ,IdeaPartSuggestion.class, IdeaCollaborator.class));
 
         this.userDAO = new UserDAO(this.testUtil.getSessionFactory());
         this.ideaDAO = new IdeaDAO(this.testUtil.getSessionFactory(), this.userDAO);
@@ -76,19 +75,12 @@ public class IdeaCollaboratorDAOTest {
                 .userId((int) userB.getId())
                 .ideaId(idea.getId())
                 .build();
-        final IdeaInvitation invitation = IdeaInvitation.builder()
-                .acceptedState(false)
-                .inviteState(true)
-                .transactionId("test-transaction-id")
-                .createdDate(new java.sql.Date(System.currentTimeMillis()))
-                .build();
-        testUtil.getSession().save(invitation);
 
         final IdeaCollaborator collab = IdeaCollaborator.builder()
                 .id(collabId)
                 .user(userB)
                 .idea(ideaFound.get())
-                .invitation(invitation)
+                .inviteStatus((byte) 0)
                 .build();
         this.testUtil.getSession().save(collab);
 

@@ -139,12 +139,6 @@
 		    <artifactId>guava</artifactId>
 		    <version>19.0</version>
 		</dependency>
-        <!-- Generate transactionId for the invites -->
-        <dependency>
-            <groupId>com.github.mifmif</groupId>
-            <artifactId>generex</artifactId>
-            <version>0.0.4</version>
-        </dependency>
     </dependencies>
 
     <build>
