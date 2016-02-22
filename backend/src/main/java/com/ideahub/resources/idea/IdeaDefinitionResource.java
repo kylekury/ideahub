@@ -2,9 +2,9 @@ package com.ideahub.resources.idea;
 
 import java.util.List;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -18,6 +18,7 @@ import com.ideahub.model.User;
 
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
+
 import jodd.petite.meta.PetiteBean;
 import lombok.AllArgsConstructor;
 
@@ -32,9 +33,10 @@ public class IdeaDefinitionResource {
     @GET
     @Timed
     @ExceptionMetered
-    @Consumes(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public List<IdeaPartType> getIdeaDefinition(@Auth final User authenticatedUser) throws Exception {
-        return ideaDefinitionCache.getIdeaDefinition();
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<IdeaPartType> getIdeaDefinition(@Auth final User authenticatedUser)
+            throws Exception {
+        return this.ideaDefinitionCache.getIdeaDefinition();
     }
 }
