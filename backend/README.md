@@ -289,7 +289,18 @@ Output: {See update /idea/part/suggestion output}
 ### List out popular ideas
 
 ```
-URI: /idea/popular
+URI: /idea/popular?total={itemsToReturn}&page={currentPage}
+Method: GET
+Headers:
+    Accept: application/json;
+    
+Output: {See load idea output}
+```
+
+### List out recent ideas
+
+```
+URI: /idea/recent?total={itemsToReturn}&page={currentPage}
 Method: GET
 Headers:
     Accept: application/json;

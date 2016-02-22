@@ -109,7 +109,7 @@ public class IdeaDAOTest {
                 .build();
         this.testUtil.getSession().save(idea);
 
-        final Set<Idea> ideas = this.ideaDAO.findRecent(10);
+        final Set<Idea> ideas = this.ideaDAO.findRecent(10, 1);
 
         assertThat(ideas).hasSize(1).containsOnly(idea);
     }
@@ -153,7 +153,7 @@ public class IdeaDAOTest {
                 .build();
         this.testUtil.getSession().save(idea2);
 
-        final Set<Idea> ideas = this.ideaDAO.findRecent(10);
+        final Set<Idea> ideas = this.ideaDAO.findRecent(10, 1);
 
         assertThat(ideas).hasSize(2).containsOnly(idea, idea2);
     }
@@ -202,7 +202,7 @@ public class IdeaDAOTest {
         this.testUtil.getSession().close();
         this.testUtil.openSession();
 
-        final Set<Idea> ideas = this.ideaDAO.findRecent(1);
+        final Set<Idea> ideas = this.ideaDAO.findRecent(1, 1);
 
         assertThat(ideas).hasSize(1).containsExactly(idea2);
     }

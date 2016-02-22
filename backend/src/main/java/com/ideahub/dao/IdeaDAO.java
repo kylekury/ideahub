@@ -62,14 +62,17 @@ public class IdeaDAO extends AbstractDAO<Idea> {
     }
 
     @SuppressWarnings("unchecked")
-    public Set<Idea> findPopularIdeas(int limit) {
+    public Set<Idea> findPopular(final int limit, final int page) {
+        final int baseLimit = page * (limit / 2);
+        final int pagedAmount = baseLimit + (limit / 2);
+        
         // Holy fuck this ugly haha
         Query topPartVotes = this.currentSession()
                 .createSQLQuery(
-                        String.format("select i.id from idea i left outer join idea_part_vote v ON i.id = v.idea_id group by i.id LIMIT %d", limit / 2));
+                        String.format("select i.id from idea i left outer join idea_part_vote v ON i.id = v.idea_id group by i.id LIMIT %d, %d", baseLimit, pagedAmount));
         Query topPartSuggestionVotes = this.currentSession()
-                .createSQLQuery(String.format("select i.id from idea i left outer join idea_part_suggestion_vote v ON i.id = v.idea_id group by i.id LIMIT %d",
-                        limit / 2));
+                .createSQLQuery(String.format("select i.id from idea i left outer join idea_part_suggestion_vote v ON i.id = v.idea_id group by i.id LIMIT %d, %d",
+                        baseLimit, pagedAmount));
 
         final List<BigInteger> topPartIds = topPartVotes.list();
         final List<BigInteger> topPartSuggestionIds = topPartSuggestionVotes.list();
@@ -95,10 +98,14 @@ public class IdeaDAO extends AbstractDAO<Idea> {
         return ideas;
     }
     
-    public Set<Idea> findRecent(final int maxResults) {
+    public Set<Idea> findRecent(final int maxResults, final int page) {
+        final int baseLimit = page == 1 ? 0 : page * maxResults;
+        final int pagedAmount = baseLimit + maxResults;
+        
         final Criteria criteria = this.criteria()
                 .addOrder(Order.desc("createdAt"))
-                .setMaxResults(maxResults);
+                .setFirstResult(baseLimit)
+                .setMaxResults(pagedAmount);
 
         final Set<Idea> ideas = new LinkedHashSet<Idea>(criteria.list());
         for (final Idea idea : ideas) {

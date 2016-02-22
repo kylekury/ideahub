@@ -37,6 +37,7 @@ public class IdeaFeedCache {
 
     private final long cacheTimeoutInSeconds = 10;
     private final int cacheSize = 100;
+    private final int cachePage = 0;
 
     private LoadingCache<IdeaFeedType, Set<Idea>> feedCache;
 
@@ -48,9 +49,9 @@ public class IdeaFeedCache {
                         public Set<Idea> load(IdeaFeedType key) { // no checked exception
                             switch (key) {
                             case RECENT:
-                                return ideaDAO.findRecent(cacheSize);
+                                return ideaDAO.findRecent(cacheSize, cachePage);
                             case POPULAR:
-                                return ideaDAO.findPopularIdeas(cacheSize);
+                                return ideaDAO.findPopular(cacheSize, cachePage);
                             }
 
                             // This should never happen

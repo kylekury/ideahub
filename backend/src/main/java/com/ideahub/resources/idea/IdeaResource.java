@@ -93,9 +93,14 @@ public class IdeaResource {
     @Timed
     @ExceptionMetered
     @UnitOfWork
-    public Set<Idea> getRecentIdeas(@QueryParam("total") final Optional<Integer> total) throws Exception {
+    public Set<Idea> getRecentIdeas(@QueryParam("total") final Optional<Integer> total, @QueryParam("page") final Optional<Integer> page) throws Exception {
         int totalParameter = total.isPresent() ? Math.min(total.get(), MAX_NUMBER_OF_RECENT_IDEAS) : MAX_NUMBER_OF_RECENT_IDEAS;
         
+        // We have to go to the database to pull more ideas
+        if (page.isPresent()) {
+            return ideaDAO.findRecent(totalParameter, page.get());
+        }
+                
         return ideaFeedCache.getIdeaFeed(IdeaFeedType.RECENT, totalParameter);
     }
     
@@ -105,10 +110,14 @@ public class IdeaResource {
     @ExceptionMetered
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public Set<Idea> getPopularIdeas(@QueryParam("total") final Optional<Integer> total) throws Exception {
+    public Set<Idea> getPopularIdeas(@QueryParam("total") final Optional<Integer> total, @QueryParam("page") final Optional<Integer> page) throws Exception {
         int totalParameter = total.isPresent() ? Math.min(total.get(), MAX_NUMBER_OF_POPULAR_IDEAS) : MAX_NUMBER_OF_POPULAR_IDEAS;
                 
-        // TODO: If pagination is supplied, then we should go straight to the DB
+        // We have to go to the database to pull more ideas
+        if (page.isPresent()) {
+            return ideaDAO.findPopular(totalParameter, page.get());
+        }
+        
         return ideaFeedCache.getIdeaFeed(IdeaFeedType.POPULAR, totalParameter);
     }
 
