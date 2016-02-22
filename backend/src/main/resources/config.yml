@@ -1,5 +1,5 @@
-clientId: 0b985cb6cb3f4c2d9961
-clientSecret: 43ef82cc8b4c1e45e6789e508a5bcfb4c161c835
+clientId: 936582d0c7c09a85971c
+clientSecret: 86172fd1e98a1b39dd1b710e21ab3af4253ad0f2
 secretState: secret
 authCallback: http://localhost:8080/auth/authorized
 

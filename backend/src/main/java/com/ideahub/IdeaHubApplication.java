@@ -1,7 +1,13 @@
 package com.ideahub;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.hibernate.SessionFactory;
 
@@ -98,6 +104,7 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
                         PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES)
                 .setSerializationInclusion(Include.NON_NULL);
 
+        this.registerCORS(environment);
         this.registerExternalDependencies(configuration, environment);
         this.registerAuthentication(configuration, environment, environment.jersey());
         this.registerResources(environment);
@@ -168,5 +175,21 @@ public class IdeaHubApplication extends Application<IdeaHubConfiguration> {
                 User.class);
         environment.jersey().register(authValueFactoryProvider);
         adminJerseyEnvironment.register(authValueFactoryProvider);
+    }
+
+    private void registerCORS(final Environment environment) {
+        final FilterRegistration.Dynamic filter = environment.servlets().addFilter(
+                "CORS", CrossOriginFilter.class);
+        // Add URL mapping
+        filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class),
+                true, "/*");
+        filter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM,
+                "GET,PUT,POST,DELETE,OPTIONS");
+        filter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
+        filter.setInitParameter(
+                CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
+        filter.setInitParameter("allowedHeaders",
+                "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
+        filter.setInitParameter("allowCredentials", "true");
     }
 }
