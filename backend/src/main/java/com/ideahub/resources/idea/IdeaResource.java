@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
+import com.ideahub.cache.IdeaFeedCache;
+import com.ideahub.cache.IdeaFeedCache.IdeaFeedType;
 import com.ideahub.dao.IdeaDAO;
 import com.ideahub.exceptions.UserDoesntOwnIdeaException;
 import com.ideahub.model.Idea;
@@ -28,7 +30,6 @@ import com.ideahub.model.User;
 
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
-
 import jodd.petite.meta.PetiteBean;
 import lombok.AllArgsConstructor;
 
@@ -39,8 +40,10 @@ import lombok.AllArgsConstructor;
 public class IdeaResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(IdeaResource.class);
     private static final int MAX_NUMBER_OF_RECENT_IDEAS = 100;
+    private static final int MAX_NUMBER_OF_POPULAR_IDEAS = 100;
 
     private final IdeaDAO ideaDAO;
+    private final IdeaFeedCache ideaFeedCache;
 
     @GET
     @Path("/{ideaId}")
@@ -90,15 +93,23 @@ public class IdeaResource {
     @Timed
     @ExceptionMetered
     @UnitOfWork
-    public Set<Idea> getRecentIdeas(@QueryParam("total") final Optional<Integer> total) {
-        int totalParameter;
-        if (!total.isPresent()) {
-            totalParameter = MAX_NUMBER_OF_RECENT_IDEAS;
-        } else {
-            totalParameter = total.get();
-        }
-        final Set<Idea> ideas = new HashSet<>(this.ideaDAO.findRecent(Math.min(totalParameter, MAX_NUMBER_OF_RECENT_IDEAS)));
-        return ideas;
+    public Set<Idea> getRecentIdeas(@QueryParam("total") final Optional<Integer> total) throws Exception {
+        int totalParameter = total.isPresent() ? Math.min(total.get(), MAX_NUMBER_OF_RECENT_IDEAS) : MAX_NUMBER_OF_RECENT_IDEAS;
+        
+        return ideaFeedCache.getIdeaFeed(IdeaFeedType.RECENT, totalParameter);
+    }
+    
+    @GET
+    @Path("/popular")
+    @Timed
+    @ExceptionMetered
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    public Set<Idea> getPopularIdeas(@QueryParam("total") final Optional<Integer> total) throws Exception {
+        int totalParameter = total.isPresent() ? Math.min(total.get(), MAX_NUMBER_OF_POPULAR_IDEAS) : MAX_NUMBER_OF_POPULAR_IDEAS;
+                
+        // TODO: If pagination is supplied, then we should go straight to the DB
+        return ideaFeedCache.getIdeaFeed(IdeaFeedType.POPULAR, totalParameter);
     }
 
     @PUT
@@ -125,15 +136,5 @@ public class IdeaResource {
         this.ideaDAO.createOrUpdate(idea.get());
 
         return idea;
-    }
-
-    @GET
-    @Path("/popular")
-    @Timed
-    @ExceptionMetered
-    @Produces(MediaType.APPLICATION_JSON)
-    @UnitOfWork
-    public List<Idea> getPopularIdeas() throws Exception {
-        return this.ideaDAO.findPopularIdeas();
     }
 }

@@ -61,14 +61,15 @@ public class IdeaDAO extends AbstractDAO<Idea> {
         return Optional.fromNullable(this.reconcileIdeaSummary(this.uniqueResult(criteria)));
     }
 
-    // TODO: This should be cached, since this is called on the homepage, and doesn't need to 100% accurate
     @SuppressWarnings("unchecked")
-    public List<Idea> findPopularIdeas() {
+    public Set<Idea> findPopularIdeas(int limit) {
         // Holy fuck this ugly haha
-        final Query topPartVotes = this.currentSession()
-                .createSQLQuery("select i.id from idea i left outer join idea_part_vote v ON i.id = v.idea_id group by i.id LIMIT 5");
-        final Query topPartSuggestionVotes = this.currentSession()
-                .createSQLQuery("select i.id from idea i left outer join idea_part_suggestion_vote v ON i.id = v.idea_id group by i.id LIMIT 5");
+        Query topPartVotes = this.currentSession()
+                .createSQLQuery(
+                        String.format("select i.id from idea i left outer join idea_part_vote v ON i.id = v.idea_id group by i.id LIMIT %d", limit / 2));
+        Query topPartSuggestionVotes = this.currentSession()
+                .createSQLQuery(String.format("select i.id from idea i left outer join idea_part_suggestion_vote v ON i.id = v.idea_id group by i.id LIMIT %d",
+                        limit / 2));
 
         final List<BigInteger> topPartIds = topPartVotes.list();
         final List<BigInteger> topPartSuggestionIds = topPartSuggestionVotes.list();
@@ -87,12 +88,24 @@ public class IdeaDAO extends AbstractDAO<Idea> {
                 .add(Restrictions.in("id", ideaIds));
 
         final Set<Idea> ideas = new LinkedHashSet<Idea>(criteria.list());
-        final List<Idea> exportedIdeas = new ArrayList<>();
         for (final Idea idea : ideas) {
-            exportedIdeas.add(this.reconcileIdeaSummary(idea));
+            this.reconcileIdeaSummary(idea);
         }
 
-        return exportedIdeas;
+        return ideas;
+    }
+    
+    public Set<Idea> findRecent(final int maxResults) {
+        final Criteria criteria = this.criteria()
+                .addOrder(Order.desc("createdAt"))
+                .setMaxResults(maxResults);
+
+        final Set<Idea> ideas = new LinkedHashSet<Idea>(criteria.list());
+        for (final Idea idea : ideas) {
+            this.reconcileIdeaSummary(idea);
+        }
+
+        return ideas;
     }
 
     public boolean delete(final long userId, final long ideaId) {
@@ -150,18 +163,5 @@ public class IdeaDAO extends AbstractDAO<Idea> {
         idea.setContributions(contributions);
 
         return idea;
-    }
-
-    public List<Idea> findRecent(final int maxResults) {
-        final Criteria criteria = this.criteria()
-                .addOrder(Order.desc("createdAt"))
-                .setMaxResults(maxResults);
-
-        final List<Idea> ideas = this.list(criteria);
-        for (final Idea idea : ideas) {
-            this.reconcileIdeaSummary(idea);
-        }
-
-        return ideas;
     }
 }

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -108,7 +109,7 @@ public class IdeaDAOTest {
                 .build();
         this.testUtil.getSession().save(idea);
 
-        final List<Idea> ideas = this.ideaDAO.findRecent(10);
+        final Set<Idea> ideas = this.ideaDAO.findRecent(10);
 
         assertThat(ideas).hasSize(1).containsOnly(idea);
     }
@@ -152,7 +153,7 @@ public class IdeaDAOTest {
                 .build();
         this.testUtil.getSession().save(idea2);
 
-        final List<Idea> ideas = this.ideaDAO.findRecent(10);
+        final Set<Idea> ideas = this.ideaDAO.findRecent(10);
 
         assertThat(ideas).hasSize(2).containsOnly(idea, idea2);
     }
@@ -201,7 +202,7 @@ public class IdeaDAOTest {
         this.testUtil.getSession().close();
         this.testUtil.openSession();
 
-        final List<Idea> ideas = this.ideaDAO.findRecent(1);
+        final Set<Idea> ideas = this.ideaDAO.findRecent(1);
 
         assertThat(ideas).hasSize(1).containsExactly(idea2);
     }
