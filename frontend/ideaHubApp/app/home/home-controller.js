@@ -67,6 +67,12 @@
             );  
         }
 
+        $scope.showNewIdeas = function (){
+            $('html, body').stop().animate({
+                scrollTop: $("#newIdeas").offset().top - 30
+            }, 1500, 'easeInOutExpo');
+        }
+
     }
 
 })();
